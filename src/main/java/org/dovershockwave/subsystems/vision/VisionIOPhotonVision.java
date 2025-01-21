@@ -51,9 +51,7 @@ public class VisionIOPhotonVision implements VisionIO {
       }
 
       // Add pose observation
-      if (result.multitagResult.isPresent()) {
-        final var multitagResult = result.multitagResult.get();
-
+      result.multitagResult.ifPresent(multitagResult -> {
         // Calculate robot pose
         final var fieldToCamera = multitagResult.estimatedPose.best;
         final var fieldToRobot = fieldToCamera.plus(robotToCamera.inverse());
@@ -69,14 +67,13 @@ public class VisionIOPhotonVision implements VisionIO {
         tagIds.addAll(multitagResult.fiducialIDsUsed);
 
         // Add observation
-        poseObservations.add(
-                new PoseObservation(
-                        result.getTimestampSeconds(), // Timestamp
-                        robotPose, // 3D pose estimate
-                        multitagResult.estimatedPose.ambiguity, // Ambiguity
-                        multitagResult.fiducialIDsUsed.size(), // Tag count
-                        totalTagDistance / result.targets.size())); // Average tag distance
-      }
+        poseObservations.add(new PoseObservation(
+                result.getTimestampSeconds(), // Timestamp
+                robotPose, // 3D pose estimate
+                multitagResult.estimatedPose.ambiguity, // Ambiguity
+                multitagResult.fiducialIDsUsed.size(), // Tag count
+                totalTagDistance / result.targets.size())); // Average tag distance
+      });
     }
 
     // Save pose observations to inputs object
