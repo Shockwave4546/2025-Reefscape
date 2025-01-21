@@ -11,14 +11,14 @@ public enum ModuleType {
   BACK_RIGHT("BackRight", 13, 23, 0.0);
 
   public final String name;
-  public final int driveID;
-  public final int turnID;
+  public final int driveId;
+  public final int turnId;
   public final double angleOffset;
 
-  ModuleType(String name, int driveID, int turnID, double angleOffset) {
+  ModuleType(String name, int driveId, int turnId, double angleOffset) {
     this.name = name;
-    this.driveID = driveID;
-    this.turnID = turnID;
+    this.driveId = driveId;
+    this.turnId = turnId;
     this.angleOffset = angleOffset;
   }
 }

@@ -41,11 +41,11 @@ public class ModuleIOSpark implements ModuleIO {
   private final ModuleType type;
 
   public ModuleIOSpark(ModuleType type) {
-    driveSpark = new SparkMax(type.driveID, SparkLowLevel.MotorType.kBrushless);
+    driveSpark = new SparkMax(type.driveId, SparkLowLevel.MotorType.kBrushless);
     driveEncoder = driveSpark.getEncoder();
     drivePID = driveSpark.getClosedLoopController();
 
-    turnSpark = new SparkMax(type.turnID, SparkLowLevel.MotorType.kBrushless);
+    turnSpark = new SparkMax(type.turnId, SparkLowLevel.MotorType.kBrushless);
     turnEncoder = turnSpark.getAbsoluteEncoder();
     turnPID = turnSpark.getClosedLoopController();
 
