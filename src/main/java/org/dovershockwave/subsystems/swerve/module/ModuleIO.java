@@ -1,6 +1,5 @@
 package org.dovershockwave.subsystems.swerve.module;
 
-import com.revrobotics.REVLibError;
 import edu.wpi.first.math.geometry.Rotation2d;
 import org.dovershockwave.utils.PIDFGains;
 import org.littletonrobotics.junction.AutoLog;

@@ -3,18 +3,14 @@ package org.dovershockwave.subsystems.vision.commands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import org.dovershockwave.subsystems.swerve.SwerveSubsystem;
 import org.dovershockwave.subsystems.vision.CameraType;
+import org.dovershockwave.subsystems.vision.VisionConstants;
 import org.dovershockwave.subsystems.vision.VisionSubsystem;
 
 // TODO: 1/20/2025 Add TunablePIDF to this whole class
 public class MoveToTagCommand extends Command {
-  // TODO: 1/20/2025 move to constants
-  private static final double ALIGNMENT_RAD_TOLERANCE = Units.degreesToRadians(5);
-  private static final double ALIGNMENT_X_METERS_TOLERANCE = Units.inchesToMeters(2);
-  private static final double ALIGNMENT_Y_METERS_TOLERANCE = Units.inchesToMeters(2);
   private final PIDController xVelocityPID = new PIDController(0, 0, 0);
   private final PIDController yVelocityPID = new PIDController(0, 0, 0);
   private final PIDController omegaPID = new PIDController(2.91, 0.0, 0.094);
@@ -36,13 +32,13 @@ public class MoveToTagCommand extends Command {
 
   @Override public void initialize() {
     omegaPID.reset();
-    omegaPID.setTolerance(ALIGNMENT_RAD_TOLERANCE);
+    omegaPID.setTolerance(VisionConstants.ALIGNMENT_RAD_TOLERANCE);
 
     xVelocityPID.reset();
-    xVelocityPID.setTolerance(ALIGNMENT_X_METERS_TOLERANCE);
+    xVelocityPID.setTolerance(VisionConstants.ALIGNMENT_X_METERS_TOLERANCE);
 
     yVelocityPID.reset();
-    yVelocityPID.setTolerance(ALIGNMENT_Y_METERS_TOLERANCE);
+    yVelocityPID.setTolerance(VisionConstants.ALIGNMENT_Y_METERS_TOLERANCE);
   }
 
   @Override public void execute() {
