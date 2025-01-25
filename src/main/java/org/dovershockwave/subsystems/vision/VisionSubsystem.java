@@ -47,6 +47,15 @@ public class VisionSubsystem extends SubsystemBase {
             .findFirst();
   }
 
+  public TargetObservation getBestTargetObservation(CameraType camera) {
+    return inputs.get(camera).bestTargetObservation;
+  }
+  
+  public Optional<TargetObservation> getBestTargetObservation(CameraType camera, int id) {
+    final var observation = inputs.get(camera).bestTargetObservation;
+    return observation.tagId() == id ? Optional.of(observation) : Optional.empty();
+  }
+
   @Override public void periodic() {
     for (final var camera : cameras) {
       io.get(camera).updateInputs(inputs.get(camera));

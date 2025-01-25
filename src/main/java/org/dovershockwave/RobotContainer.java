@@ -18,9 +18,11 @@ import org.dovershockwave.subsystems.swerve.commands.sysid.SysIdTurnQuasistaticC
 import org.dovershockwave.subsystems.swerve.gyro.GyroIO;
 import org.dovershockwave.subsystems.swerve.gyro.GyroIONavX;
 import org.dovershockwave.subsystems.swerve.module.ModuleIO;
+import org.dovershockwave.subsystems.swerve.module.ModuleIOSim;
 import org.dovershockwave.subsystems.swerve.module.ModuleIOSpark;
 import org.dovershockwave.subsystems.swerve.module.ModuleType;
 import org.dovershockwave.subsystems.vision.*;
+import org.dovershockwave.subsystems.vision.commands.AlignToTagCommand;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class RobotContainer {
@@ -47,7 +49,12 @@ public class RobotContainer {
                 Pair.of(CameraType.HUMAN_PLAYER_STATION_CAMERA, new VisionIOPhotonVision(CameraType.HUMAN_PLAYER_STATION_CAMERA)));
         break;
       case SIM:
-        swerve = new SwerveSubsystem(new GyroIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {});
+        swerve = new SwerveSubsystem(new GyroIO() {},
+                new ModuleIOSim(),
+                new ModuleIOSim(),
+                new ModuleIOSim(),
+                new ModuleIOSim());
+
         vision = new VisionSubsystem(
                 swerve::addVisionMeasurement,
                 Pair.of(CameraType.REEF_CAMERA, new VisionIOPhotonVisionSim(CameraType.REEF_CAMERA, swerve::getPose)),
@@ -82,6 +89,8 @@ public class RobotContainer {
     swerve.setDefaultCommand(new SwerveDriveCommand(swerve, driverController));
     driverController.b().onTrue(new ResetFieldOrientatedDriveCommand(swerve));
     driverController.x().onTrue(new InstantCommand(swerve::stopWithX, swerve));
+
+    driverController.y().onTrue(new AlignToTagCommand(swerve, vision, CameraType.REEF_CAMERA));
 
     driverController.leftBumper().onTrue(new InstantCommand(() -> swerve.multiplyFF(-0.1)).ignoringDisable(true));
     driverController.rightBumper().onTrue(new InstantCommand(() -> swerve.multiplyFF(0.1)).ignoringDisable(true));

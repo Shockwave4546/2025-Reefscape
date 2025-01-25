@@ -95,7 +95,9 @@ public class Robot extends LoggedRobot {
     Threads.setCurrentThreadPriority(false, 10);
   }
 
-  @Override public void autonomousInit() {}
+  @Override public void autonomousInit() {
+    container.autoChooser.get().schedule();
+  }
 
   @Override public void autonomousPeriodic() {}
 
