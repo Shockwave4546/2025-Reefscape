@@ -13,7 +13,7 @@ import org.dovershockwave.utils.TunablePIDF;
 import org.littletonrobotics.junction.Logger;
 
 public class AlignToTagCommand extends Command {
-  private final TunableNumber alignmentRadTolerance = new TunableNumber("AlignToTagCommand/AlignmentRadTolerance", VisionConstants.ALIGNMENT_RAD_TOLERANCE);
+  private static final TunableNumber ALIGNMENT_RAD_TOLERANCE = new TunableNumber("AlignToTagCommand/AlignmentRadTolerance", VisionConstants.ALIGNMENT_RAD_TOLERANCE);
   private final TunablePIDF tunableOmegaPID = new TunablePIDF("AlignToTagCommand/OmegaPID", VisionConstants.ALIGNMENT_OMEGA_PID);
   private final PIDController omegaPID = new PIDController(tunableOmegaPID.getGains().p(), tunableOmegaPID.getGains().i(), tunableOmegaPID.getGains().d());
   private final SwerveSubsystem swerve;
@@ -32,7 +32,7 @@ public class AlignToTagCommand extends Command {
 
   @Override public void initialize() {
     omegaPID.reset();
-    omegaPID.setTolerance(alignmentRadTolerance.get());
+    omegaPID.setTolerance(ALIGNMENT_RAD_TOLERANCE.get());
     omegaPID.setP(tunableOmegaPID.getGains().p());
     omegaPID.setI(tunableOmegaPID.getGains().i());
     omegaPID.setD(tunableOmegaPID.getGains().d());
@@ -40,16 +40,16 @@ public class AlignToTagCommand extends Command {
 
   @Override public void execute() {
     final var bestTarget = vision.getBestTargetObservation(camera);
-    
+
     ReefScoringPosition.getPositionFor(bestTarget.tagId(), ReefScoringPosition.ReefScoringSide.LEFT, ReefScoringPosition.ReefLevel.L1).ifPresentOrElse(position -> {
       this.tagFound = true;
-      final var omega = omegaPID.calculate(swerve.getRotation().getRadians(), position.robotHeading.getRadians());
-      swerve.runVelocity(new ChassisSpeeds(0.0, 0.0, omega));
+      final var omega = omegaPID.calculate(swerve.getRotation().getRadians(), position.robotHeading().getRadians());
+      swerve.runVelocity(new ChassisSpeeds(0.0, 0.0, omega), false);
 
-      Logger.recordOutput("AlignToTagCommand/Target-" + position.id + "/CurrentRotRad", swerve.getRotation().getRadians());
-      Logger.recordOutput("AlignToTagCommand/Target-" + position.id  + "/GoalRotRad", position.robotHeading.getRadians());
-      Logger.recordOutput("AlignToTagCommand/Target-" + position.id  + "/RotErrorRad", omegaPID.getError());
-      Logger.recordOutput("AlignToTagCommand/Target-" + position.id  + "/Omega", omega);
+      Logger.recordOutput("AlignToTagCommand/Target-" + position.id() + "/RotRadCurrent", swerve.getRotation().getRadians());
+      Logger.recordOutput("AlignToTagCommand/Target-" + position.id() + "/RotRadGoal", position.robotHeading().getRadians());
+      Logger.recordOutput("AlignToTagCommand/Target-" + position.id() + "/RotRadError", omegaPID.getError());
+      Logger.recordOutput("AlignToTagCommand/Target-" + position.id() + "/Omega", omega);
     }, swerve::stop);
   }
 
