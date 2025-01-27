@@ -21,5 +21,14 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Elevator", inputs);
+
+    tunablePIDF.periodic(io::setPIDF, io::setPosition);
+
+    leftDisconnectedAlert.set(!inputs.leftConnected);
+    rightDisconnectedAlert.set(!inputs.rightConnected);
+  }
+
+  public void setPosition(ElevatorPosition position) {
+    io.setPosition(position.positionRad);
   }
 }
