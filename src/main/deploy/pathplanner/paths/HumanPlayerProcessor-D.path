@@ -1,0 +1,59 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.6212889296033195,
+        "y": 0.6826019613347774
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.5202855336516894,
+        "y": 1.4904403707329905
+      },
+      "isLocked": false,
+      "linkedName": "HumanPlayerProcessor"
+    },
+    {
+      "anchor": {
+        "x": 3.99078,
+        "y": 2.83371
+      },
+      "prevControl": {
+        "x": 4.2106265989025875,
+        "y": 3.036498786452381
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "ReefD"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.7,
+      "rotationDegrees": 59.99999999999999
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 59.99999999999999
+  },
+  "reversed": false,
+  "folder": "Processor",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -126.0
+  },
+  "useDefaultConstraints": true
+}

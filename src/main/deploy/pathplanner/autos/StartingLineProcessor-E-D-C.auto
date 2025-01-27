@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "StartingLineProcessor-E"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "E-HumanPlayerProcessor"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HumanPlayerProcessor-D"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "D-HumanPlayerProcessor"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HumanPlayerProcessor-C"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Processor",
+  "choreoAuto": false
+}

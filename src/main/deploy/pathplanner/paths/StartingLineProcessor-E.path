@@ -1,0 +1,59 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.1562214,
+        "y": 2.9733748
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.287678440680859,
+        "y": 3.208563129274795
+      },
+      "isLocked": false,
+      "linkedName": "StartingLineProcessor"
+    },
+    {
+      "anchor": {
+        "x": 4.98787,
+        "y": 2.83371
+      },
+      "prevControl": {
+        "x": 4.657775921101704,
+        "y": 2.737072013342439
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "ReefE"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.75,
+      "rotationDegrees": 119.99999999999999
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 119.99999999999999
+  },
+  "reversed": false,
+  "folder": "Processor",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}
