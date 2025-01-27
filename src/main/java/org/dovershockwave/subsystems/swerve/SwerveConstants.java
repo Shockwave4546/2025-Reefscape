@@ -21,7 +21,7 @@ public class SwerveConstants {
    * Distance between front and back wheels on robot
    */
   public static final double WHEEL_BASE_METERS = Units.inchesToMeters(26);
-  public static final double DRIVE_BASE_RADIUS = Math.sqrt(Math.pow(WHEEL_BASE_METERS, 2) + Math.pow(TRACK_WIDTH_METERS, 2));
+  public static final double DRIVE_BASE_RADIUS = Math.sqrt(Math.pow(WHEEL_BASE_METERS / 2, 2) + Math.pow(TRACK_WIDTH_METERS / 2, 2));
   public static final double MAX_REAL_SPEED_METERS_PER_SECOND = 5.28; // TODO: 1/20/2025 - Update this value
   public static final double MAX_ANGULAR_SPEED_RAD_PER_SEC = MAX_REAL_SPEED_METERS_PER_SECOND / DRIVE_BASE_RADIUS;
   public static final Translation2d[] MODULE_TRANSLATIONS = {
