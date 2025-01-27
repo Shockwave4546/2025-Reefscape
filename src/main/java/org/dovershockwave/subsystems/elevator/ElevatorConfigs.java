@@ -38,5 +38,21 @@ public class ElevatorConfigs {
             .idleMode(SparkMaxConfig.IdleMode.kBrake)
             .smartCurrentLimit(Constants.NEO_CURRENT_LIMIT)
             .voltageCompensation(12.0);
+    RIGHT_CONFIG.encoder
+            .positionConversionFactor(ElevatorConstants.POSITION_CONVERSION_FACTOR)
+            .velocityConversionFactor(ElevatorConstants.VELOCITY_CONVERSION_FACTOR)
+            .uvwMeasurementPeriod(10)
+            .uvwAverageDepth(10);
+    RIGHT_CONFIG.closedLoop
+            .feedbackSensor(ClosedLoopConfig.FeedbackSensor.kPrimaryEncoder)
+            .pidf(ElevatorConstants.GAINS.p(), ElevatorConstants.GAINS.i(), ElevatorConstants.GAINS.d(), ElevatorConstants.GAINS.ff());
+    RIGHT_CONFIG.signals
+            .primaryEncoderPositionAlwaysOn(true)
+            .primaryEncoderPositionPeriodMs((int) (1000.0 / SwerveConstants.ODOMETRY_FREQUENCY))
+            .primaryEncoderVelocityAlwaysOn(true)
+            .primaryEncoderVelocityPeriodMs(20)
+            .appliedOutputPeriodMs(20)
+            .busVoltagePeriodMs(20)
+            .outputCurrentPeriodMs(20);
   }
 }
