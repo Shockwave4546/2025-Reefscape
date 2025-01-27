@@ -1,0 +1,214 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.207,
+        "y": 3.86159
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.457,
+        "y": 3.86159
+      },
+      "isLocked": true,
+      "linkedName": "ReefB"
+    },
+    {
+      "anchor": {
+        "x": 3.20675,
+        "y": 4.19021
+      },
+      "prevControl": {
+        "x": 2.95675,
+        "y": 4.19021
+      },
+      "nextControl": {
+        "x": 3.45675,
+        "y": 4.19021
+      },
+      "isLocked": true,
+      "linkedName": "ReefA"
+    },
+    {
+      "anchor": {
+        "x": 3.70618,
+        "y": 5.054
+      },
+      "prevControl": {
+        "x": 3.58118,
+        "y": 5.27050635094611
+      },
+      "nextControl": {
+        "x": 3.83118,
+        "y": 4.837493649053891
+      },
+      "isLocked": true,
+      "linkedName": "ReefL"
+    },
+    {
+      "anchor": {
+        "x": 3.99078,
+        "y": 5.21809
+      },
+      "prevControl": {
+        "x": 3.86578,
+        "y": 5.4345963509461095
+      },
+      "nextControl": {
+        "x": 4.11578,
+        "y": 5.001583649053891
+      },
+      "isLocked": true,
+      "linkedName": "ReefK"
+    },
+    {
+      "anchor": {
+        "x": 4.98787,
+        "y": 5.21809
+      },
+      "prevControl": {
+        "x": 5.11287,
+        "y": 5.4345963509461095
+      },
+      "nextControl": {
+        "x": 4.86287,
+        "y": 5.001583649053891
+      },
+      "isLocked": true,
+      "linkedName": "ReefJ"
+    },
+    {
+      "anchor": {
+        "x": 5.27246,
+        "y": 5.05377
+      },
+      "prevControl": {
+        "x": 5.39746,
+        "y": 5.2702763509461095
+      },
+      "nextControl": {
+        "x": 5.14746,
+        "y": 4.837263649053891
+      },
+      "isLocked": true,
+      "linkedName": "ReefI"
+    },
+    {
+      "anchor": {
+        "x": 5.7719,
+        "y": 4.19021
+      },
+      "prevControl": {
+        "x": 6.0219,
+        "y": 4.19021
+      },
+      "nextControl": {
+        "x": 5.5219,
+        "y": 4.19021
+      },
+      "isLocked": true,
+      "linkedName": "ReefH"
+    },
+    {
+      "anchor": {
+        "x": 5.7719,
+        "y": 3.86159
+      },
+      "prevControl": {
+        "x": 6.0219,
+        "y": 3.86159
+      },
+      "nextControl": {
+        "x": 5.5219,
+        "y": 3.86159
+      },
+      "isLocked": true,
+      "linkedName": "ReefG"
+    },
+    {
+      "anchor": {
+        "x": 5.27246,
+        "y": 2.99803
+      },
+      "prevControl": {
+        "x": 5.39746,
+        "y": 2.78152364905389
+      },
+      "nextControl": {
+        "x": 5.14746,
+        "y": 3.21453635094611
+      },
+      "isLocked": true,
+      "linkedName": "ReefF"
+    },
+    {
+      "anchor": {
+        "x": 4.98787,
+        "y": 2.83371
+      },
+      "prevControl": {
+        "x": 5.11287,
+        "y": 2.61720364905389
+      },
+      "nextControl": {
+        "x": 4.86287,
+        "y": 3.0502163509461098
+      },
+      "isLocked": true,
+      "linkedName": "ReefE"
+    },
+    {
+      "anchor": {
+        "x": 3.99078,
+        "y": 2.83371
+      },
+      "prevControl": {
+        "x": 3.86578,
+        "y": 2.61720364905389
+      },
+      "nextControl": {
+        "x": 4.11578,
+        "y": 3.0502163509461093
+      },
+      "isLocked": true,
+      "linkedName": "ReefD"
+    },
+    {
+      "anchor": {
+        "x": 3.70618,
+        "y": 2.99803
+      },
+      "prevControl": {
+        "x": 3.58118,
+        "y": 2.78152364905389
+      },
+      "nextControl": null,
+      "isLocked": true,
+      "linkedName": "ReefC"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 59.99999999999999
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}
