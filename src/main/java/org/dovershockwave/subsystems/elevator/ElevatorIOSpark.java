@@ -7,6 +7,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.filter.Debouncer;
+import org.dovershockwave.subsystems.swerve.SwerveConfigs;
 import org.dovershockwave.utils.PIDFGains;
 
 import java.util.function.DoubleSupplier;
@@ -31,6 +32,16 @@ public class ElevatorIOSpark implements ElevatorIO {
 
     this.rightSpark = new SparkMax(rightCanId, SparkLowLevel.MotorType.kBrushless);
     this.rightEncoder = rightSpark.getEncoder();
+
+    tryUntilOk(leftSpark, 5, spark -> {
+      spark.configure(ElevatorConfigs.LEFT_CONFIG, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
+    });
+
+    tryUntilOk(rightSpark, 5, spark -> {
+      spark.configure(ElevatorConfigs.RIGHT_CONFIG, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
+    });
+
+    resetPosition();
   }
 
   @Override public void updateInputs(ElevatorIOInputs inputs) {
