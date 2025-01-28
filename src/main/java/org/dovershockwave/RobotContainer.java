@@ -4,6 +4,10 @@ import au.grapplerobotics.CanBridge;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import org.dovershockwave.subsystems.algaerollers.AlgaeRollerIO;
+import org.dovershockwave.subsystems.algaerollers.AlgaeRollerIOSpark;
+import org.dovershockwave.subsystems.algaerollers.AlgaeRollerSubsystem;
+import org.dovershockwave.subsystems.algaerollers.AlgaeRollersConstants;
 import org.dovershockwave.subsystems.coralrollers.CoralRollerIO;
 import org.dovershockwave.subsystems.coralrollers.CoralRollerIOSpark;
 import org.dovershockwave.subsystems.coralrollers.CoralRollerSubsystem;
@@ -21,6 +25,7 @@ public class RobotContainer {
 //  private final VisionSubsystem vision;
   private final ElevatorSubsystem elevator;
   private final CoralRollerSubsystem coralRoller;
+  private final AlgaeRollerSubsystem algaeRoller;
   protected final CommandXboxController driverController = new CommandXboxController(Constants.DRIVER_CONTROLLER_PORT);
   protected final CommandXboxController operatorController = new CommandXboxController(Constants.OPERATOR_CONTROLLER_PORT);
 
@@ -44,6 +49,7 @@ public class RobotContainer {
 
         elevator = new ElevatorSubsystem(new ElevatorIOSpark(ElevatorConstants.LEFT_SPARK_ID, ElevatorConstants.RIGHT_SPARK_ID), new LidarIOLaserCan());
         coralRoller = new CoralRollerSubsystem(new CoralRollerIOSpark(CoralRollersConstants.SPARK_ID));
+        algaeRoller = new AlgaeRollerSubsystem(new AlgaeRollerIOSpark(AlgaeRollersConstants.SPARK_ID));
         break;
       case SIM:
 //        swerve = new SwerveSubsystem(new GyroIO() {},
@@ -59,6 +65,7 @@ public class RobotContainer {
 
         elevator = new ElevatorSubsystem(new ElevatorIO() {}, new LidarIO() {});
         coralRoller = new CoralRollerSubsystem(new CoralRollerIO() {});
+        algaeRoller = new AlgaeRollerSubsystem(new AlgaeRollerIO() {});
         break;
       case REPLAY:
       default:
@@ -66,6 +73,7 @@ public class RobotContainer {
 //        vision = new VisionSubsystem(swerve::addVisionMeasurement, Pair.of(CameraType.NONE, new VisionIO() {}), Pair.of(CameraType.NONE, new VisionIO() {}));
         elevator = new ElevatorSubsystem(new ElevatorIO() {}, new LidarIO() {});
         coralRoller = new CoralRollerSubsystem(new CoralRollerIO() {});
+        algaeRoller = new AlgaeRollerSubsystem(new AlgaeRollerIO() {});
     }
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices");
