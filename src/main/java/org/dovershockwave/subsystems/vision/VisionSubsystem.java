@@ -87,10 +87,8 @@ public class VisionSubsystem extends SubsystemBase {
         // Check whether to reject pose
         final boolean rejectPose =
                 observation.tagCount() == 0 // Must have at least one tag
-                        || (observation.tagCount() == 1
-                        && observation.ambiguity() > MAX_AMBIGUITY) // Cannot be high ambiguity
-                        || Math.abs(observation.pose().getZ())
-                        > MAX_Z_ERROR // Must have realistic Z coordinate
+                        || (observation.tagCount() == 1 && observation.ambiguity() > SINGLE_TAG_MAX_AMBIGUITY) // Cannot be high ambiguity
+                        || Math.abs(observation.pose().getZ()) > MAX_Z_ERROR // Must have realistic Z coordinate
 
                         // Must be within the field boundaries
                         || observation.pose().getX() < 0.0

@@ -51,7 +51,7 @@ public class VisionIOPhotonVision implements VisionIO {
       }
 
       // Add pose observation
-      result.multitagResult.ifPresent(multitagResult -> {
+      result.multitagResult.ifPresentOrElse(multitagResult -> {
         // Calculate robot pose
         final var fieldToCamera = multitagResult.estimatedPose.best;
         final var fieldToRobot = fieldToCamera.plus(robotToCamera.inverse());
@@ -73,6 +73,33 @@ public class VisionIOPhotonVision implements VisionIO {
                 multitagResult.estimatedPose.ambiguity, // Ambiguity
                 multitagResult.fiducialIDsUsed.size(), // Tag count
                 totalTagDistance / result.targets.size())); // Average tag distance
+      }, () -> {
+        if (!result.hasTargets()) return;
+        if (!VisionConstants.DO_SINGLE_TAG_POSE_ESTIMATE) return;
+        final var bestTarget = result.getBestTarget();
+
+        // Get the target pose relative to the camera
+        final var cameraToTarget = bestTarget.getBestCameraToTarget();
+
+        // Invert robotToCamera to get cameraToRobot
+        final var cameraToRobot = this.robotToCamera.inverse();
+
+        // Combine cameraToTarget with cameraToRobot to find the robot pose relative to the target
+        final var robotToTarget = cameraToTarget.plus(cameraToRobot);
+        // TODO: 1/30/25 This needs to be resolved later bc the optional can be empty.
+        final var fieldToTarget = VisionConstants.APRIL_TAG_FIELD.getTagPose(bestTarget.fiducialId).get(); // Define the field-to-target Pose3d (AprilTag position on the field)
+
+        // Combine fieldToTarget with the inverted robotToTarget to get fieldToRobot
+        final var fieldToRobot = fieldToTarget.transformBy(robotToTarget.inverse());
+
+        tagIds.add((short) bestTarget.fiducialId);
+
+        poseObservations.add(new PoseObservation(
+                result.getTimestampSeconds(), // Timestamp
+                fieldToRobot, // 3D pose estimate
+                bestTarget.poseAmbiguity, // Ambiguity
+                1, // Tag count
+                cameraToTarget.getTranslation().getNorm())); // Average tag distance
       });
     }
 
