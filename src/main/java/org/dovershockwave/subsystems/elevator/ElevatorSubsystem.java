@@ -42,19 +42,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     rightDisconnectedAlert.set(!elevatorInputs.rightConnected);
   }
 
-  /**
-   * When the elevator is at the bottom, but the LIDAR reads a distance greater/less than the starting distance,
-   * the relative encoder must be reset to ensure the robot knows the elevator is at the bottom.
-   */
-  public void calibratePosition() {
-    final var atStartingState = desiredState == ElevatorState.STARTING && atDesiredState();
-    final var trulyAtBottom = MathUtil.isNear(lidarInputs.distanceMeters, ElevatorConstants.LIDAR_STARTING_DISTANCE, ElevatorConstants.LIDAR_STARTING_DISTANCE_TOLERANCE);
-
-    if (atStartingState && !trulyAtBottom) {
-      elevatorIO.resetPosition();
-    }
-  }
-
   public void setDesiredState(ElevatorState desiredState) {
     elevatorIO.setPosition(desiredState.positionRad());
     this.desiredState = desiredState;
