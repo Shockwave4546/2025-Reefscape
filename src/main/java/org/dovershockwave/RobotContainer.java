@@ -4,14 +4,18 @@ import au.grapplerobotics.CanBridge;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import org.dovershockwave.subsystems.algaerollers.AlgaeRollerIO;
-import org.dovershockwave.subsystems.algaerollers.AlgaeRollerIOSpark;
 import org.dovershockwave.subsystems.algaerollers.AlgaeRollerSubsystem;
 import org.dovershockwave.subsystems.algaerollers.AlgaeRollersConstants;
-import org.dovershockwave.subsystems.coralrollers.CoralRollerIO;
-import org.dovershockwave.subsystems.coralrollers.CoralRollerIOSpark;
-import org.dovershockwave.subsystems.coralrollers.CoralRollerSubsystem;
+import org.dovershockwave.subsystems.algaerollers.AlgaeRollersIO;
+import org.dovershockwave.subsystems.algaerollers.AlgaeRollersIOSpark;
+import org.dovershockwave.subsystems.coralpivot.CoralPivotConstants;
+import org.dovershockwave.subsystems.coralpivot.CoralPivotIO;
+import org.dovershockwave.subsystems.coralpivot.CoralPivotIOSpark;
+import org.dovershockwave.subsystems.coralpivot.CoralPivotSubsystem;
 import org.dovershockwave.subsystems.coralrollers.CoralRollersConstants;
+import org.dovershockwave.subsystems.coralrollers.CoralRollersIO;
+import org.dovershockwave.subsystems.coralrollers.CoralRollersIOSpark;
+import org.dovershockwave.subsystems.coralrollers.CoralRollersSubsystem;
 import org.dovershockwave.subsystems.elevator.ElevatorConstants;
 import org.dovershockwave.subsystems.elevator.ElevatorIO;
 import org.dovershockwave.subsystems.elevator.ElevatorIOSpark;
@@ -24,8 +28,9 @@ public class RobotContainer {
 //  protected final SwerveSubsystem swerve;
 //  private final VisionSubsystem vision;
   private final ElevatorSubsystem elevator;
-  private final CoralRollerSubsystem coralRoller;
-  private final AlgaeRollerSubsystem algaeRoller;
+  private final CoralRollersSubsystem coralRollers;
+  private final AlgaeRollerSubsystem algaeRollers;
+  private final CoralPivotSubsystem coralPivot;
   protected final CommandXboxController driverController = new CommandXboxController(Constants.DRIVER_CONTROLLER_PORT);
   protected final CommandXboxController operatorController = new CommandXboxController(Constants.OPERATOR_CONTROLLER_PORT);
 
@@ -48,8 +53,9 @@ public class RobotContainer {
 //                Pair.of(CameraType.HUMAN_PLAYER_STATION_CAMERA, new VisionIOPhotonVision(CameraType.HUMAN_PLAYER_STATION_CAMERA)));
 
         elevator = new ElevatorSubsystem(new ElevatorIOSpark(ElevatorConstants.LEFT_SPARK_ID, ElevatorConstants.RIGHT_SPARK_ID), new LidarIOLaserCan());
-        coralRoller = new CoralRollerSubsystem(new CoralRollerIOSpark(CoralRollersConstants.SPARK_ID));
-        algaeRoller = new AlgaeRollerSubsystem(new AlgaeRollerIOSpark(AlgaeRollersConstants.SPARK_ID));
+        coralRollers = new CoralRollersSubsystem(new CoralRollersIOSpark(CoralRollersConstants.SPARK_ID));
+        algaeRollers = new AlgaeRollerSubsystem(new AlgaeRollersIOSpark(AlgaeRollersConstants.SPARK_ID));
+        coralPivot = new CoralPivotSubsystem(new CoralPivotIOSpark(CoralPivotConstants.WRIST_SPARK_ID, CoralPivotConstants.BIGGER_PIVOT_LEFT_SPARK_ID, CoralPivotConstants.BIGGER_PIVOT_RIGHT_SPARK_ID));
         break;
       case SIM:
 //        swerve = new SwerveSubsystem(new GyroIO() {},
@@ -64,16 +70,18 @@ public class RobotContainer {
 //                Pair.of(CameraType.HUMAN_PLAYER_STATION_CAMERA, new VisionIOPhotonVisionSim(CameraType.HUMAN_PLAYER_STATION_CAMERA, swerve::getPose)));
 
         elevator = new ElevatorSubsystem(new ElevatorIO() {}, new LidarIO() {});
-        coralRoller = new CoralRollerSubsystem(new CoralRollerIO() {});
-        algaeRoller = new AlgaeRollerSubsystem(new AlgaeRollerIO() {});
+        coralRollers = new CoralRollersSubsystem(new CoralRollersIO() {});
+        algaeRollers = new AlgaeRollerSubsystem(new AlgaeRollersIO() {});
+        coralPivot = new CoralPivotSubsystem(new CoralPivotIO() {});
         break;
       case REPLAY:
       default:
 //        swerve = new SwerveSubsystem(new GyroIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {});
 //        vision = new VisionSubsystem(swerve::addVisionMeasurement, Pair.of(CameraType.NONE, new VisionIO() {}), Pair.of(CameraType.NONE, new VisionIO() {}));
         elevator = new ElevatorSubsystem(new ElevatorIO() {}, new LidarIO() {});
-        coralRoller = new CoralRollerSubsystem(new CoralRollerIO() {});
-        algaeRoller = new AlgaeRollerSubsystem(new AlgaeRollerIO() {});
+        coralRollers = new CoralRollersSubsystem(new CoralRollersIO() {});
+        algaeRollers = new AlgaeRollerSubsystem(new AlgaeRollersIO() {});
+        coralPivot = new CoralPivotSubsystem(new CoralPivotIO() {});
     }
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices");
