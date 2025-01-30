@@ -13,7 +13,7 @@ import java.util.function.DoubleSupplier;
 
 import static org.dovershockwave.utils.SparkUtils.*;
 
-public class CoralRollerIOSpark implements CoralRollerIO {
+public class CoralRollersIOSpark implements CoralRollersIO {
   private static boolean HAS_STICKY_FAULT = false;
 
   private final SparkBase spark;
@@ -21,12 +21,16 @@ public class CoralRollerIOSpark implements CoralRollerIO {
 
   private final Debouncer connectedDebouncer = new Debouncer(0.5);
 
-  public CoralRollerIOSpark(int sparkCanId) {
+  public CoralRollersIOSpark(int sparkCanId) {
     this.spark = new SparkMax(sparkCanId, SparkLowLevel.MotorType.kBrushless);
     this.encoder = spark.getEncoder();
+
+    tryUntilOk(spark, 5, spark -> {
+      spark.configure(CoralRollersConfigs.CONFIG, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
+    });
   }
 
-  @Override public void updateInputs(CoralRollerIOInputs inputs) {
+  @Override public void updateInputs(CoralRollersIOInputs inputs) {
     HAS_STICKY_FAULT = false;
     useValueIfOk(spark, encoder::getPosition, (value) -> inputs.positionRad = value, () -> HAS_STICKY_FAULT = true);
     useValueIfOk(spark, encoder::getVelocity, (value) -> inputs.velocityRadPerSec = value, () -> HAS_STICKY_FAULT = true);
