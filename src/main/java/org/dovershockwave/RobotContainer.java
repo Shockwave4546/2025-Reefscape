@@ -3,6 +3,7 @@ package org.dovershockwave;
 import au.grapplerobotics.CanBridge;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import org.dovershockwave.subsystems.algaerollers.AlgaeRollerSubsystem;
 import org.dovershockwave.subsystems.algaerollers.AlgaeRollersConstants;
@@ -85,6 +86,7 @@ public class RobotContainer {
     }
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices");
+    autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
 
 //    if (!isCompetitionMatch()) {
 //      autoChooser.addOption("Drive Simple FF Characterization", new FeedforwardCharacterizationCommand(swerve));
