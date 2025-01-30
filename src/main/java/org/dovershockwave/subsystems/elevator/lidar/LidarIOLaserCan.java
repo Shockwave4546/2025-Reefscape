@@ -2,7 +2,6 @@ package org.dovershockwave.subsystems.elevator.lidar;
 
 import au.grapplerobotics.ConfigurationFailedException;
 import au.grapplerobotics.LaserCan;
-import au.grapplerobotics.interfaces.LaserCanInterface;
 
 public class LidarIOLaserCan implements LidarIO {
   private final LaserCan laserCan = new LaserCan(41);
@@ -20,11 +19,7 @@ public class LidarIOLaserCan implements LidarIO {
   @Override public void updateInputs(LidarIOInputs inputs) {
     final var measurement = laserCan.getMeasurement();
     final var hasValidMeasurement = measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT;
-    if (hasValidMeasurement) {
-      inputs.distanceMeters = measurement.distance_mm / 1000.0;
-    } else {
-      inputs.distanceMeters = Double.MIN_VALUE;
-    }
+    inputs.distanceMeters = hasValidMeasurement ? measurement.distance_mm / 1000.0 : Double.MIN_VALUE;
     inputs.hasValidMeasurement = hasValidMeasurement;
   }
 }
