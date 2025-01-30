@@ -43,9 +43,6 @@ public class ElevatorConfigs {
             .velocityConversionFactor(ElevatorConstants.VELOCITY_CONVERSION_FACTOR)
             .uvwMeasurementPeriod(10)
             .uvwAverageDepth(10);
-    RIGHT_CONFIG.closedLoop
-            .feedbackSensor(ClosedLoopConfig.FeedbackSensor.kPrimaryEncoder)
-            .pidf(ElevatorConstants.GAINS.p(), ElevatorConstants.GAINS.i(), ElevatorConstants.GAINS.d(), ElevatorConstants.GAINS.ff());
     RIGHT_CONFIG.signals
             .primaryEncoderPositionAlwaysOn(true)
             .primaryEncoderPositionPeriodMs((int) (1000.0 / SwerveConstants.ODOMETRY_FREQUENCY))

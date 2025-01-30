@@ -7,7 +7,6 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.filter.Debouncer;
-import org.dovershockwave.subsystems.swerve.SwerveConfigs;
 import org.dovershockwave.utils.PIDFGains;
 
 import java.util.function.DoubleSupplier;
@@ -64,7 +63,6 @@ public class ElevatorIOSpark implements ElevatorIO {
             () -> HAS_STICKY_FAULT = true);
     useValueIfOk(rightSpark, rightSpark::getOutputCurrent, (value) -> inputs.rightCurrentAmps = value, () -> HAS_STICKY_FAULT = true);
     inputs.rightConnected = rightConnectedDebouncer.calculate(!HAS_STICKY_FAULT);
-
   }
 
   @Override public void setPosition(double rad) {
@@ -86,10 +84,6 @@ public class ElevatorIOSpark implements ElevatorIO {
   @Override public void setPIDF(PIDFGains gains) {
     final var config = new SparkMaxConfig().apply(new ClosedLoopConfig().pidf(gains.p(), gains.i(), gains.d(), gains.ff()));
     tryUntilOk(leftSpark, 5, spark -> {
-      spark.configure(config, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
-    });
-
-    tryUntilOk(rightSpark, 5, spark -> {
       spark.configure(config, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
     });
   }
