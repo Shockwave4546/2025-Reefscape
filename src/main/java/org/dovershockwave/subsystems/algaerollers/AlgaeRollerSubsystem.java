@@ -6,27 +6,27 @@ import org.dovershockwave.utils.TunablePIDF;
 import org.littletonrobotics.junction.Logger;
 
 public class AlgaeRollerSubsystem extends SubsystemBase {
-  private final AlgaeRollerIO algaeIO;
-  private final AlgaeRollerIOInputsAutoLogged algaeInputs = new AlgaeRollerIOInputsAutoLogged();
+  private final AlgaeRollersIO algaeIO;
+  private final AlgaeRollersIOInputsAutoLogged algaeInputs = new AlgaeRollersIOInputsAutoLogged();
 
   private final TunablePIDF tunablePIDF = new TunablePIDF("AlgaeRoller/PID/", AlgaeRollersConstants.GAINS);
 
   private final Alert disconnectedAlert = new Alert("Disconnected motor on the algae roller.", Alert.AlertType.kError);
 
-  public AlgaeRollerSubsystem(AlgaeRollerIO algaeIO) {
+  public AlgaeRollerSubsystem(AlgaeRollersIO algaeIO) {
     this.algaeIO = algaeIO;
   }
 
   @Override public void periodic() {
     algaeIO.updateInputs(algaeInputs);
-    Logger.processInputs("AlgaeRoller", algaeInputs);
+    Logger.processInputs("AlgaeRollers", algaeInputs);
 
     tunablePIDF.periodic(algaeIO::setPIDF, algaeIO::setVelocity);
 
     disconnectedAlert.set(!algaeInputs.connected);
   }
 
-  public void setState(AlgaeRollerState state) {
+  public void setState(AlgaeRollersState state) {
     algaeIO.setVelocity(state.velocityRadPerSec);
   }
 }
