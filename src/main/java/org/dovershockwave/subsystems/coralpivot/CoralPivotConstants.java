@@ -1,5 +1,6 @@
 package org.dovershockwave.subsystems.coralpivot;
 
+import edu.wpi.first.math.util.Units;
 import org.dovershockwave.utils.PIDFGains;
 
 public class CoralPivotConstants {
@@ -20,4 +21,6 @@ public class CoralPivotConstants {
 
   public static final PIDFGains WRIST_GAINS = new PIDFGains(0.0, 0.0, 0.0, 0.0);
   public static final PIDFGains BIGGER_PIVOT_GAINS = new PIDFGains(0.0, 0.0, 0.0, 0.0);
+  public static final double WRIST_POSITION_TOLERANCE = Units.degreesToRadians(2.5);
+  public static final double BIGGER_PIVOT_POSITION_TOLERANCE =  Units.degreesToRadians(2.5);
 }

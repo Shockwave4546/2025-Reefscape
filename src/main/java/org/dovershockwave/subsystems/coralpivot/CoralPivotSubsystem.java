@@ -1,8 +1,10 @@
 package org.dovershockwave.subsystems.coralpivot;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.dovershockwave.utils.TunablePIDF;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class CoralPivotSubsystem extends SubsystemBase {
@@ -16,6 +18,8 @@ public class CoralPivotSubsystem extends SubsystemBase {
   private final Alert biggerPivotLeftDisconnectedAlert = new Alert("Disconnected motor on the coral bigger pivot left motor.", Alert.AlertType.kError);
   private final Alert biggerPivotRightDisconnectedAlert = new Alert("Disconnected motor on the coral bigger pivot right motor.", Alert.AlertType.kError);
 
+  private CoralPivotState desiredState = CoralPivotState.STARTING;
+
   public CoralPivotSubsystem(CoralPivotIO coralPivotIO) {
     this.coralPivotIO = coralPivotIO;
   }
@@ -24,16 +28,49 @@ public class CoralPivotSubsystem extends SubsystemBase {
     coralPivotIO.updateInputs(coralPivotInputs);
     Logger.processInputs("CoralPivot", coralPivotInputs);
 
-    wristTunablePIDF.periodic(coralPivotIO::setWristPIDF, coralPivotIO::setWristPosition);
-    biggerPivotTunablePIDF.periodic(coralPivotIO::setBiggerPivotPIDF, coralPivotIO::setBiggerPivotPosition);
+    wristTunablePIDF.periodic(coralPivotIO::setWristPIDF, positionRad -> {
+      coralPivotIO.setWristPosition(positionRad);
+      setDesiredState(new CoralPivotState("PID Wrist Tuning", positionRad, coralPivotInputs.biggerPivotLeftPositionRad));
+    });
+
+    biggerPivotTunablePIDF.periodic(coralPivotIO::setBiggerPivotPIDF, positionRad -> {
+      coralPivotIO.setBiggerPivotPosition(positionRad);
+      setDesiredState(new CoralPivotState("PID Bigger Pivot Tuning", coralPivotInputs.wristPositionRad, positionRad));
+    });
 
     wristDisconnectedAlert.set(!coralPivotInputs.wristConnected);
     biggerPivotLeftDisconnectedAlert.set(!coralPivotInputs.biggerPivotLeftConnected);
     biggerPivotRightDisconnectedAlert.set(!coralPivotInputs.biggerPivotRightConnected);
   }
 
-  public void setState(CoralPivotState state) {
-    coralPivotIO.setWristPosition(state.wristPositionRad);
-    coralPivotIO.setBiggerPivotPosition(state.biggerPivotPositionRad);
+  public void setDesiredState(CoralPivotState desiredState) {
+    coralPivotIO.setWristPosition(desiredState.wristPositionRad());
+    coralPivotIO.setBiggerPivotPosition(desiredState.biggerPivotPositionRad());
+    this.desiredState = desiredState;
+  }
+
+  @AutoLogOutput(key = "CoralPivot/State")
+  public CoralPivotState getState() {
+    return new CoralPivotState("Current State", coralPivotInputs.wristPositionRad, coralPivotInputs.biggerPivotLeftPositionRad);
+  }
+
+  @AutoLogOutput(key = "CoralPivot/DesiredState")
+  public CoralPivotState getDesiredState() {
+    return this.desiredState;
+  }
+
+  @AutoLogOutput(key = "CoralPivot/AtDesiredWristState")
+  public boolean atDesiredWristState() {
+    return MathUtil.isNear(coralPivotInputs.wristPositionRad, desiredState.wristPositionRad(), CoralPivotConstants.WRIST_POSITION_TOLERANCE);
+  }
+
+  @AutoLogOutput(key = "CoralPivot/AtDesiredBiggerPivotState")
+  public boolean atDesiredBiggerPivotState() {
+    return MathUtil.isNear(coralPivotInputs.biggerPivotLeftPositionRad, desiredState.biggerPivotPositionRad(), CoralPivotConstants.BIGGER_PIVOT_POSITION_TOLERANCE);
+  }
+
+  @AutoLogOutput(key = "CoralPivot/AtDesiredState")
+  public boolean atDesiredState() {
+    return atDesiredWristState() && atDesiredBiggerPivotState();
   }
 }

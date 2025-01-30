@@ -12,4 +12,5 @@ public class CoralRollersConstants {
   public static final double ENCODER_VELOCITY_FACTOR = ((2 * Math.PI) / MOTOR_REDUCTION) / 60.0;
 
   public static final PIDFGains GAINS = new PIDFGains(0.0, 0.0, 0.0, 0.0);
+  public static final double VELOCITY_TOLERANCE = 1.0;
 }

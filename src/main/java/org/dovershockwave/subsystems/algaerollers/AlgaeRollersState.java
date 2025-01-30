@@ -1,13 +1,7 @@
 package org.dovershockwave.subsystems.algaerollers;
 
-public enum AlgaeRollersState {
-  STOPPED(0.0),
-  INTAKE(0.0),
-  OUTTAKE(0.0);
-
-  public final double velocityRadPerSec;
-
-  AlgaeRollersState(double velocityRadPerSec) {
-    this.velocityRadPerSec = velocityRadPerSec;
-  }
+public record AlgaeRollersState(String name, double velocityRadPerSec) {
+  public static final AlgaeRollersState STOPPED = new AlgaeRollersState("Stopped", 0.0);
+  public static final AlgaeRollersState INTAKE = new AlgaeRollersState("Intake", 0.0);
+  public static final AlgaeRollersState OUTTAKE = new AlgaeRollersState("Outtake", 0.0);
 }

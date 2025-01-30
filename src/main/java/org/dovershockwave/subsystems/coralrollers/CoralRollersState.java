@@ -1,13 +1,7 @@
 package org.dovershockwave.subsystems.coralrollers;
 
-public enum CoralRollersState {
-  STOPPED(0.0),
-  INTAKE(0.0),
-  OUTTAKE(0.0);
-
-  public final double velocityRadPerSec;
-
-  CoralRollersState(double velocityRadPerSec) {
-    this.velocityRadPerSec = velocityRadPerSec;
-  }
+public record CoralRollersState(String name, double velocityRadPerSec) {
+  public static final CoralRollersState STOPPED = new CoralRollersState("Stopped", 0.0);
+  public static final CoralRollersState INTAKE = new CoralRollersState("Intake", 0.0);
+  public static final CoralRollersState OUTTAKE = new CoralRollersState("Outtake", 0.0);
 }
