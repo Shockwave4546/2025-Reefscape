@@ -1,6 +1,5 @@
 package org.dovershockwave.subsystems.algaerollers;
 
-import org.dovershockwave.utils.PIDFGains;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface AlgaeRollersIO {
@@ -14,7 +13,5 @@ public interface AlgaeRollersIO {
 
   default void updateInputs(AlgaeRollersIOInputs inputs) {}
 
-  default void setVelocity(double velocityRadPerSec) {}
-
-  default void setPIDF(PIDFGains gains) {}
+  default void setVoltage(double volts) {}
 }
