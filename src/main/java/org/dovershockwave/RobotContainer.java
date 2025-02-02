@@ -23,6 +23,7 @@ import org.dovershockwave.subsystems.elevator.ElevatorIOSpark;
 import org.dovershockwave.subsystems.elevator.ElevatorSubsystem;
 import org.dovershockwave.subsystems.elevator.lidar.LidarIO;
 import org.dovershockwave.subsystems.elevator.lidar.LidarIOLaserCan;
+import org.dovershockwave.subsystems.vision.ReefScoringPosition;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class RobotContainer {
@@ -34,10 +35,12 @@ public class RobotContainer {
   private final CoralPivotSubsystem coralPivot;
   protected final CommandXboxController driverController = new CommandXboxController(Constants.DRIVER_CONTROLLER_PORT);
   protected final CommandXboxController operatorController = new CommandXboxController(Constants.OPERATOR_CONTROLLER_PORT);
+  private final ReefScoringSelector selector = new ReefScoringSelector();
 
   protected final LoggedDashboardChooser<Command> autoChooser;
 
   public RobotContainer() {
+    // TODO: 2/2/2025 eventually get rid of this
     CanBridge.runTCP();
     switch (Constants.CURRENT_MODE) {
       case REAL:
@@ -116,9 +119,11 @@ public class RobotContainer {
 //    driverController.rightBumper().onTrue(new InstantCommand(() -> swerve.multiplyFF(0.1)).ignoringDisable(true));
 //    driverController.a().onTrue(new DriveLinearVelocityCommand(swerve, driverController, false));
 //    driverController.b().onTrue(new DriveLinearVelocityCommand(swerve, driverController, true));
-//
-//    driverController.povDown().onTrue(new InstantCommand(() -> swerve.setDefaultCommand(new SwerveDriveCommand(swerve, driverController))));
-//    driverController.povUp().onTrue(new InstantCommand(() -> CommandScheduler.getInstance().removeDefaultCommand(swerve)));
+
+    operatorController.povDown().onTrue(new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L1)));
+    operatorController.povLeft().onTrue(new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L2)));
+    operatorController.povUp().onTrue(new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L3)));
+    operatorController.povRight().onTrue(new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L4)));
   }
 
   public static boolean isCompetitionMatch() {

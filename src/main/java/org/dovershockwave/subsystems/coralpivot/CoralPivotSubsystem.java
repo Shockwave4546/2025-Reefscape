@@ -3,6 +3,7 @@ package org.dovershockwave.subsystems.coralpivot;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.dovershockwave.subsystems.vision.ReefScoringPosition;
 import org.dovershockwave.utils.TunablePIDF;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -47,6 +48,15 @@ public class CoralPivotSubsystem extends SubsystemBase {
     coralPivotIO.setWristPosition(desiredState.wristPositionRad());
     coralPivotIO.setBiggerPivotPosition(desiredState.biggerPivotPositionRad());
     this.desiredState = desiredState;
+  }
+
+  public void setDesiredState(ReefScoringPosition.ReefLevel level) {
+    switch (level) {
+      case L1 -> setDesiredState(CoralPivotState.L1);
+      case L2 -> setDesiredState(CoralPivotState.L2);
+      case L3 -> setDesiredState(CoralPivotState.L3);
+      case L4 -> setDesiredState(CoralPivotState.L4);
+    }
   }
 
   @AutoLogOutput(key = "CoralPivot/State")

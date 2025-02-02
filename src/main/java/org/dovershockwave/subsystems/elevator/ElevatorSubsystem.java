@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.dovershockwave.subsystems.elevator.lidar.LidarIO;
 import org.dovershockwave.subsystems.elevator.lidar.LidarIOInputsAutoLogged;
+import org.dovershockwave.subsystems.vision.ReefScoringPosition;
 import org.dovershockwave.utils.TunablePIDF;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -45,6 +46,15 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void setDesiredState(ElevatorState desiredState) {
     elevatorIO.setPosition(desiredState.positionRad());
     this.desiredState = desiredState;
+  }
+
+  public void setDesiredState(ReefScoringPosition.ReefLevel level) {
+    switch (level) {
+      case L1 -> setDesiredState(ElevatorState.L1);
+      case L2 -> setDesiredState(ElevatorState.L2);
+      case L3 -> setDesiredState(ElevatorState.L3);
+      case L4 -> setDesiredState(ElevatorState.L4);
+    }
   }
 
   @AutoLogOutput(key = "Elevator/State")
