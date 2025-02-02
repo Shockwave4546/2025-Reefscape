@@ -10,7 +10,7 @@ import org.dovershockwave.subsystems.vision.VisionConstants;
 import org.dovershockwave.subsystems.vision.VisionSubsystem;
 import org.dovershockwave.subsystems.vision.controllers.FullAlignController;
 
-public class AlignToReefCommand extends Command {
+public class AlignToReefCoralCommand extends Command {
   private final FullAlignController alignController = new FullAlignController(
           "AlignToReefCommand",
           VisionConstants.ALIGNMENT_RAD_TOLERANCE,
@@ -26,7 +26,7 @@ public class AlignToReefCommand extends Command {
   private final ReefScoringSelector selector;
   private boolean tagFound = false;
 
-  public AlignToReefCommand(SwerveSubsystem swerve, VisionSubsystem vision, ReefScoringSelector selector) {
+  public AlignToReefCoralCommand(SwerveSubsystem swerve, VisionSubsystem vision, ReefScoringSelector selector) {
     this.swerve = swerve;
     this.vision = vision;
     this.selector = selector;

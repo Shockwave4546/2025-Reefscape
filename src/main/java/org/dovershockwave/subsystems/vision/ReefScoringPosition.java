@@ -9,6 +9,7 @@ import edu.wpi.first.math.util.Units;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.OptionalDouble;
 
 public record ReefScoringPosition(int id, Translation3d position, Rotation2d robotHeading) {
   /**
@@ -42,6 +43,10 @@ public record ReefScoringPosition(int id, Translation3d position, Rotation2d rob
     REEF_SCORING_POSE_2D.put(10, new Pose2d(3.6576, 10.501458, Rotation2d.fromRadians(0.0)));
     REEF_SCORING_POSE_2D.put(11, new Pose2d(4.073905999999999, 11.22108, Rotation2d.fromRadians(0.0)));
     REEF_SCORING_POSE_2D.put(6, new Pose2d(4.073905999999999, 11.940702, Rotation2d.fromRadians(0.0)));
+  }
+
+  public static OptionalDouble getRobotHeading(int id) {
+    return OptionalDouble.of(REEF_SCORING_POSE_2D.get(id).getRotation().getRadians());
   }
 
   public static Optional<ReefScoringPosition> getPositionFor(int id, ReefScoringSide side, ReefLevel level) {

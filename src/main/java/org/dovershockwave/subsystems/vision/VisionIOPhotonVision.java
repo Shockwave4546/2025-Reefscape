@@ -30,6 +30,7 @@ public class VisionIOPhotonVision implements VisionIO {
         final var bestTarget = result.getBestTarget();
         final var bestTargetPose = bestTarget.getBestCameraToTarget();
         inputs.bestTargetObservation = new TargetObservation(
+                true,
                 bestTarget.getFiducialId(),
                 Rotation2d.fromDegrees(bestTarget.getYaw()),
                 Rotation2d.fromDegrees(bestTarget.getPitch()),
@@ -39,6 +40,7 @@ public class VisionIOPhotonVision implements VisionIO {
         inputs.latestTargetObservations = result.targets.stream().map(target -> {
           final var targetPose = target.getBestCameraToTarget();
           return new TargetObservation(
+                  true,
                   target.getFiducialId(),
                   Rotation2d.fromDegrees(target.getYaw()),
                   Rotation2d.fromDegrees(target.getPitch()),
@@ -46,7 +48,7 @@ public class VisionIOPhotonVision implements VisionIO {
                   targetPose.getTranslation().getNorm());
         }).toArray(TargetObservation[]::new);
       } else {
-        inputs.bestTargetObservation = new TargetObservation(Integer.MIN_VALUE, new Rotation2d(), new Rotation2d(), new Translation3d(), 0.0);
+        inputs.bestTargetObservation = new TargetObservation(false, Integer.MIN_VALUE, new Rotation2d(), new Rotation2d(), new Translation3d(), 0.0);
         inputs.latestTargetObservations = new TargetObservation[0];
       }
 
