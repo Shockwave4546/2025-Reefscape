@@ -8,7 +8,6 @@ import org.dovershockwave.subsystems.coralrollers.CoralRollersState;
 import org.dovershockwave.subsystems.coralrollers.CoralRollersSubsystem;
 import org.dovershockwave.subsystems.elevator.ElevatorSubsystem;
 import org.dovershockwave.subsystems.swerve.SwerveSubsystem;
-import org.dovershockwave.subsystems.vision.CameraType;
 import org.dovershockwave.subsystems.vision.VisionSubsystem;
 import org.dovershockwave.subsystems.vision.commands.AlignToReefCommand;
 
@@ -18,7 +17,7 @@ public class FullScoreReefCommand extends SequentialCommandGroup {
     addCommands(
             new InstantCommand(() -> elevator.setDesiredState(selector.getLevel())),
             new InstantCommand(() -> coralPivot.setDesiredState(selector.getLevel())),
-            new AlignToReefCommand(swerve, vision, CameraType.REEF_CAMERA, selector),
+            new AlignToReefCommand(swerve, vision, selector),
             new InstantCommand(() -> coralRollers.setDesiredState(CoralRollersState.OUTTAKE)).withTimeout(0.25)
     );
 

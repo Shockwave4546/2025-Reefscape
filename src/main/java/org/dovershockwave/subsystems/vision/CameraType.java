@@ -4,9 +4,15 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 
 public enum CameraType {
-  REEF_CAMERA(
+  LEFT_REEF_CAMERA(
           0,
-          "ReefCamera",
+          "LeftReefCamera",
+          new Transform3d(0.0, 0.0, 0.0, new Rotation3d(0.0, 0.0, 0.0)),
+          1.0),
+
+  RIGHT_REEF_CAMERA(
+          0,
+          "RightReefCamera",
           new Transform3d(0.0, 0.0, 0.0, new Rotation3d(0.0, 0.0, 0.0)),
           1.0),
 

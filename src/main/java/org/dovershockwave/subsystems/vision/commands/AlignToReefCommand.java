@@ -23,14 +23,12 @@ public class AlignToReefCommand extends Command {
 
   private final SwerveSubsystem swerve;
   private final VisionSubsystem vision;
-  private final CameraType camera;
   private final ReefScoringSelector selector;
   private boolean tagFound = false;
 
-  public AlignToReefCommand(SwerveSubsystem swerve, VisionSubsystem vision, CameraType camera, ReefScoringSelector selector) {
+  public AlignToReefCommand(SwerveSubsystem swerve, VisionSubsystem vision, ReefScoringSelector selector) {
     this.swerve = swerve;
     this.vision = vision;
-    this.camera = camera;
     this.selector = selector;
     addRequirements(swerve, vision);
   }
@@ -41,9 +39,9 @@ public class AlignToReefCommand extends Command {
   }
 
   @Override public void execute() {
+    final var camera = selector.getSide() == ReefScoringPosition.ReefScoringSide.LEFT ? CameraType.RIGHT_REEF_CAMERA : CameraType.LEFT_REEF_CAMERA;
     final var bestTarget = vision.getBestTargetObservation(camera);
 
-    // TODO: 2/2/2025 distinguish between left and right reef camera based on side 
     ReefScoringPosition.getPositionFor(bestTarget.tagId(), selector.getSide(), selector.getLevel()).ifPresentOrElse(position -> {
       this.tagFound = true;
       // TODO: 2/1/2025 Fix this xOffset
