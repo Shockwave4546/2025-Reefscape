@@ -121,7 +121,7 @@ public class RobotContainer {
 //    driverController.a().whileTrue(new AlignToHumanPlayerCommand(swerve, vision, HumanPlayerStationSide.CLOSE));
 //    driverController.x().whileTrue(new AlignToHumanPlayerCommand(swerve, vision, HumanPlayerStationSide.CENTER));
 //    driverController.y().whileTrue(new AlignToHumanPlayerCommand(swerve, vision, HumanPlayerStationSide.FAR));
-//    driverController.b().whileTrue(new TemporaryHeadingCommand(swerve));
+//    driverController.b().whileTrue(new TemporaryHeadingCommand(swerve, vision));
 //
 //    swerve.setDefaultCommand(new SwerveDriveCommand(swerve, driverController));
 //    driverController.povDown().onTrue(new ResetFieldOrientatedDriveCommand(swerve));
