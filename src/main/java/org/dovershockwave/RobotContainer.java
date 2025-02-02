@@ -109,21 +109,29 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+//    driverController.leftTrigger(0.8).onTrue(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(0.5))).onFalse(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(1.0)));
+//    driverController.leftBumper().whileTrue(new InstantCommand(() -> {
+//      selector.setSide(ReefScoringPosition.ReefScoringSide.LEFT);
+//    }).andThen(new AlignToReefCoralCommand(swerve, vision, selector)));
+//
+//    driverController.rightBumper().whileTrue(new InstantCommand(() -> {
+//      selector.setSide(ReefScoringPosition.ReefScoringSide.RIGHT);
+//    }).andThen(new AlignToReefCoralCommand(swerve, vision, selector)));
+//
+//    driverController.a().whileTrue(new AlignToHumanPlayerCommand(swerve, vision, HumanPlayerStationSide.CLOSE));
+//    driverController.x().whileTrue(new AlignToHumanPlayerCommand(swerve, vision, HumanPlayerStationSide.CENTER));
+//    driverController.y().whileTrue(new AlignToHumanPlayerCommand(swerve, vision, HumanPlayerStationSide.FAR));
+//    driverController.b().whileTrue(new TemporaryHeadingCommand(swerve));
+//
 //    swerve.setDefaultCommand(new SwerveDriveCommand(swerve, driverController));
-//    driverController.b().onTrue(new ResetFieldOrientatedDriveCommand(swerve));
-//    driverController.x().onTrue(new InstantCommand(swerve::stopWithX, swerve));
-//
-//    driverController.y().onTrue(new AlignToTagCommand(swerve, vision, CameraType.REEF_CAMERA));
-//
-//    driverController.leftBumper().onTrue(new InstantCommand(() -> swerve.multiplyFF(-0.1)).ignoringDisable(true));
-//    driverController.rightBumper().onTrue(new InstantCommand(() -> swerve.multiplyFF(0.1)).ignoringDisable(true));
-//    driverController.a().onTrue(new DriveLinearVelocityCommand(swerve, driverController, false));
-//    driverController.b().onTrue(new DriveLinearVelocityCommand(swerve, driverController, true));
+//    driverController.povDown().onTrue(new ResetFieldOrientatedDriveCommand(swerve));
 
     operatorController.povDown().onTrue(new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L1)));
     operatorController.povLeft().onTrue(new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L2)));
     operatorController.povUp().onTrue(new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L3)));
     operatorController.povRight().onTrue(new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L4)));
+
+    // TODO: 2/2/25 Add Algae commands
   }
 
   public static boolean isCompetitionMatch() {

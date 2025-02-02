@@ -36,6 +36,8 @@ import java.util.Arrays;
 import static edu.wpi.first.units.Units.Volts;
 
 public class SwerveSubsystem extends SubsystemBase {
+  private static double velocityMultiplier = 1.0;
+
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
   private final Alert gyroDisconnectedAlert = new Alert("Disconnected gyro", Alert.AlertType.kError);
   private final GyroIO gyroIO;
@@ -196,6 +198,14 @@ public class SwerveSubsystem extends SubsystemBase {
     for (Module module : modules) {
       module.runTurnCharacterization(volts);
     }
+  }
+
+  public static double getVelocityMultiplier() {
+    return velocityMultiplier;
+  }
+
+  public static void setVelocityMultiplier(double velocityMultiplier) {
+    SwerveSubsystem.velocityMultiplier = velocityMultiplier;
   }
 
   public void stop() {

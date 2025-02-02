@@ -41,9 +41,9 @@ public class SwerveDriveCommand extends Command {
     omega = Math.copySign(omega * omega, omega);
 
     return new ChassisSpeeds(
-            linearVelocity.getX() * SwerveConstants.MAX_REAL_SPEED_METERS_PER_SECOND,
-            linearVelocity.getY() * SwerveConstants.MAX_REAL_SPEED_METERS_PER_SECOND,
-            omega * SwerveConstants.MAX_ANGULAR_SPEED_RAD_PER_SEC
+            linearVelocity.getX() * SwerveConstants.MAX_REAL_SPEED_METERS_PER_SECOND * SwerveSubsystem.getVelocityMultiplier(),
+            linearVelocity.getY() * SwerveConstants.MAX_REAL_SPEED_METERS_PER_SECOND * SwerveSubsystem.getVelocityMultiplier(),
+            omega * SwerveConstants.MAX_ANGULAR_SPEED_RAD_PER_SEC * SwerveSubsystem.getVelocityMultiplier()
     );
   }
 

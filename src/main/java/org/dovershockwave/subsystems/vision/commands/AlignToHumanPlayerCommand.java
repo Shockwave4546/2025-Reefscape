@@ -23,11 +23,13 @@ public class AlignToHumanPlayerCommand extends Command {
 
   private final SwerveSubsystem swerve;
   private final VisionSubsystem vision;
+  private final HumanPlayerStationSide side;
   private boolean tagFound = false;
 
-  public AlignToHumanPlayerCommand(SwerveSubsystem swerve, VisionSubsystem vision) {
+  public AlignToHumanPlayerCommand(SwerveSubsystem swerve, VisionSubsystem vision, HumanPlayerStationSide side) {
     this.swerve = swerve;
     this.vision = vision;
+    this.side = side;
     addRequirements(swerve, vision);
   }
 
@@ -37,6 +39,7 @@ public class AlignToHumanPlayerCommand extends Command {
   }
 
   @Override public void execute() {
+    // TODO: 2/2/25 this logic isnt actually real yet, 
     final var bestTarget = vision.getBestTargetObservation(CameraType.HUMAN_PLAYER_STATION_CAMERA);
     if (!bestTarget.hasObservation()) {
       swerve.stop();
