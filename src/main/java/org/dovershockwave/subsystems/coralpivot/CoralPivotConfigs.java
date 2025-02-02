@@ -19,6 +19,7 @@ public class CoralPivotConfigs {
             .smartCurrentLimit(Constants.NEO_550_CURRENT_LIMIT)
             .voltageCompensation(12.0);
     WRIST_CONFIG.absoluteEncoder
+            .zeroCentered(true)
             .positionConversionFactor(CoralPivotConstants.WRIST_POSITION_CONVERSION_FACTOR)
             .velocityConversionFactor(CoralPivotConstants.WRIST_VELOCITY_CONVERSION_FACTOR)
             .averageDepth(2);

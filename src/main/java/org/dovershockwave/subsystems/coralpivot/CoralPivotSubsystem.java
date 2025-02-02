@@ -30,12 +30,12 @@ public class CoralPivotSubsystem extends SubsystemBase {
 
     wristTunablePIDF.periodic(coralPivotIO::setWristPIDF, positionRad -> {
       coralPivotIO.setWristPosition(positionRad);
-      setDesiredState(new CoralPivotState("PID Wrist Tuning", positionRad, coralPivotInputs.biggerPivotLeftPositionRad));
+      setDesiredState(new CoralPivotState(positionRad, coralPivotInputs.biggerPivotLeftPositionRad));
     });
 
     biggerPivotTunablePIDF.periodic(coralPivotIO::setBiggerPivotPIDF, positionRad -> {
       coralPivotIO.setBiggerPivotPosition(positionRad);
-      setDesiredState(new CoralPivotState("PID Bigger Pivot Tuning", coralPivotInputs.wristPositionRad, positionRad));
+      setDesiredState(new CoralPivotState(coralPivotInputs.wristPositionRad, positionRad));
     });
 
     wristDisconnectedAlert.set(!coralPivotInputs.wristConnected);
@@ -51,7 +51,7 @@ public class CoralPivotSubsystem extends SubsystemBase {
 
   @AutoLogOutput(key = "CoralPivot/State")
   public CoralPivotState getState() {
-    return new CoralPivotState("Current State", coralPivotInputs.wristPositionRad, coralPivotInputs.biggerPivotLeftPositionRad);
+    return new CoralPivotState(coralPivotInputs.wristPositionRad, coralPivotInputs.biggerPivotLeftPositionRad);
   }
 
   @AutoLogOutput(key = "CoralPivot/DesiredState")
