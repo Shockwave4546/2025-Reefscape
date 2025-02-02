@@ -1,6 +1,5 @@
 package org.dovershockwave.subsystems.coralrollers;
 
-import org.dovershockwave.utils.PIDFGains;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface CoralRollersIO {
@@ -14,7 +13,5 @@ public interface CoralRollersIO {
 
   default void updateInputs(CoralRollersIOInputs inputs) {}
 
-  default void setVelocity(double velocityRadPerSec) {}
-
-  default void setPIDF(PIDFGains gains) {}
+  default void setVoltage(double volts) {}
 }

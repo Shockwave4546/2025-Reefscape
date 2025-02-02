@@ -4,10 +4,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.ClosedLoopConfig;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.filter.Debouncer;
-import org.dovershockwave.utils.PIDFGains;
 
 import java.util.function.DoubleSupplier;
 
@@ -42,16 +39,7 @@ public class CoralRollersIOSpark implements CoralRollersIO {
     inputs.connected = connectedDebouncer.calculate(!HAS_STICKY_FAULT);
   }
 
-  @Override public void setVelocity(double velocityRadPerSec) {
-    tryUntilOk(spark, 5, spark -> {
-      spark.getClosedLoopController().setReference(velocityRadPerSec, SparkBase.ControlType.kVelocity);
-    });
-  }
-
-  @Override public void setPIDF(PIDFGains gains) {
-    final var config = new SparkMaxConfig().apply(new ClosedLoopConfig().pidf(gains.p(), gains.i(), gains.d(), gains.ff()));
-    tryUntilOk(spark, 5, spark -> {
-      spark.configure(config, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
-    });
+  @Override public void setVoltage(double volts) {
+    spark.setVoltage(volts);
   }
 }
