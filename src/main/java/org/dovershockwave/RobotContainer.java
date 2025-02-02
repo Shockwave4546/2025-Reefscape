@@ -54,7 +54,7 @@ public class RobotContainer {
 //        vision = new VisionSubsystem(
 //                swerve::addVisionMeasurement,
 //                Pair.of(CameraType.REEF_CAMERA, new VisionIOPhotonVision(CameraType.REEF_CAMERA)),
-//                Pair.of(CameraType.HUMAN_PLAYER_STATION_CAMERA, new VisionIOPhotonVision(CameraType.HUMAN_PLAYER_STATION_CAMERA)));
+//                Pair.of(CameraType.LEFT_HUMAN_PLAYER_STATION_CAMERA, new VisionIOPhotonVision(CameraType.LEFT_HUMAN_PLAYER_STATION_CAMERA)));
 
         elevator = new ElevatorSubsystem(new ElevatorIOSpark(ElevatorConstants.LEFT_SPARK_ID, ElevatorConstants.RIGHT_SPARK_ID), new LidarIOLaserCan());
         coralRollers = new CoralRollersSubsystem(new CoralRollersIOSpark(CoralRollersConstants.SPARK_ID));
@@ -71,7 +71,7 @@ public class RobotContainer {
 //        vision = new VisionSubsystem(
 //                swerve::addVisionMeasurement,
 //                Pair.of(CameraType.REEF_CAMERA, new VisionIOPhotonVisionSim(CameraType.REEF_CAMERA, swerve::getPose)),
-//                Pair.of(CameraType.HUMAN_PLAYER_STATION_CAMERA, new VisionIOPhotonVisionSim(CameraType.HUMAN_PLAYER_STATION_CAMERA, swerve::getPose)));
+//                Pair.of(CameraType.LEFT_HUMAN_PLAYER_STATION_CAMERA, new VisionIOPhotonVisionSim(CameraType.LEFT_HUMAN_PLAYER_STATION_CAMERA, swerve::getPose)));
 
         elevator = new ElevatorSubsystem(new ElevatorIO() {}, new LidarIO() {});
         coralRollers = new CoralRollersSubsystem(new CoralRollersIO() {});

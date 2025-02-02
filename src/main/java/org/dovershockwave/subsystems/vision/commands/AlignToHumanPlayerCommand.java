@@ -4,7 +4,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import org.dovershockwave.subsystems.swerve.SwerveSubsystem;
 import org.dovershockwave.subsystems.vision.CameraType;
-import org.dovershockwave.subsystems.vision.ReefScoringPosition;
+import org.dovershockwave.subsystems.vision.HumanPlayerStationPosition;
 import org.dovershockwave.subsystems.vision.VisionConstants;
 import org.dovershockwave.subsystems.vision.VisionSubsystem;
 import org.dovershockwave.subsystems.vision.controllers.FullAlignController;
@@ -23,10 +23,10 @@ public class AlignToHumanPlayerCommand extends Command {
 
   private final SwerveSubsystem swerve;
   private final VisionSubsystem vision;
-  private final HumanPlayerStationSide side;
+  private final HumanPlayerStationPosition.HumanPlayerStationSide side;
   private boolean tagFound = false;
 
-  public AlignToHumanPlayerCommand(SwerveSubsystem swerve, VisionSubsystem vision, HumanPlayerStationSide side) {
+  public AlignToHumanPlayerCommand(SwerveSubsystem swerve, VisionSubsystem vision, HumanPlayerStationPosition.HumanPlayerStationSide side) {
     this.swerve = swerve;
     this.vision = vision;
     this.side = side;
@@ -39,25 +39,24 @@ public class AlignToHumanPlayerCommand extends Command {
   }
 
   @Override public void execute() {
-    // TODO: 2/2/25 this logic isnt actually real yet, 
-    final var bestTarget = vision.getBestTargetObservation(CameraType.HUMAN_PLAYER_STATION_CAMERA);
-    if (!bestTarget.hasObservation()) {
-      swerve.stop();
-      return;
-    }
+    final var camera = switch (side) {
+      case CLOSE -> CameraType.RIGHT_HUMAN_PLAYER_STATION_CAMERA;
+      case CENTER -> vision.getBestTargetObservation(CameraType.LEFT_HUMAN_PLAYER_STATION_CAMERA).hasObservation() ? CameraType.LEFT_HUMAN_PLAYER_STATION_CAMERA : CameraType.RIGHT_HUMAN_PLAYER_STATION_CAMERA;
+      case FAR -> CameraType.LEFT_HUMAN_PLAYER_STATION_CAMERA;
+    };
 
-    ReefScoringPosition.getRobotHeading(bestTarget.tagId()).ifPresentOrElse(desiredHeading -> {
+    final var bestTarget = vision.getBestTargetObservation(camera);
+    HumanPlayerStationPosition.getPositionFor(bestTarget.tagId(), side).ifPresentOrElse(position -> {
       this.tagFound = true;
-
       // TODO: 2/2/25 Fix this xOffset
-      final var offsetTranslationGoal = new Translation2d(0.5, 0.0);
+      final var offsetTranslationGoal = new Translation2d(0.5, position.yOffsetMeters());
       final var speeds = alignController.calculate(
               swerve.getRotation().getRadians(),
-              desiredHeading,
+              position.robotHeadingRad(),
               bestTarget.translation().toTranslation2d(),
               offsetTranslationGoal,
               String.valueOf(bestTarget.tagId())
-              );
+      );
 
       swerve.runVelocity(speeds, false);
     }, swerve::stop);

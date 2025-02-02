@@ -16,9 +16,15 @@ public enum CameraType {
           new Transform3d(0.0, 0.0, 0.0, new Rotation3d(0.0, 0.0, 0.0)),
           1.0),
 
-  HUMAN_PLAYER_STATION_CAMERA(
+  LEFT_HUMAN_PLAYER_STATION_CAMERA(
           1,
-          "HumanPlayerStationCamera",
+          "LeftHumanPlayerStationCamera",
+          new Transform3d(0.0, 0.0, 0.0, new Rotation3d(0.0, 0.0, 0.0)),
+          1.0),
+
+  RIGHT_HUMAN_PLAYER_STATION_CAMERA(
+          1,
+          "RightHumanPlayerStationCamera",
           new Transform3d(0.0, 0.0, 0.0, new Rotation3d(0.0, 0.0, 0.0)),
           1.0),
 
