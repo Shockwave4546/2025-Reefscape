@@ -43,6 +43,7 @@ public class AlignToReefCommand extends Command {
   @Override public void execute() {
     final var bestTarget = vision.getBestTargetObservation(camera);
 
+    // TODO: 2/2/2025 distinguish between left and right reef camera based on side 
     ReefScoringPosition.getPositionFor(bestTarget.tagId(), selector.getSide(), selector.getLevel()).ifPresentOrElse(position -> {
       this.tagFound = true;
       // TODO: 2/1/2025 Fix this xOffset
