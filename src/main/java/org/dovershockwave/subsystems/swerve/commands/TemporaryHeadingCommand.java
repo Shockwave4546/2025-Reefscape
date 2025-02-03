@@ -36,7 +36,7 @@ public class TemporaryHeadingCommand extends Command {
 
     /*
     Default to using the left camera to align to the reef, but use the right camera if the left camera doesn't have an observation.
-    If neither camera has an observation, default to null and stop the command.
+    If neither camera has an observation, default to null and keeps looking for a tag.
      */
     final var camera = vision.getBestTargetObservation(CameraType.LEFT_REEF_CAMERA).hasObservation() ? CameraType.LEFT_REEF_CAMERA :
             vision.getBestTargetObservation(CameraType.RIGHT_REEF_CAMERA).hasObservation() ? CameraType.RIGHT_REEF_CAMERA : null;
