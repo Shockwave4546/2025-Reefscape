@@ -15,6 +15,10 @@ import org.dovershockwave.subsystems.algaerollers.AlgaeRollerSubsystem;
 import org.dovershockwave.subsystems.algaerollers.AlgaeRollersConstants;
 import org.dovershockwave.subsystems.algaerollers.AlgaeRollersIO;
 import org.dovershockwave.subsystems.algaerollers.AlgaeRollersIOSpark;
+import org.dovershockwave.subsystems.climb.ClimbConstants;
+import org.dovershockwave.subsystems.climb.ClimbIO;
+import org.dovershockwave.subsystems.climb.ClimbIOSpark;
+import org.dovershockwave.subsystems.climb.ClimbSubsystem;
 import org.dovershockwave.subsystems.coralpivot.CoralPivotConstants;
 import org.dovershockwave.subsystems.coralpivot.CoralPivotIO;
 import org.dovershockwave.subsystems.coralpivot.CoralPivotIOSpark;
@@ -53,6 +57,7 @@ public class RobotContainer {
   private final AlgaeRollerSubsystem algaeRollers;
   private final AlgaePivotSubsystem algaePivot;
   private final CoralPivotSubsystem coralPivot;
+  private final ClimbSubsystem climb;
   protected final CommandXboxController driverController = new CommandXboxController(Constants.DRIVER_CONTROLLER_PORT);
   protected final CommandXboxController operatorController = new CommandXboxController(Constants.OPERATOR_CONTROLLER_PORT);
   private final ReefScoringSelector selector = new ReefScoringSelector();
@@ -85,6 +90,7 @@ public class RobotContainer {
         algaeRollers = new AlgaeRollerSubsystem(new AlgaeRollersIOSpark(AlgaeRollersConstants.SPARK_ID));
         algaePivot = new AlgaePivotSubsystem(new AlgaePivotIOSpark(AlgaePivotConstants.SPARK_ID));
         coralPivot = new CoralPivotSubsystem(new CoralPivotIOSpark(CoralPivotConstants.WRIST_SPARK_ID, CoralPivotConstants.BIGGER_PIVOT_LEFT_SPARK_ID, CoralPivotConstants.BIGGER_PIVOT_RIGHT_SPARK_ID));
+        climb = new ClimbSubsystem(new ClimbIOSpark(ClimbConstants.SPARK_ID));
         break;
       case SIM:
         swerve = new SwerveSubsystem(new GyroIO() {},
@@ -105,6 +111,7 @@ public class RobotContainer {
         algaeRollers = new AlgaeRollerSubsystem(new AlgaeRollersIO() {});
         algaePivot = new AlgaePivotSubsystem(new AlgaePivotIO() {});
         coralPivot = new CoralPivotSubsystem(new CoralPivotIO() {});
+        climb = new ClimbSubsystem(new ClimbIO() {});
         break;
       case REPLAY:
       default:
@@ -115,6 +122,7 @@ public class RobotContainer {
         algaeRollers = new AlgaeRollerSubsystem(new AlgaeRollersIO() {});
         algaePivot = new AlgaePivotSubsystem(new AlgaePivotIO() {});
         coralPivot = new CoralPivotSubsystem(new CoralPivotIO() {});
+        climb = new ClimbSubsystem(new ClimbIO() {});
     }
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices");
