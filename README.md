@@ -21,4 +21,4 @@ Coral Left Bigger Pivot: 34 \
 Coral Right Bigger Pivot: 35 \
 Coral Rollers: 36 \
 Elevator Left: 37 \
-Elevator Right: 38 \
+Elevator Right: 38 
