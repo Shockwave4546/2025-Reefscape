@@ -71,6 +71,12 @@ public class ElevatorIOSpark implements ElevatorIO {
     });
   }
 
+//  @Override public void setPosition(double rad, double ff) {
+//    tryUntilOk(leftSpark, 5, spark -> {
+//      spark.getClosedLoopController().setReference(rad, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0, ff, SparkClosedLoopController.ArbFFUnits.kVoltage);
+//    });
+//  }
+
   @Override public void resetPosition() {
     tryUntilOk(leftSpark, 5, spark -> {
       spark.getEncoder().setPosition(0);

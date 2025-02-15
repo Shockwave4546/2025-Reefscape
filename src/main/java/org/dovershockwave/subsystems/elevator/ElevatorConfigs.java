@@ -23,7 +23,7 @@ public class ElevatorConfigs {
             .uvwAverageDepth(10);
     LEFT_CONFIG.closedLoop
             .feedbackSensor(ClosedLoopConfig.FeedbackSensor.kPrimaryEncoder)
-            .pidf(ElevatorConstants.GAINS.p(), ElevatorConstants.GAINS.i(), ElevatorConstants.GAINS.d(), ElevatorConstants.GAINS.ff());
+            .pidf(ElevatorConstants.PID_GAINS.p(), ElevatorConstants.PID_GAINS.i(), ElevatorConstants.PID_GAINS.d(), ElevatorConstants.PID_GAINS.ff());
     LEFT_CONFIG.signals
             .primaryEncoderPositionAlwaysOn(true)
             .primaryEncoderPositionPeriodMs((int) (1000.0 / SwerveConstants.ODOMETRY_FREQUENCY))

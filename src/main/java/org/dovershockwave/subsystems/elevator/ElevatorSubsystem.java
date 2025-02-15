@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.dovershockwave.subsystems.elevator.lidar.LidarIO;
 import org.dovershockwave.subsystems.elevator.lidar.LidarIOInputsAutoLogged;
 import org.dovershockwave.subsystems.vision.ReefScoringPosition;
+import org.dovershockwave.utils.TunableElevatorFeedforward;
 import org.dovershockwave.utils.TunablePIDF;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -16,7 +17,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final LidarIO lidarIO;
   private final LidarIOInputsAutoLogged lidarInputs = new LidarIOInputsAutoLogged();
 
-  private final TunablePIDF tunablePIDF = new TunablePIDF("Elevator/PID/", ElevatorConstants.GAINS);
+  private final TunablePIDF tunablePIDF = new TunablePIDF("Elevator/PID/", ElevatorConstants.PID_GAINS);
+  private final TunableElevatorFeedforward tunableFeedforward = new TunableElevatorFeedforward("Elevator/Feedforward/", ElevatorConstants.FEEDFORWARD_GAINS);
 
   private final Alert leftDisconnectedAlert = new Alert("Disconnected left motor on the elevator.", Alert.AlertType.kError);
   private final Alert rightDisconnectedAlert = new Alert("Disconnected right motor on the elevator.", Alert.AlertType.kError);
