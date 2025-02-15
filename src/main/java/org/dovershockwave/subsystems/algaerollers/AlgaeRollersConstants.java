@@ -1,7 +1,7 @@
 package org.dovershockwave.subsystems.algaerollers;
 
 public class AlgaeRollersConstants {
-  public static final int SPARK_ID = 36; // NEO 550
+  public static final int SPARK_ID = 31; // NEO 550
 
   public static final boolean MOTOR_INVERTED = false;
 

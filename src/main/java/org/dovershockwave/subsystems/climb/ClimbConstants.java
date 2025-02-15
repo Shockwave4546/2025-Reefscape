@@ -4,7 +4,7 @@ import edu.wpi.first.math.util.Units;
 import org.dovershockwave.utils.PIDFGains;
 
 public class ClimbConstants {
-  public static final int SPARK_ID = 30; // Neo
+  public static final int SPARK_ID = 32; // Neo
 
   public static final boolean DIRECTION_INVERTED = false;
 

@@ -4,8 +4,8 @@ import edu.wpi.first.math.util.Units;
 import org.dovershockwave.utils.PIDFGains;
 
 public class ElevatorConstants {
-  public static final int LEFT_SPARK_ID = 30; // Neo
-  public static final int RIGHT_SPARK_ID = 31; // Neo
+  public static final int LEFT_SPARK_ID = 37; // Neo
+  public static final int RIGHT_SPARK_ID = 38; // Neo
 
   public static final boolean DIRECTION_INVERTED = false;
 
