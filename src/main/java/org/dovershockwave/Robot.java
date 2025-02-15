@@ -76,7 +76,7 @@ public class Robot extends LoggedRobot {
         break;
     }
 
-    Logger.registerURCL(URCL.startExternal());
+//    Logger.registerURCL(URCL.startExternal());
     Logger.start();
 
     if (RobotContainer.isCompetitionMatch() && Constants.TUNING_MODE) TUNING_MODE_ENABLED_COMP.set(true);

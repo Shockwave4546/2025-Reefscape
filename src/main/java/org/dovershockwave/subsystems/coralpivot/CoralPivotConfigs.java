@@ -41,6 +41,8 @@ public class CoralPivotConfigs {
             .smartCurrentLimit(Constants.NEO_CURRENT_LIMIT)
             .voltageCompensation(12.0);
     BIGGER_PIVOT_RIGHT_CONFIG.absoluteEncoder
+            .inverted(true)
+            .zeroCentered(true)
             .positionConversionFactor(CoralPivotConstants.BIGGER_PIVOT_POSITION_CONVERSION_FACTOR)
             .velocityConversionFactor(CoralPivotConstants.BIGGER_PIVOT_VELOCITY_CONVERSION_FACTOR)
             .averageDepth(2);
@@ -57,7 +59,7 @@ public class CoralPivotConfigs {
             .outputCurrentPeriodMs(20);
 
     BIGGER_PIVOT_LEFT_CONFIG
-            .follow(CoralPivotConstants.BIGGER_PIVOT_LEFT_SPARK_ID)
+            .follow(CoralPivotConstants.BIGGER_PIVOT_RIGHT_SPARK_ID, true)
             .idleMode(SparkBaseConfig.IdleMode.kBrake)
             .smartCurrentLimit(Constants.NEO_CURRENT_LIMIT)
             .voltageCompensation(12.0);

@@ -12,12 +12,12 @@ public interface CoralPivotIO {
     public double wristCurrentAmps = 0.0;
 
     public boolean biggerPivotLeftConnected = false;
-    public double biggerPivotLeftPositionRad = 0.0;
-    public double biggerPivotLeftVelocityRadPerSec = 0.0;
     public double biggerPivotLeftAppliedVolts = 0.0;
     public double biggerPivotLeftCurrentAmps = 0.0;
 
     public boolean biggerPivotRightConnected = false;
+    public double biggerPivotRightPositionRad = 0.0;
+    public double biggerPivotRightVelocityRadPerSec = 0.0;
     public double biggerPivotRightAppliedVolts = 0.0;
     public double biggerPivotRightCurrentAmps = 0.0;
   }

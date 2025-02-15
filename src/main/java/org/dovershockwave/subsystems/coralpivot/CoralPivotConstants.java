@@ -11,7 +11,7 @@ public class CoralPivotConstants {
   public static final int BIGGER_PIVOT_RIGHT_SPARK_ID = 35; // NEO
 
   public static final boolean WRIST_INVERTED = true;
-  public static final boolean BIGGER_PIVOT_INVERTED = false;
+  public static final boolean BIGGER_PIVOT_INVERTED = true;
 
   public static final double WRIST_POSITION_CONVERSION_FACTOR = 2 * Math.PI;
   public static final double WRIST_VELOCITY_CONVERSION_FACTOR = (2 * Math.PI) / 60.0;
@@ -20,9 +20,10 @@ public class CoralPivotConstants {
   public static final double BIGGER_PIVOT_VELOCITY_CONVERSION_FACTOR = (2 * Math.PI) / 60.0;
 
   public static final PIDFGains WRIST_GAINS = new PIDFGains(0.5, 0.0, 0.0, 0.0);
-  public static final PIDFGains BIGGER_PIVOT_GAINS = new PIDFGains(0.0, 0.0, 0.0, 0.0);
-  public static final TrapezoidProfile ARM_TRAPEZOID_PROFILE = new TrapezoidProfile(new TrapezoidProfile.Constraints(0.0, 0.0));
-  public static final ArmFeedforwardConstants ARM_FEEDFORWARD_CONSTANTS = new ArmFeedforwardConstants(0.0, 0.0, 0.0, 0.0, new TrapezoidProfile.Constraints(Math.PI, 10));
+  public static final PIDFGains BIGGER_PIVOT_GAINS = new PIDFGains(0.4, 0.0, 0.1, 0.0);
+  private static final TrapezoidProfile.Constraints ARM_CONSTRAINTS = new TrapezoidProfile.Constraints(2 * Math.PI, 100.0);
+  public static final TrapezoidProfile ARM_TRAPEZOID_PROFILE = new TrapezoidProfile(ARM_CONSTRAINTS);
+  public static final ArmFeedforwardConstants ARM_FEEDFORWARD_CONSTANTS = new ArmFeedforwardConstants(0.0, 0.2, 0.64, 0.0, ARM_CONSTRAINTS);
   public static final double WRIST_POSITION_TOLERANCE = Units.degreesToRadians(2.5);
   public static final double BIGGER_PIVOT_POSITION_TOLERANCE =  Units.degreesToRadians(2.5);
 }

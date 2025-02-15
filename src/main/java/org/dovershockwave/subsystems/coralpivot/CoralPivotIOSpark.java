@@ -18,9 +18,9 @@ public class CoralPivotIOSpark implements CoralPivotIO {
   private final AbsoluteEncoder wristEncoder;
 
   private final SparkBase biggerPivotLeftSpark;
-  private final AbsoluteEncoder biggerPivotLeftEncoder;
 
   private final SparkBase biggerPivotRightSpark;
+  private final AbsoluteEncoder biggerPivotRightEncoder;
 
   private final Debouncer wristConnectedDebouncer = new Debouncer(0.5);
   private final Debouncer biggerPivotLeftConnectedDebouncer = new Debouncer(0.5);
@@ -31,9 +31,9 @@ public class CoralPivotIOSpark implements CoralPivotIO {
     this.wristEncoder = wristSpark.getAbsoluteEncoder();
 
     this.biggerPivotLeftSpark = new SparkMax(biggerPivotLeftCanId, SparkLowLevel.MotorType.kBrushless);
-    this.biggerPivotLeftEncoder = biggerPivotLeftSpark.getAbsoluteEncoder();
 
     this.biggerPivotRightSpark = new SparkMax(biggerPivotRightCanId, SparkLowLevel.MotorType.kBrushless);
+    this.biggerPivotRightEncoder = biggerPivotRightSpark.getAbsoluteEncoder();
 
     tryUntilOk(wristSpark, 5, spark -> {
       spark.configure(CoralPivotConfigs.WRIST_CONFIG, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
@@ -60,8 +60,6 @@ public class CoralPivotIOSpark implements CoralPivotIO {
     inputs.wristConnected = wristConnectedDebouncer.calculate(!HAS_STICKY_FAULT);
 
     HAS_STICKY_FAULT = false;
-    useValueIfOk(biggerPivotLeftSpark, biggerPivotLeftEncoder::getPosition, (value) -> inputs.biggerPivotLeftPositionRad = value, () -> HAS_STICKY_FAULT = true);
-    useValueIfOk(biggerPivotLeftSpark, biggerPivotLeftEncoder::getVelocity, (value) -> inputs.biggerPivotLeftVelocityRadPerSec = value, () -> HAS_STICKY_FAULT = true);
     useValuesIfOk(biggerPivotLeftSpark,
             new DoubleSupplier[]{biggerPivotLeftSpark::getAppliedOutput, biggerPivotLeftSpark::getBusVoltage},
             (values) -> inputs.biggerPivotLeftAppliedVolts = values[0] * values[1],
@@ -70,6 +68,8 @@ public class CoralPivotIOSpark implements CoralPivotIO {
     inputs.biggerPivotLeftConnected = biggerPivotLeftConnectedDebouncer.calculate(!HAS_STICKY_FAULT);
 
     HAS_STICKY_FAULT = false;
+    useValueIfOk(biggerPivotRightSpark, biggerPivotRightEncoder::getPosition, (value) -> inputs.biggerPivotRightPositionRad = value, () -> HAS_STICKY_FAULT = true);
+    useValueIfOk(biggerPivotRightSpark, biggerPivotRightEncoder::getVelocity, (value) -> inputs.biggerPivotRightVelocityRadPerSec = value, () -> HAS_STICKY_FAULT = true);
     useValuesIfOk(biggerPivotRightSpark,
             new DoubleSupplier[]{biggerPivotRightSpark::getAppliedOutput, biggerPivotRightSpark::getBusVoltage},
             (values) -> inputs.biggerPivotRightAppliedVolts = values[0] * values[1],
@@ -85,7 +85,7 @@ public class CoralPivotIOSpark implements CoralPivotIO {
   }
 
   @Override public void setBiggerPivotPosition(double rad, double ff) {
-    tryUntilOk(biggerPivotLeftSpark, 5, spark -> {
+    tryUntilOk(biggerPivotRightSpark, 5, spark -> {
       spark.getClosedLoopController().setReference(rad, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0, ff, SparkClosedLoopController.ArbFFUnits.kVoltage);
     });
   }
@@ -99,7 +99,7 @@ public class CoralPivotIOSpark implements CoralPivotIO {
 
   @Override public void setBiggerPivotPIDF(PIDFGains gains) {
     final var config = new SparkMaxConfig().apply(new ClosedLoopConfig().pidf(gains.p(), gains.i(), gains.d(), gains.ff()));
-    tryUntilOk(biggerPivotLeftSpark, 5, spark -> {
+    tryUntilOk(biggerPivotRightSpark, 5, spark -> {
       spark.configure(config, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
     });
   }

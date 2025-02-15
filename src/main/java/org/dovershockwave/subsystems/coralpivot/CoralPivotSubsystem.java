@@ -2,6 +2,7 @@ package org.dovershockwave.subsystems.coralpivot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -41,7 +42,7 @@ public class CoralPivotSubsystem extends SubsystemBase {
 
     wristTunablePIDF.periodic(coralPivotIO::setWristPIDF, positionRad -> {
       coralPivotIO.setWristPosition(positionRad);
-      setDesiredState(new CoralPivotState(positionRad, coralPivotInputs.biggerPivotLeftPositionRad));
+      setDesiredState(new CoralPivotState(positionRad, coralPivotInputs.biggerPivotRightPositionRad));
     });
 
     biggerPivotTunablePIDF.periodic(coralPivotIO::setBiggerPivotPIDF, positionRad -> {
@@ -49,10 +50,14 @@ public class CoralPivotSubsystem extends SubsystemBase {
     });
 
     tunableArmFeedforward.periodic((armFeedforwardConstants) -> {
+      System.out.println("armFeedforwardConstants = " + armFeedforwardConstants);
       armFeedforward.setKs(armFeedforwardConstants.kS());
       armFeedforward.setKg(armFeedforwardConstants.kG());
       armFeedforward.setKv(armFeedforwardConstants.kV());
       armFeedforward.setKa(armFeedforwardConstants.kA());
+
+      // Update FF values
+      setDesiredState(desiredState);
     }, positionRad -> {
       setDesiredState(new CoralPivotState(coralPivotInputs.wristPositionRad, positionRad));
     });
@@ -60,17 +65,25 @@ public class CoralPivotSubsystem extends SubsystemBase {
     wristDisconnectedAlert.set(!coralPivotInputs.wristConnected);
     biggerPivotLeftDisconnectedAlert.set(!coralPivotInputs.biggerPivotLeftConnected);
     biggerPivotRightDisconnectedAlert.set(!coralPivotInputs.biggerPivotRightConnected);
+
+    // Update FF values but this feels wrong
+    setDesiredState(desiredState);
   }
 
   public void setDesiredState(CoralPivotState desiredState) {
     coralPivotIO.setWristPosition(desiredState.wristPositionRad());
 
-    final var currentState = new TrapezoidProfile.State(coralPivotInputs.biggerPivotLeftPositionRad, coralPivotInputs.biggerPivotLeftVelocityRadPerSec);
+    final var currentState = new TrapezoidProfile.State(coralPivotInputs.biggerPivotRightPositionRad, coralPivotInputs.biggerPivotRightVelocityRadPerSec);
     final var goalState = new TrapezoidProfile.State(desiredState.biggerPivotPositionRad(), 0.0);
     final var nextState = CoralPivotConstants.ARM_TRAPEZOID_PROFILE.calculate(0.02, currentState, goalState);
+    System.out.println("curr = " + currentState.position + " " + currentState.velocity);
+    System.out.println("goal = " + goalState.position + "  " + goalState.velocity);
+    System.out.println("next = " + nextState.position + " " + nextState.velocity);
+    System.out.println("ff added = " + armFeedforward.calculate(nextState.position, nextState.velocity));
     coralPivotIO.setBiggerPivotPosition(desiredState.biggerPivotPositionRad(), armFeedforward.calculate(nextState.position, nextState.velocity));
     this.desiredState = desiredState;
   }
+
 
   public void setDesiredState(ReefScoringPosition.ReefLevel level) {
     switch (level) {
@@ -83,7 +96,7 @@ public class CoralPivotSubsystem extends SubsystemBase {
 
   @AutoLogOutput(key = "CoralPivot/State")
   public CoralPivotState getState() {
-    return new CoralPivotState(coralPivotInputs.wristPositionRad, coralPivotInputs.biggerPivotLeftPositionRad);
+    return new CoralPivotState(coralPivotInputs.wristPositionRad, coralPivotInputs.biggerPivotRightPositionRad);
   }
 
   @AutoLogOutput(key = "CoralPivot/DesiredState")
@@ -98,7 +111,7 @@ public class CoralPivotSubsystem extends SubsystemBase {
 
   @AutoLogOutput(key = "CoralPivot/AtDesiredBiggerPivotState")
   public boolean atDesiredBiggerPivotState() {
-    return MathUtil.isNear(coralPivotInputs.biggerPivotLeftPositionRad, desiredState.biggerPivotPositionRad(), CoralPivotConstants.BIGGER_PIVOT_POSITION_TOLERANCE);
+    return MathUtil.isNear(coralPivotInputs.biggerPivotRightPositionRad, desiredState.biggerPivotPositionRad(), CoralPivotConstants.BIGGER_PIVOT_POSITION_TOLERANCE);
   }
 
   @AutoLogOutput(key = "CoralPivot/AtDesiredState")
