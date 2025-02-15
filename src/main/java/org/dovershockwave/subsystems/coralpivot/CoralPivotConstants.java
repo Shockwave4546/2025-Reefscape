@@ -1,6 +1,8 @@
 package org.dovershockwave.subsystems.coralpivot;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import org.dovershockwave.utils.ArmFeedforwardConstants;
 import org.dovershockwave.utils.PIDFGains;
 
 public class CoralPivotConstants {
@@ -19,6 +21,7 @@ public class CoralPivotConstants {
 
   public static final PIDFGains WRIST_GAINS = new PIDFGains(0.5, 0.0, 0.0, 0.0);
   public static final PIDFGains BIGGER_PIVOT_GAINS = new PIDFGains(0.0, 0.0, 0.0, 0.0);
+  public static final ArmFeedforwardConstants ARM_FEEDFORWARD_CONSTANTS = new ArmFeedforwardConstants(0.0, 0.0, 0.0, 0.0, Trap)
   public static final double WRIST_POSITION_TOLERANCE = Units.degreesToRadians(2.5);
   public static final double BIGGER_PIVOT_POSITION_TOLERANCE =  Units.degreesToRadians(2.5);
 }

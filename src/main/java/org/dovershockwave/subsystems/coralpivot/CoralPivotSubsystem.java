@@ -1,9 +1,12 @@
 package org.dovershockwave.subsystems.coralpivot;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.dovershockwave.subsystems.vision.ReefScoringPosition;
+import org.dovershockwave.utils.TunableArmFeedforward;
 import org.dovershockwave.utils.TunablePIDF;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -14,6 +17,8 @@ public class CoralPivotSubsystem extends SubsystemBase {
 
   private final TunablePIDF wristTunablePIDF = new TunablePIDF("CoralPivot/Wrist/PID/", CoralPivotConstants.WRIST_GAINS);
   private final TunablePIDF biggerPivotTunablePIDF = new TunablePIDF("CoralPivot/BiggerPivot/PID/", CoralPivotConstants.BIGGER_PIVOT_GAINS);
+  private final TunableArmFeedforward tunableArmFeedforward = new TunableArmFeedforward()
+  private final ArmFeedforward armFeedforward = new ArmFeedforward();
 
   private final Alert wristDisconnectedAlert = new Alert("Disconnected motor on the coral pivot wrist motor.", Alert.AlertType.kError);
   private final Alert biggerPivotLeftDisconnectedAlert = new Alert("Disconnected motor on the coral bigger pivot left motor.", Alert.AlertType.kError);

@@ -86,11 +86,17 @@ public class RobotContainer {
 //                Pair.of(CameraType.RIGHT_HUMAN_PLAYER_STATION_CAMERA, new VisionIOPhotonVision(CameraType.RIGHT_HUMAN_PLAYER_STATION_CAMERA)));
 
         elevator = new ElevatorSubsystem(new ElevatorIOSpark(ElevatorConstants.LEFT_SPARK_ID, ElevatorConstants.RIGHT_SPARK_ID), new LidarIOLaserCan());
-        coralRollers = new CoralRollersSubsystem(new CoralRollersIOSpark(CoralRollersConstants.SPARK_ID));
-        algaeRollers = new AlgaeRollerSubsystem(new AlgaeRollersIOSpark(AlgaeRollersConstants.SPARK_ID));
-        algaePivot = new AlgaePivotSubsystem(new AlgaePivotIOSpark(AlgaePivotConstants.SPARK_ID));
+//        elevator = new ElevatorSubsystem(new ElevatorIO() {});
+//        coralRollers = new CoralRollersSubsystem(new CoralRollersIOSpark(CoralRollersConstants.SPARK_ID));
+        coralRollers = new CoralRollersSubsystem(new CoralRollersIO() {});
+//        algaeRollers = new AlgaeRollerSubsystem(new AlgaeRollersIOSpark(AlgaeRollersConstants.SPARK_ID));
+        algaeRollers = new AlgaeRollerSubsystem(new AlgaeRollersIO() {});
+//        algaePivot = new AlgaePivotSubsystem(new AlgaePivotIOSpark(AlgaePivotConstants.SPARK_ID));
+        algaePivot = new AlgaePivotSubsystem(new AlgaePivotIO() {});
         coralPivot = new CoralPivotSubsystem(new CoralPivotIOSpark(CoralPivotConstants.WRIST_SPARK_ID, CoralPivotConstants.BIGGER_PIVOT_LEFT_SPARK_ID, CoralPivotConstants.BIGGER_PIVOT_RIGHT_SPARK_ID));
-        climb = new ClimbSubsystem(new ClimbIOSpark(ClimbConstants.SPARK_ID));
+//        coralPivot = new CoralPivotSubsystem(new CoralPivotIO() {});
+//        climb = new ClimbSubsystem(new ClimbIOSpark(ClimbConstants.SPARK_ID));
+        climb = new ClimbSubsystem(new ClimbIO() {});
         break;
       case SIM:
         swerve = new SwerveSubsystem(new GyroIO() {},
