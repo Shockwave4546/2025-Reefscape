@@ -6,7 +6,7 @@ import edu.wpi.first.math.util.Units;
 import org.dovershockwave.utils.PIDFGains;
 
 public class VisionConstants {
-  public static final AprilTagFieldLayout APRIL_TAG_FIELD = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+  public static final AprilTagFieldLayout APRIL_TAG_FIELD = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
 
   /**
    * Uses the best target for pose estimation
