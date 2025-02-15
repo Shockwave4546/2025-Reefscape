@@ -1,9 +1,7 @@
 package org.dovershockwave.subsystems.elevator;
 
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkBase;
-import com.revrobotics.spark.SparkLowLevel;
-import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.*;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.filter.Debouncer;
@@ -65,17 +63,11 @@ public class ElevatorIOSpark implements ElevatorIO {
     inputs.rightConnected = rightConnectedDebouncer.calculate(!HAS_STICKY_FAULT);
   }
 
-  @Override public void setPosition(double rad) {
+  @Override public void setPosition(double rad, double ff) {
     tryUntilOk(leftSpark, 5, spark -> {
-      spark.getClosedLoopController().setReference(rad, SparkBase.ControlType.kPosition);
+      spark.getClosedLoopController().setReference(rad, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0, ff, SparkClosedLoopController.ArbFFUnits.kVoltage);
     });
   }
-
-//  @Override public void setPosition(double rad, double ff) {
-//    tryUntilOk(leftSpark, 5, spark -> {
-//      spark.getClosedLoopController().setReference(rad, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0, ff, SparkClosedLoopController.ArbFFUnits.kVoltage);
-//    });
-//  }
 
   @Override public void resetPosition() {
     tryUntilOk(leftSpark, 5, spark -> {

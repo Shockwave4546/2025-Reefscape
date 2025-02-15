@@ -26,7 +26,7 @@ public interface CoralPivotIO {
 
   default void setWristPosition(double rad) {}
 
-  default void setBiggerPivotPosition(double rad) {}
+  default void setBiggerPivotPosition(double rad, double ff) {}
 
   default void setWristPIDF(PIDFGains gains) {}
 

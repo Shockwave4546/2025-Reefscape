@@ -1,9 +1,7 @@
 package org.dovershockwave.subsystems.coralpivot;
 
 import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.spark.SparkBase;
-import com.revrobotics.spark.SparkLowLevel;
-import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.*;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.filter.Debouncer;
@@ -86,9 +84,9 @@ public class CoralPivotIOSpark implements CoralPivotIO {
     });
   }
 
-  @Override public void setBiggerPivotPosition(double rad) {
+  @Override public void setBiggerPivotPosition(double rad, double ff) {
     tryUntilOk(biggerPivotLeftSpark, 5, spark -> {
-      spark.getClosedLoopController().setReference(rad, SparkBase.ControlType.kPosition);
+      spark.getClosedLoopController().setReference(rad, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0, ff, SparkClosedLoopController.ArbFFUnits.kVoltage);
     });
   }
 

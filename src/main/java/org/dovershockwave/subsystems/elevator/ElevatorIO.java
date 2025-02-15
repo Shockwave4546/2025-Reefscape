@@ -20,7 +20,7 @@ public interface ElevatorIO {
 
   default void updateInputs(ElevatorIOInputs inputs) {}
 
-  default void setPosition(double rad) {}
+  default void setPosition(double rad, double ff) {}
 
   default void resetPosition() {}
 

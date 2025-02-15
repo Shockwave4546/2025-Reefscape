@@ -1,8 +1,11 @@
 package org.dovershockwave.subsystems.elevator;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.dovershockwave.subsystems.coralpivot.CoralPivotConstants;
 import org.dovershockwave.subsystems.elevator.lidar.LidarIO;
 import org.dovershockwave.subsystems.elevator.lidar.LidarIOInputsAutoLogged;
 import org.dovershockwave.subsystems.vision.ReefScoringPosition;
@@ -18,7 +21,13 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final LidarIOInputsAutoLogged lidarInputs = new LidarIOInputsAutoLogged();
 
   private final TunablePIDF tunablePIDF = new TunablePIDF("Elevator/PID/", ElevatorConstants.PID_GAINS);
-  private final TunableElevatorFeedforward tunableFeedforward = new TunableElevatorFeedforward("Elevator/Feedforward/", ElevatorConstants.FEEDFORWARD_GAINS);
+  private final TunableElevatorFeedforward tunableFeedforward = new TunableElevatorFeedforward("Elevator/Feedforward/", ElevatorConstants.FEEDFORWARD_CONSTANTS);
+  private final ElevatorFeedforward feedforward = new ElevatorFeedforward(
+          ElevatorConstants.FEEDFORWARD_CONSTANTS.kS(),
+          ElevatorConstants.FEEDFORWARD_CONSTANTS.kG(),
+          ElevatorConstants.FEEDFORWARD_CONSTANTS.kV(),
+          ElevatorConstants.FEEDFORWARD_CONSTANTS.kA()
+  );
 
   private final Alert leftDisconnectedAlert = new Alert("Disconnected left motor on the elevator.", Alert.AlertType.kError);
   private final Alert rightDisconnectedAlert = new Alert("Disconnected right motor on the elevator.", Alert.AlertType.kError);
@@ -37,7 +46,15 @@ public class ElevatorSubsystem extends SubsystemBase {
     Logger.processInputs("Lidar", lidarInputs);
 
     tunablePIDF.periodic(elevatorIO::setPIDF, positionRad -> {
-      elevatorIO.setPosition(positionRad);
+      setDesiredState(new ElevatorState(positionRad));
+    });
+
+    tunableFeedforward.periodic((elevatorFeedforwardConstants) -> {
+      feedforward.setKs(elevatorFeedforwardConstants.kS());
+      feedforward.setKg(elevatorFeedforwardConstants.kG());
+      feedforward.setKv(elevatorFeedforwardConstants.kV());
+      feedforward.setKa(elevatorFeedforwardConstants.kA());
+    }, positionRad -> {
       setDesiredState(new ElevatorState(positionRad));
     });
 
@@ -46,7 +63,10 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void setDesiredState(ElevatorState desiredState) {
-    elevatorIO.setPosition(desiredState.positionRad());
+    final var currentState = new TrapezoidProfile.State(elevatorInputs.leftPositionRad, elevatorInputs.leftVelocityRadPerSec);
+    final var goalState = new TrapezoidProfile.State(desiredState.positionRad(), 0.0);
+    final var nextState = CoralPivotConstants.ARM_TRAPEZOID_PROFILE.calculate(0.02, currentState, goalState);
+    elevatorIO.setPosition(desiredState.positionRad(), feedforward.calculate(nextState.velocity));
     this.desiredState = desiredState;
   }
 

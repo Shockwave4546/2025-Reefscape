@@ -2,7 +2,7 @@ package org.dovershockwave.subsystems.coralpivot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.dovershockwave.subsystems.vision.ReefScoringPosition;
@@ -17,8 +17,13 @@ public class CoralPivotSubsystem extends SubsystemBase {
 
   private final TunablePIDF wristTunablePIDF = new TunablePIDF("CoralPivot/Wrist/PID/", CoralPivotConstants.WRIST_GAINS);
   private final TunablePIDF biggerPivotTunablePIDF = new TunablePIDF("CoralPivot/BiggerPivot/PID/", CoralPivotConstants.BIGGER_PIVOT_GAINS);
-  private final TunableArmFeedforward tunableArmFeedforward = new TunableArmFeedforward()
-  private final ArmFeedforward armFeedforward = new ArmFeedforward();
+  private final TunableArmFeedforward tunableArmFeedforward = new TunableArmFeedforward("CoralPivot/BiggerPivot/ArmFeedforward/", CoralPivotConstants.ARM_FEEDFORWARD_CONSTANTS);
+  private final ArmFeedforward armFeedforward = new ArmFeedforward(
+          CoralPivotConstants.ARM_FEEDFORWARD_CONSTANTS.kS(),
+          CoralPivotConstants.ARM_FEEDFORWARD_CONSTANTS.kG(),
+          CoralPivotConstants.ARM_FEEDFORWARD_CONSTANTS.kV(),
+          CoralPivotConstants.ARM_FEEDFORWARD_CONSTANTS.kA()
+  );
 
   private final Alert wristDisconnectedAlert = new Alert("Disconnected motor on the coral pivot wrist motor.", Alert.AlertType.kError);
   private final Alert biggerPivotLeftDisconnectedAlert = new Alert("Disconnected motor on the coral bigger pivot left motor.", Alert.AlertType.kError);
@@ -40,7 +45,15 @@ public class CoralPivotSubsystem extends SubsystemBase {
     });
 
     biggerPivotTunablePIDF.periodic(coralPivotIO::setBiggerPivotPIDF, positionRad -> {
-      coralPivotIO.setBiggerPivotPosition(positionRad);
+      setDesiredState(new CoralPivotState(coralPivotInputs.wristPositionRad, positionRad));
+    });
+
+    tunableArmFeedforward.periodic((armFeedforwardConstants) -> {
+      armFeedforward.setKs(armFeedforwardConstants.kS());
+      armFeedforward.setKg(armFeedforwardConstants.kG());
+      armFeedforward.setKv(armFeedforwardConstants.kV());
+      armFeedforward.setKa(armFeedforwardConstants.kA());
+    }, positionRad -> {
       setDesiredState(new CoralPivotState(coralPivotInputs.wristPositionRad, positionRad));
     });
 
@@ -51,7 +64,11 @@ public class CoralPivotSubsystem extends SubsystemBase {
 
   public void setDesiredState(CoralPivotState desiredState) {
     coralPivotIO.setWristPosition(desiredState.wristPositionRad());
-    coralPivotIO.setBiggerPivotPosition(desiredState.biggerPivotPositionRad());
+
+    final var currentState = new TrapezoidProfile.State(coralPivotInputs.biggerPivotLeftPositionRad, coralPivotInputs.biggerPivotLeftVelocityRadPerSec);
+    final var goalState = new TrapezoidProfile.State(desiredState.biggerPivotPositionRad(), 0.0);
+    final var nextState = CoralPivotConstants.ARM_TRAPEZOID_PROFILE.calculate(0.02, currentState, goalState);
+    coralPivotIO.setBiggerPivotPosition(desiredState.biggerPivotPositionRad(), armFeedforward.calculate(nextState.position, nextState.velocity));
     this.desiredState = desiredState;
   }
 
