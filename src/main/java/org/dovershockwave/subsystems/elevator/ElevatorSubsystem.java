@@ -36,7 +36,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     tunablePIDF.periodic(elevatorIO::setPIDF, positionRad -> {
       elevatorIO.setPosition(positionRad);
-      setDesiredState(new ElevatorState("PID Tuning", positionRad));
+      setDesiredState(new ElevatorState(positionRad));
     });
 
     leftDisconnectedAlert.set(!elevatorInputs.leftConnected);
@@ -59,7 +59,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   @AutoLogOutput(key = "Elevator/State")
   public ElevatorState getState() {
-    return new ElevatorState("Current State", elevatorInputs.leftPositionRad);
+    return new ElevatorState(elevatorInputs.leftPositionRad);
   }
 
   @AutoLogOutput(key = "Elevator/DesiredState")
