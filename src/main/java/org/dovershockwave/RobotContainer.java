@@ -7,6 +7,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import org.dovershockwave.subsystems.algaepivot.AlgaePivotConstants;
+import org.dovershockwave.subsystems.algaepivot.AlgaePivotIO;
+import org.dovershockwave.subsystems.algaepivot.AlgaePivotIOSpark;
+import org.dovershockwave.subsystems.algaepivot.AlgaePivotSubsystem;
 import org.dovershockwave.subsystems.algaerollers.AlgaeRollerSubsystem;
 import org.dovershockwave.subsystems.algaerollers.AlgaeRollersConstants;
 import org.dovershockwave.subsystems.algaerollers.AlgaeRollersIO;
@@ -47,6 +51,7 @@ public class RobotContainer {
   private final ElevatorSubsystem elevator;
   private final CoralRollersSubsystem coralRollers;
   private final AlgaeRollerSubsystem algaeRollers;
+  private final AlgaePivotSubsystem algaePivot;
   private final CoralPivotSubsystem coralPivot;
   protected final CommandXboxController driverController = new CommandXboxController(Constants.DRIVER_CONTROLLER_PORT);
   protected final CommandXboxController operatorController = new CommandXboxController(Constants.OPERATOR_CONTROLLER_PORT);
@@ -78,6 +83,7 @@ public class RobotContainer {
         elevator = new ElevatorSubsystem(new ElevatorIOSpark(ElevatorConstants.LEFT_SPARK_ID, ElevatorConstants.RIGHT_SPARK_ID), new LidarIOLaserCan());
         coralRollers = new CoralRollersSubsystem(new CoralRollersIOSpark(CoralRollersConstants.SPARK_ID));
         algaeRollers = new AlgaeRollerSubsystem(new AlgaeRollersIOSpark(AlgaeRollersConstants.SPARK_ID));
+        algaePivot = new AlgaePivotSubsystem(new AlgaePivotIOSpark(AlgaePivotConstants.SPARK_ID));
         coralPivot = new CoralPivotSubsystem(new CoralPivotIOSpark(CoralPivotConstants.WRIST_SPARK_ID, CoralPivotConstants.BIGGER_PIVOT_LEFT_SPARK_ID, CoralPivotConstants.BIGGER_PIVOT_RIGHT_SPARK_ID));
         break;
       case SIM:
@@ -97,6 +103,7 @@ public class RobotContainer {
         elevator = new ElevatorSubsystem(new ElevatorIO() {}, new LidarIO() {});
         coralRollers = new CoralRollersSubsystem(new CoralRollersIO() {});
         algaeRollers = new AlgaeRollerSubsystem(new AlgaeRollersIO() {});
+        algaePivot = new AlgaePivotSubsystem(new AlgaePivotIO() {});
         coralPivot = new CoralPivotSubsystem(new CoralPivotIO() {});
         break;
       case REPLAY:
@@ -106,6 +113,7 @@ public class RobotContainer {
         elevator = new ElevatorSubsystem(new ElevatorIO() {}, new LidarIO() {});
         coralRollers = new CoralRollersSubsystem(new CoralRollersIO() {});
         algaeRollers = new AlgaeRollerSubsystem(new AlgaeRollersIO() {});
+        algaePivot = new AlgaePivotSubsystem(new AlgaePivotIO() {});
         coralPivot = new CoralPivotSubsystem(new CoralPivotIO() {});
     }
 
