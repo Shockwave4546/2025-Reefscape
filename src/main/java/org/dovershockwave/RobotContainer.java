@@ -1,52 +1,11 @@
 package org.dovershockwave;
 
 import au.grapplerobotics.CanBridge;
-import edu.wpi.first.math.Pair;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import org.dovershockwave.subsystems.algaepivot.AlgaePivotConstants;
-import org.dovershockwave.subsystems.algaepivot.AlgaePivotIO;
-import org.dovershockwave.subsystems.algaepivot.AlgaePivotIOSpark;
-import org.dovershockwave.subsystems.algaepivot.AlgaePivotSubsystem;
-import org.dovershockwave.subsystems.algaerollers.AlgaeRollerSubsystem;
-import org.dovershockwave.subsystems.algaerollers.AlgaeRollersConstants;
-import org.dovershockwave.subsystems.algaerollers.AlgaeRollersIO;
-import org.dovershockwave.subsystems.algaerollers.AlgaeRollersIOSpark;
-import org.dovershockwave.subsystems.climb.ClimbConstants;
-import org.dovershockwave.subsystems.climb.ClimbIO;
-import org.dovershockwave.subsystems.climb.ClimbIOSpark;
-import org.dovershockwave.subsystems.climb.ClimbSubsystem;
-import org.dovershockwave.subsystems.coralpivot.CoralPivotConstants;
-import org.dovershockwave.subsystems.coralpivot.CoralPivotIO;
-import org.dovershockwave.subsystems.coralpivot.CoralPivotIOSpark;
-import org.dovershockwave.subsystems.coralpivot.CoralPivotSubsystem;
-import org.dovershockwave.subsystems.coralrollers.CoralRollersConstants;
-import org.dovershockwave.subsystems.coralrollers.CoralRollersIO;
-import org.dovershockwave.subsystems.coralrollers.CoralRollersIOSpark;
-import org.dovershockwave.subsystems.coralrollers.CoralRollersSubsystem;
-import org.dovershockwave.subsystems.elevator.ElevatorConstants;
-import org.dovershockwave.subsystems.elevator.ElevatorIO;
-import org.dovershockwave.subsystems.elevator.ElevatorIOSpark;
-import org.dovershockwave.subsystems.elevator.ElevatorSubsystem;
-import org.dovershockwave.subsystems.elevator.lidar.LidarIO;
-import org.dovershockwave.subsystems.elevator.lidar.LidarIOLaserCan;
-import org.dovershockwave.subsystems.swerve.SwerveSubsystem;
-import org.dovershockwave.subsystems.swerve.commands.FeedforwardCharacterizationCommand;
-import org.dovershockwave.subsystems.swerve.commands.ResetFieldOrientatedDriveCommand;
-import org.dovershockwave.subsystems.swerve.commands.SwerveDriveCommand;
-import org.dovershockwave.subsystems.swerve.commands.TemporaryHeadingCommand;
-import org.dovershockwave.subsystems.swerve.commands.sysid.SysIdDriveDynamicCommand;
-import org.dovershockwave.subsystems.swerve.commands.sysid.SysIdDriveQuasistaticCommand;
-import org.dovershockwave.subsystems.swerve.commands.sysid.SysIdTurnQuasistaticCommand;
-import org.dovershockwave.subsystems.swerve.gyro.GyroIO;
-import org.dovershockwave.subsystems.swerve.module.ModuleIO;
-import org.dovershockwave.subsystems.swerve.module.ModuleIOSim;
-import org.dovershockwave.subsystems.vision.*;
-import org.dovershockwave.subsystems.vision.commands.AlignToHumanPlayerCommand;
-import org.dovershockwave.subsystems.vision.commands.AlignToReefCoralCommand;
+import org.dovershockwave.subsystems.coralpivot.*;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class RobotContainer {
@@ -93,7 +52,7 @@ public class RobotContainer {
 //        algaeRollers = new AlgaeRollerSubsystem(new AlgaeRollersIO() {});
 //        algaePivot = new AlgaePivotSubsystem(new AlgaePivotIOSpark(AlgaePivotConstants.SPARK_ID));
 //        algaePivot = new AlgaePivotSubsystem(new AlgaePivotIO() {});
-        coralPivot = new CoralPivotSubsystem(new CoralPivotIOSpark(CoralPivotConstants.WRIST_SPARK_ID, CoralPivotConstants.BIGGER_PIVOT_LEFT_SPARK_ID, CoralPivotConstants.BIGGER_PIVOT_RIGHT_SPARK_ID));
+        coralPivot = new CoralPivotSubsystem(new CoralArmIOSpark(CoralPivotConstants.ARM_LEFT_SPARK_ID, CoralPivotConstants.ARM_RIGHT_SPARK_ID), new CoralWristIOSpark(CoralPivotConstants.WRIST_SPARK_ID));
 //        coralPivot = new CoralPivotSubsystem(new CoralPivotIO() {});
 //        climb = new ClimbSubsystem(new ClimbIOSpark(ClimbConstants.SPARK_ID));
 //        climb = new ClimbSubsystem(new ClimbIO() {});
@@ -116,7 +75,7 @@ public class RobotContainer {
 //        coralRollers = new CoralRollersSubsystem(new CoralRollersIO() {});
 //        algaeRollers = new AlgaeRollerSubsystem(new AlgaeRollersIO() {});
 //        algaePivot = new AlgaePivotSubsystem(new AlgaePivotIO() {});
-        coralPivot = new CoralPivotSubsystem(new CoralPivotIO() {});
+        coralPivot = new CoralPivotSubsystem(new CoralArmIO() {}, new CoralWristIO() {});
 //        climb = new ClimbSubsystem(new ClimbIO() {});
         break;
       case REPLAY:
@@ -127,7 +86,7 @@ public class RobotContainer {
 //        coralRollers = new CoralRollersSubsystem(new CoralRollersIO() {});
 //        algaeRollers = new AlgaeRollerSubsystem(new AlgaeRollersIO() {});
 //        algaePivot = new AlgaePivotSubsystem(new AlgaePivotIO() {});
-        coralPivot = new CoralPivotSubsystem(new CoralPivotIO() {});
+        coralPivot = new CoralPivotSubsystem(new CoralArmIO() {}, new CoralWristIO() {});
 //        climb = new ClimbSubsystem(new ClimbIO() {});
     }
 

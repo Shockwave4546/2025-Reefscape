@@ -9,8 +9,8 @@ import static org.dovershockwave.subsystems.swerve.SwerveConstants.ODOMETRY_FREQ
 
 public class CoralPivotConfigs {
   public static final SparkBaseConfig WRIST_CONFIG = new SparkMaxConfig();
-  public static final SparkBaseConfig BIGGER_PIVOT_LEFT_CONFIG = new SparkMaxConfig();
-  public static final SparkBaseConfig BIGGER_PIVOT_RIGHT_CONFIG = new SparkMaxConfig();
+  public static final SparkBaseConfig ARM_LEFT_CONFIG = new SparkMaxConfig();
+  public static final SparkBaseConfig ARM_RIGHT_CONFIG = new SparkMaxConfig();
 
   static {
     WRIST_CONFIG
@@ -35,21 +35,21 @@ public class CoralPivotConfigs {
             .busVoltagePeriodMs(20)
             .outputCurrentPeriodMs(20);
 
-    BIGGER_PIVOT_RIGHT_CONFIG
-            .inverted(CoralPivotConstants.BIGGER_PIVOT_INVERTED)
+    ARM_RIGHT_CONFIG
+            .inverted(CoralPivotConstants.ARM_PIVOT_INVERTED)
             .idleMode(SparkBaseConfig.IdleMode.kBrake)
             .smartCurrentLimit(Constants.NEO_CURRENT_LIMIT)
             .voltageCompensation(12.0);
-    BIGGER_PIVOT_RIGHT_CONFIG.absoluteEncoder
+    ARM_RIGHT_CONFIG.absoluteEncoder
             .inverted(true)
             .zeroCentered(true)
-            .positionConversionFactor(CoralPivotConstants.BIGGER_PIVOT_POSITION_CONVERSION_FACTOR)
-            .velocityConversionFactor(CoralPivotConstants.BIGGER_PIVOT_VELOCITY_CONVERSION_FACTOR)
+            .positionConversionFactor(CoralPivotConstants.ARM_POSITION_CONVERSION_FACTOR)
+            .velocityConversionFactor(CoralPivotConstants.ARM_VELOCITY_CONVERSION_FACTOR)
             .averageDepth(2);
-    BIGGER_PIVOT_RIGHT_CONFIG.closedLoop
+    ARM_RIGHT_CONFIG.closedLoop
             .feedbackSensor(ClosedLoopConfig.FeedbackSensor.kAbsoluteEncoder)
-            .pidf(CoralPivotConstants.BIGGER_PIVOT_GAINS.p(), CoralPivotConstants.BIGGER_PIVOT_GAINS.i(), CoralPivotConstants.BIGGER_PIVOT_GAINS.d(), CoralPivotConstants.BIGGER_PIVOT_GAINS.ff());
-    BIGGER_PIVOT_RIGHT_CONFIG.signals
+            .pidf(CoralPivotConstants.ARM_GAINS.p(), CoralPivotConstants.ARM_GAINS.i(), CoralPivotConstants.ARM_GAINS.d(), CoralPivotConstants.ARM_GAINS.ff());
+    ARM_RIGHT_CONFIG.signals
             .absoluteEncoderPositionAlwaysOn(true)
             .absoluteEncoderPositionPeriodMs((int) (1000.0 / ODOMETRY_FREQUENCY))
             .absoluteEncoderVelocityAlwaysOn(true)
@@ -58,9 +58,9 @@ public class CoralPivotConfigs {
             .busVoltagePeriodMs(20)
             .outputCurrentPeriodMs(20);
 
-    BIGGER_PIVOT_LEFT_CONFIG
-            .follow(CoralPivotConstants.BIGGER_PIVOT_RIGHT_SPARK_ID, true)
-            .idleMode(SparkBaseConfig.IdleMode.kBrake)
+    ARM_LEFT_CONFIG
+            .follow(CoralPivotConstants.ARM_RIGHT_SPARK_ID, true)
+            .idleMode(SparkBaseConfig.IdleMode.kCoast)
             .smartCurrentLimit(Constants.NEO_CURRENT_LIMIT)
             .voltageCompensation(12.0);
   }

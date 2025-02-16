@@ -17,8 +17,8 @@ Algae Pivot: 30 \
 Algae Rollers: 31 \
 Climb: 32 \
 Coral Wrist Pivot: 33 \
-Coral Left Bigger Pivot: 34 \
-Coral Right Bigger Pivot: 35 \
+Coral Left Arm (Follower): 34 \
+Coral Right Arm (Master): 35 \
 Coral Rollers: 36 \
-Elevator Left: 37 \
-Elevator Right: 38 
+Elevator Left (Master): 37 \
+Elevator Right (Follower): 38 
