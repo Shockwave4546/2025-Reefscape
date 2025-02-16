@@ -6,7 +6,7 @@ import org.dovershockwave.RobotContainer;
 
 import java.util.function.Consumer;
 
-public class TunableArmGains {
+public class TunableElevatorGains {
   private final TunableBoolean isManualMode;
   private final TunableNumber manualValue;
 
@@ -22,7 +22,7 @@ public class TunableArmGains {
   private final TunableNumber maxVelocity;
   private final TunableNumber maxAcceleration;
 
-  public TunableArmGains(String prefix, PIDFGains pidGains, ArmFeedforwardConstants ffConstants, TrapezoidProfile.Constraints constraints) {
+  public TunableElevatorGains(String prefix, PIDFGains pidGains, ElevatorFeedforwardConstants ffConstants, TrapezoidProfile.Constraints constraints) {
     isManualMode = new TunableBoolean(prefix + "(1) ManualMode", false);
     manualValue = new TunableNumber(prefix + "(2) ManualValue", 0.0);
 
@@ -41,19 +41,19 @@ public class TunableArmGains {
 
   public void periodic(
           Consumer<PIDFGains> pidGainsConfigurator,
-          Consumer<ArmFeedforwardConstants> armFeedforwardConfigurator,
-          Consumer<TrapezoidProfile.Constraints> armConstraintsConfigurator,
+          Consumer<ElevatorFeedforwardConstants> elevatorFeedforwardConfigurator,
+          Consumer<TrapezoidProfile.Constraints> elevatorConstraintsConfigurator,
           Consumer<Double> manualValueSetter
   ) {
     if (!Constants.TUNING_MODE || RobotContainer.isCompetitionMatch()) return;
 
     TunableNumber.ifChanged(hashCode(), values -> pidGainsConfigurator.accept(new PIDFGains(values[0], values[1], values[2], 0.0)), p, i, d);
 
-    TunableNumber.ifChanged(hashCode() + 1, values -> armFeedforwardConfigurator.accept(
-            new ArmFeedforwardConstants(values[0], values[1], values[2], values[3])),
+    TunableNumber.ifChanged(hashCode() + 1, values -> elevatorFeedforwardConfigurator.accept(
+            new ElevatorFeedforwardConstants(values[0], values[1], values[2], values[3])),
             kS, kG, kV, kA);
 
-    TunableNumber.ifChanged(hashCode() + 2, values -> armConstraintsConfigurator.accept(new TrapezoidProfile.Constraints(values[0], values[1])), maxVelocity, maxAcceleration);
+    TunableNumber.ifChanged(hashCode() + 2, values -> elevatorConstraintsConfigurator.accept(new TrapezoidProfile.Constraints(values[0], values[1])), maxVelocity, maxAcceleration);
 
     if (isManualMode.get()) {
       TunableNumber.ifChanged(hashCode() + 3, values -> manualValueSetter.accept(values[0]), manualValue);
@@ -66,7 +66,7 @@ public class TunableArmGains {
     d.set(gains.d());
   }
 
-  public void setFFConstants(ArmFeedforwardConstants constants) {
+  public void setFFConstants(ElevatorFeedforwardConstants constants) {
     kS.set(constants.kS());
     kG.set(constants.kG());
     kV.set(constants.kV());
@@ -82,8 +82,8 @@ public class TunableArmGains {
     return new PIDFGains(p.get(), i.get(), d.get(), 0.0);
   }
 
-  public ArmFeedforwardConstants getFFConstants() {
-    return new ArmFeedforwardConstants(kS.get(), kG.get(), kV.get(), kA.get());
+  public ElevatorFeedforwardConstants getFFConstants() {
+    return new ElevatorFeedforwardConstants(kS.get(), kG.get(), kV.get(), kA.get());
   }
 
   public boolean isManualMode() {

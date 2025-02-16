@@ -19,7 +19,7 @@ public class CoralPivotSubsystem extends SubsystemBase {
   private final CoralWristIOInputsAutoLogged coralWristInputs = new CoralWristIOInputsAutoLogged();
 
   private final TunablePIDF wristTunablePIDF = new TunablePIDF("CoralPivot/Wrist/PID/", CoralPivotConstants.WRIST_GAINS);
-  private final TunableArmGains armTunableGains = new TunableArmGains("CoralPivot/ArmGains/", CoralPivotConstants.ARM_GAINS, CoralPivotConstants.ARM_FEEDFORWARD_CONSTANTS);
+  private final TunableArmGains armTunableGains = new TunableArmGains("CoralPivot/ArmGains/", CoralPivotConstants.ARM_GAINS, CoralPivotConstants.ARM_FEEDFORWARD_CONSTANTS, CoralPivotConstants.ARM_CONSTRAINTS);
   private final ArmFeedforward armFeedforward = new ArmFeedforward(
           CoralPivotConstants.ARM_FEEDFORWARD_CONSTANTS.kS(),
           CoralPivotConstants.ARM_FEEDFORWARD_CONSTANTS.kG(),

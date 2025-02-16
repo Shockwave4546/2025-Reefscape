@@ -1,5 +1,8 @@
 package org.dovershockwave.utils;
 
+import org.dovershockwave.Constants;
+import org.dovershockwave.RobotContainer;
+
 import java.util.function.Consumer;
 
 public class TunablePIDF {
@@ -20,6 +23,8 @@ public class TunablePIDF {
   }
 
   public void periodic(Consumer<PIDFGains> pidfConfigurator, Consumer<Double> manualValueSetter) {
+    if (!Constants.TUNING_MODE || RobotContainer.isCompetitionMatch()) return;
+
     TunableNumber.ifChanged(hashCode(), values -> pidfConfigurator.accept(new PIDFGains(values[0], values[1], values[2], values[3])), p, i, d, ff);
 
     if (isManualMode.get()) {
