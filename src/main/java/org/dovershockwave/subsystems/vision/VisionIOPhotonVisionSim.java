@@ -14,7 +14,7 @@ public class VisionIOPhotonVisionSim extends VisionIOPhotonVision {
   private final PhotonCameraSim cameraSim;
 
   public VisionIOPhotonVisionSim(CameraType type, Supplier<Pose2d> poseSupplier) {
-    super(type);
+    super(type, () -> poseSupplier.get().getRotation());
     this.poseSupplier = poseSupplier;
 
     if (visionSim == null) {
