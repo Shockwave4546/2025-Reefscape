@@ -22,7 +22,7 @@ public class TunableElevatorGains {
   private final TunableNumber maxVelocity;
   private final TunableNumber maxAcceleration;
 
-  public TunableElevatorGains(String prefix, PIDFGains pidGains, ElevatorFeedforwardConstants ffConstants, TrapezoidProfile.Constraints constraints) {
+  public TunableElevatorGains(String prefix, PIDFGains pidGains, ElevatorFeedforwardGains ffGains, TrapezoidProfile.Constraints constraints) {
     isManualMode = new TunableBoolean(prefix + "(1) ManualMode", false);
     manualValue = new TunableNumber(prefix + "(2) ManualValue", 0.0);
 
@@ -30,10 +30,10 @@ public class TunableElevatorGains {
     i = new TunableNumber(prefix + "(4) I", pidGains.i());
     d = new TunableNumber(prefix + "(5) D", pidGains.d());
 
-    kS = new TunableNumber(prefix + "(6) kS", ffConstants.kS());
-    kG = new TunableNumber(prefix + "(7) kG", ffConstants.kG());
-    kV = new TunableNumber(prefix + "(8) kV", ffConstants.kV());
-    kA = new TunableNumber(prefix + "(9) kA", ffConstants.kA());
+    kS = new TunableNumber(prefix + "(6) kS", ffGains.kS());
+    kG = new TunableNumber(prefix + "(7) kG", ffGains.kG());
+    kV = new TunableNumber(prefix + "(8) kV", ffGains.kV());
+    kA = new TunableNumber(prefix + "(9) kA", ffGains.kA());
 
     maxVelocity = new TunableNumber(prefix + "(10) MaxVelocity", constraints.maxVelocity);
     maxAcceleration = new TunableNumber(prefix + "(11) MaxAcceleration", constraints.maxAcceleration);
@@ -41,7 +41,7 @@ public class TunableElevatorGains {
 
   public void periodic(
           Consumer<PIDFGains> pidGainsConfigurator,
-          Consumer<ElevatorFeedforwardConstants> elevatorFeedforwardConfigurator,
+          Consumer<ElevatorFeedforwardGains> elevatorFeedforwardConfigurator,
           Consumer<TrapezoidProfile.Constraints> elevatorConstraintsConfigurator,
           Consumer<Double> manualValueSetter
   ) {
@@ -50,7 +50,7 @@ public class TunableElevatorGains {
     TunableNumber.ifChanged(hashCode(), values -> pidGainsConfigurator.accept(new PIDFGains(values[0], values[1], values[2], 0.0)), p, i, d);
 
     TunableNumber.ifChanged(hashCode() + 1, values -> elevatorFeedforwardConfigurator.accept(
-            new ElevatorFeedforwardConstants(values[0], values[1], values[2], values[3])),
+            new ElevatorFeedforwardGains(values[0], values[1], values[2], values[3])),
             kS, kG, kV, kA);
 
     TunableNumber.ifChanged(hashCode() + 2, values -> elevatorConstraintsConfigurator.accept(new TrapezoidProfile.Constraints(values[0], values[1])), maxVelocity, maxAcceleration);
@@ -66,11 +66,11 @@ public class TunableElevatorGains {
     d.set(gains.d());
   }
 
-  public void setFFConstants(ElevatorFeedforwardConstants constants) {
-    kS.set(constants.kS());
-    kG.set(constants.kG());
-    kV.set(constants.kV());
-    kA.set(constants.kA());
+  public void setFFGains(ElevatorFeedforwardGains ffGains) {
+    kS.set(ffGains.kS());
+    kG.set(ffGains.kG());
+    kV.set(ffGains.kV());
+    kA.set(ffGains.kA());
   }
 
   public void setConstraints(TrapezoidProfile.Constraints constraints) {
@@ -82,8 +82,8 @@ public class TunableElevatorGains {
     return new PIDFGains(p.get(), i.get(), d.get(), 0.0);
   }
 
-  public ElevatorFeedforwardConstants getFFConstants() {
-    return new ElevatorFeedforwardConstants(kS.get(), kG.get(), kV.get(), kA.get());
+  public ElevatorFeedforwardGains getFFGains() {
+    return new ElevatorFeedforwardGains(kS.get(), kG.get(), kV.get(), kA.get());
   }
 
   public boolean isManualMode() {

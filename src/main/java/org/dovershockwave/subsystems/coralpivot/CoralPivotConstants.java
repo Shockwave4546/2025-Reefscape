@@ -2,7 +2,7 @@ package org.dovershockwave.subsystems.coralpivot;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import org.dovershockwave.utils.ArmFeedforwardConstants;
+import org.dovershockwave.utils.ArmFeedforwardGains;
 import org.dovershockwave.utils.PIDFGains;
 
 public class CoralPivotConstants {
@@ -22,7 +22,7 @@ public class CoralPivotConstants {
   public static final PIDFGains WRIST_GAINS = new PIDFGains(0.5, 0.0, 0.0, 0.0);
   public static final PIDFGains ARM_GAINS = new PIDFGains(0.4, 0.0, 0.1, 0.0);
   public static final TrapezoidProfile.Constraints ARM_CONSTRAINTS = new TrapezoidProfile.Constraints(2 * Math.PI, 10.0);
-  public static final ArmFeedforwardConstants ARM_FEEDFORWARD_CONSTANTS = new ArmFeedforwardConstants(0.0, 0.2, 0.64, 0.0);
+  public static final ArmFeedforwardGains ARM_FEEDFORWARD_GAINS = new ArmFeedforwardGains(0.0, 0.2, 0.64, 0.0);
   public static final double WRIST_POSITION_TOLERANCE = Units.degreesToRadians(2.5);
   public static final double ARM_POSITION_TOLERANCE =  Units.degreesToRadians(2.5);
 }
