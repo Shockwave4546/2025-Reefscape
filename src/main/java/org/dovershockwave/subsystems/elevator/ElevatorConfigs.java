@@ -35,7 +35,7 @@ public class ElevatorConfigs {
 
     RIGHT_CONFIG
             .follow(ElevatorConstants.LEFT_SPARK_ID, true)
-            .idleMode(SparkMaxConfig.IdleMode.kBrake)
+            .idleMode(SparkMaxConfig.IdleMode.kCoast)
             .smartCurrentLimit(Constants.NEO_CURRENT_LIMIT)
             .voltageCompensation(12.0);
     RIGHT_CONFIG.encoder
