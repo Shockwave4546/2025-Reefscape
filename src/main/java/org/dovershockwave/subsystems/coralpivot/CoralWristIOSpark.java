@@ -6,6 +6,7 @@ import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.Debouncer;
 import org.dovershockwave.utils.PIDFGains;
 
@@ -44,7 +45,10 @@ public class CoralWristIOSpark implements CoralWristIO {
 
   @Override public void setWristPosition(double rad) {
     tryUntilOk(wristSpark, 5, spark -> {
-      spark.getClosedLoopController().setReference(rad, SparkBase.ControlType.kPosition);
+      spark.getClosedLoopController().setReference(
+              MathUtil.clamp(rad, CoralPivotConstants.WRIST_MIN_POS, CoralPivotConstants.WRIST_MAX_POS),
+              SparkBase.ControlType.kPosition
+      );
     });
   }
 

@@ -4,6 +4,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.*;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.Debouncer;
 import org.dovershockwave.utils.PIDFGains;
 
@@ -65,7 +66,13 @@ public class ElevatorIOSpark implements ElevatorIO {
 
   @Override public void setPosition(double rad, double ff) {
     tryUntilOk(leftSpark, 5, spark -> {
-      spark.getClosedLoopController().setReference(rad, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0, ff, SparkClosedLoopController.ArbFFUnits.kVoltage);
+      spark.getClosedLoopController().setReference(
+              MathUtil.clamp(rad, ElevatorConstants.MIN_POS, ElevatorConstants.MAX_POS),
+              SparkBase.ControlType.kPosition,
+              ClosedLoopSlot.kSlot0,
+              ff,
+              SparkClosedLoopController.ArbFFUnits.kVoltage
+      );
     });
   }
 

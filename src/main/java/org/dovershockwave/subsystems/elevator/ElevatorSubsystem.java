@@ -18,7 +18,14 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final LidarIO lidarIO;
   private final LidarIOInputsAutoLogged lidarInputs = new LidarIOInputsAutoLogged();
 
-  private final TunableElevatorGains tunableGains = new TunableElevatorGains("Elevator/Gains/", ElevatorConstants.PID_GAINS, ElevatorConstants.FEEDFORWARD_GAINS, ElevatorConstants.CONSTRAINTS);
+  private final TunableElevatorGains tunableGains = new TunableElevatorGains(
+          "Elevator/Gains/",
+          ElevatorConstants.PID_GAINS,
+          ElevatorConstants.FEEDFORWARD_GAINS,
+          ElevatorConstants.CONSTRAINTS,
+          ElevatorConstants.MIN_POS,
+          ElevatorConstants.MAX_POS
+  );
   private final ElevatorFeedforward feedforward = new ElevatorFeedforward(
           ElevatorConstants.FEEDFORWARD_GAINS.kS(),
           ElevatorConstants.FEEDFORWARD_GAINS.kG(),

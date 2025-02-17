@@ -4,6 +4,7 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.*;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.Debouncer;
 import org.dovershockwave.utils.PIDFGains;
 
@@ -59,7 +60,13 @@ public class CoralArmIOSpark implements CoralArmIO {
 
   @Override public void setArmPosition(double rad, double ff) {
     tryUntilOk(armRightSpark, 5, spark -> {
-      spark.getClosedLoopController().setReference(rad, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0, ff, SparkClosedLoopController.ArbFFUnits.kVoltage);
+      spark.getClosedLoopController().setReference(
+              MathUtil.clamp(rad, CoralPivotConstants.ARM_MIN_POS, CoralPivotConstants.ARM_MAX_POS),
+              SparkBase.ControlType.kPosition,
+              ClosedLoopSlot.kSlot0,
+              ff,
+              SparkClosedLoopController.ArbFFUnits.kVoltage
+      );
     });
   }
 

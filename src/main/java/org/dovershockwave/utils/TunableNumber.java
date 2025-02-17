@@ -1,5 +1,6 @@
 package org.dovershockwave.utils;
 
+import edu.wpi.first.math.MathUtil;
 import org.dovershockwave.Constants;
 import org.dovershockwave.RobotContainer;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
@@ -14,11 +15,20 @@ public class TunableNumber {
   private LoggedNetworkNumber dashboardNumber;
   private final Map<Integer, Double> lastHasChangedValues = new HashMap<>();
 
-  public TunableNumber(String key, double defaultValue) {
+  private final double minValue;
+  private final double maxValue;
+
+  public TunableNumber(String key, double defaultValue, double minValue, double maxValue) {
     this.defaultValue = defaultValue;
     if (Constants.TUNING_MODE && !RobotContainer.isCompetitionMatch()) {
       this.dashboardNumber = new LoggedNetworkNumber(Constants.TUNING_TABLE_NAME + "/" + key, defaultValue);
     }
+    this.minValue = minValue;
+    this.maxValue = maxValue;
+  }
+
+  public TunableNumber(String key, double defaultValue) {
+    this(key, defaultValue, -Double.MAX_VALUE, Double.MAX_VALUE);
   }
 
   public double get() {
@@ -26,7 +36,7 @@ public class TunableNumber {
   }
 
   public void set(double value) {
-    dashboardNumber.set(value);
+    dashboardNumber.set(MathUtil.clamp(value, minValue, maxValue));
   }
 
   public boolean hasChanged(int id) {

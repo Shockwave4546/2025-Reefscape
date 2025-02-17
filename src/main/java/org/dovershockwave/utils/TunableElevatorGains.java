@@ -1,5 +1,6 @@
 package org.dovershockwave.utils;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import org.dovershockwave.Constants;
 import org.dovershockwave.RobotContainer;
@@ -22,9 +23,12 @@ public class TunableElevatorGains {
   private final TunableNumber maxVelocity;
   private final TunableNumber maxAcceleration;
 
-  public TunableElevatorGains(String prefix, PIDFGains pidGains, ElevatorFeedforwardGains ffGains, TrapezoidProfile.Constraints constraints) {
+  private final double minValue;
+  private final double maxValue;
+
+  public TunableElevatorGains(String prefix, PIDFGains pidGains, ElevatorFeedforwardGains ffGains, TrapezoidProfile.Constraints constraints, double minValue, double maxValue) {
     isManualMode = new TunableBoolean(prefix + "(1) ManualMode", false);
-    manualValue = new TunableNumber(prefix + "(2) ManualValue", 0.0);
+    manualValue = new TunableNumber(prefix + "(2) ManualValue", 0.0, minValue, maxValue);
 
     p = new TunableNumber(prefix + "(3) P", pidGains.p());
     i = new TunableNumber(prefix + "(4) I", pidGains.i());
@@ -37,6 +41,13 @@ public class TunableElevatorGains {
 
     maxVelocity = new TunableNumber(prefix + "(10) MaxVelocity", constraints.maxVelocity);
     maxAcceleration = new TunableNumber(prefix + "(11) MaxAcceleration", constraints.maxAcceleration);
+
+    this.minValue = minValue;
+    this.maxValue = maxValue;
+  }
+
+  public TunableElevatorGains(String prefix, PIDFGains pidGains, ElevatorFeedforwardGains ffGains, TrapezoidProfile.Constraints constraints) {
+    this(prefix, pidGains, ffGains, constraints, -Double.MAX_VALUE, Double.MAX_VALUE);
   }
 
   public void periodic(
@@ -56,7 +67,7 @@ public class TunableElevatorGains {
     TunableNumber.ifChanged(hashCode() + 2, values -> elevatorConstraintsConfigurator.accept(new TrapezoidProfile.Constraints(values[0], values[1])), maxVelocity, maxAcceleration);
 
     if (isManualMode.get()) {
-      TunableNumber.ifChanged(hashCode() + 3, values -> manualValueSetter.accept(values[0]), manualValue);
+      TunableNumber.ifChanged(hashCode() + 3, values -> manualValueSetter.accept(MathUtil.clamp(values[0], minValue, maxValue)), manualValue);
     }
   }
 
