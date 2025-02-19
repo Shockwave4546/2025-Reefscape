@@ -38,9 +38,9 @@ import static edu.wpi.first.units.Units.Volts;
 public class SwerveSubsystem extends SubsystemBase {
   private static double velocityMultiplier = 1.0;
 
+  private final GyroIO gyroIO;
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
   private final Alert gyroDisconnectedAlert = new Alert("Disconnected gyro", Alert.AlertType.kError);
-  private final GyroIO gyroIO;
 
   private final Module[] modules;
 

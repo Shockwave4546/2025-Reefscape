@@ -35,9 +35,9 @@ public class CoralPivotSubsystem extends SubsystemBase {
   );
   private TrapezoidProfile armProfile = new TrapezoidProfile(CoralPivotConstants.ARM_CONSTRAINTS);
 
-  private final Alert wristDisconnectedAlert = new Alert("Disconnected motor on the coral pivot wrist motor.", Alert.AlertType.kError);
-  private final Alert armLeftDisconnectedAlert = new Alert("Disconnected motor on the coral pivot left arm motor.", Alert.AlertType.kError);
-  private final Alert armRightDisconnectedAlert = new Alert("Disconnected motor on the coral pivot right arm motor.", Alert.AlertType.kError);
+  private final Alert wristDisconnectedAlert = new Alert("Disconnected coral wrist motor (" + CoralPivotConstants.WRIST_SPARK_ID + ")", Alert.AlertType.kError);
+  private final Alert armLeftDisconnectedAlert = new Alert("Disconnected coral left arm motor (" + CoralPivotConstants.ARM_LEFT_SPARK_ID, Alert.AlertType.kError);
+  private final Alert armRightDisconnectedAlert = new Alert("Disconnected coral right arm motor (" + CoralPivotConstants.ARM_RIGHT_SPARK_ID + ")", Alert.AlertType.kError);
 
   private CoralPivotState desiredState = CoralPivotState.STARTING;
 

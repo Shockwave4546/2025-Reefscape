@@ -30,8 +30,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   );
   private TrapezoidProfile profile = new TrapezoidProfile(ElevatorConstants.CONSTRAINTS);
 
-  private final Alert leftDisconnectedAlert = new Alert("Disconnected left motor on the elevator.", Alert.AlertType.kError);
-  private final Alert rightDisconnectedAlert = new Alert("Disconnected right motor on the elevator.", Alert.AlertType.kError);
+  private final Alert leftDisconnectedAlert = new Alert("Disconnected elevator left motor (" + ElevatorConstants.LEFT_SPARK_ID + ")", Alert.AlertType.kError);
+  private final Alert rightDisconnectedAlert = new Alert("Disconnected elevator right motor (" + ElevatorConstants.RIGHT_SPARK_ID + ")", Alert.AlertType.kError);
 
   private ElevatorState desiredState = ElevatorState.STARTING;
 

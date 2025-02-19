@@ -9,7 +9,7 @@ import org.dovershockwave.subsystems.swerve.SwerveConstants;
 import java.util.Queue;
 
 public class GyroIONavX implements GyroIO {
-  private final AHRS navX = new AHRS(AHRS.NavXComType.kMXP_SPI, (byte) SwerveConstants.ODOMETRY_FREQUENCY);
+  private final AHRS navX = new AHRS(AHRS.NavXComType.kUSB1, (byte) SwerveConstants.ODOMETRY_FREQUENCY);
   private final Queue<Double> yawPositionQueue;
   private final Queue<Double> yawTimestampQueue;
 

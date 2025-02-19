@@ -33,7 +33,7 @@ public class VisionSubsystem extends SubsystemBase {
     for (var io : ios) {
       this.io.put(io.getFirst(), io.getSecond());
       this.inputs.put(io.getFirst(), new VisionIOInputsAutoLogged());
-      this.disconnectedAlerts.put(io.getFirst(), new Alert("Vision camera " + io.getFirst().name + " is disconnected.", AlertType.kWarning));
+      this.disconnectedAlerts.put(io.getFirst(), new Alert("Disconnected " + io.getFirst().name, AlertType.kError));
     }
   }
 
@@ -59,7 +59,7 @@ public class VisionSubsystem extends SubsystemBase {
   @Override public void periodic() {
     for (final var camera : cameras) {
       io.get(camera).updateInputs(inputs.get(camera));
-      Logger.processInputs("Vision/Camera" + camera.name, inputs.get(camera));
+      Logger.processInputs("Vision/" + camera.name, inputs.get(camera));
     }
     // Initialize logging values
     final var allTagPoses = new LinkedList<Pose3d>();
@@ -116,10 +116,10 @@ public class VisionSubsystem extends SubsystemBase {
       }
 
       // Log camera data
-      Logger.recordOutput("Vision/Camera" + camera.name + "/TagPoses", tagPoses.toArray(new Pose3d[0]));
-      Logger.recordOutput("Vision/Camera" + camera.name + "/RobotPoses", robotPoses.toArray(new Pose3d[0]));
-      Logger.recordOutput("Vision/Camera" + camera.name + "/RobotPosesAccepted", robotPosesAccepted.toArray(new Pose3d[0]));
-      Logger.recordOutput("Vision/Camera" + camera.name + "/RobotPosesRejected", robotPosesRejected.toArray(new Pose3d[0]));
+      Logger.recordOutput("Vision/" + camera.name + "/TagPoses", tagPoses.toArray(new Pose3d[0]));
+      Logger.recordOutput("Vision/" + camera.name + "/RobotPoses", robotPoses.toArray(new Pose3d[0]));
+      Logger.recordOutput("Vision/" + camera.name + "/RobotPosesAccepted", robotPosesAccepted.toArray(new Pose3d[0]));
+      Logger.recordOutput("Vision/" + camera.name + "/RobotPosesRejected", robotPosesRejected.toArray(new Pose3d[0]));
       allTagPoses.addAll(tagPoses);
       allRobotPoses.addAll(robotPoses);
       allRobotPosesAccepted.addAll(robotPosesAccepted);

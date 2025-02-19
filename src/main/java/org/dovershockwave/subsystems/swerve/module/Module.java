@@ -26,9 +26,8 @@ public class Module {
   private final ModuleIOInputsAutoLogged inputs = new ModuleIOInputsAutoLogged();
   private final ModuleType type;
 
-  // TODO: 1/27/2025 rename to tunable__
-  private final TunablePIDF drivePIDF;
-  private final TunablePIDF turnPIDF;
+  private final TunablePIDF tunableDrivePIDF;
+  private final TunablePIDF tunableTurnPIDF;
 
   private final Alert driveDisconnectedAlert;
   private final Alert turnDisconnectedAlert;
@@ -37,11 +36,11 @@ public class Module {
   public Module(ModuleIO io, ModuleType type) {
     this.io = io;
     this.type = type;
-    drivePIDF = new TunablePIDF("Drive/" + type.name + "Module/DrivePID/", Constants.CURRENT_MODE == Constants.Mode.REAL ? SwerveConstants.DRIVE_PIDF : SwerveConstants.DRIVE_SIM_PIDF);
-    turnPIDF = new TunablePIDF("Drive/" + type.name + "Module/TurnPID/", Constants.CURRENT_MODE == Constants.Mode.REAL ? SwerveConstants.TURN_PIDF : SwerveConstants.TURN_SIM_PIDF);
+    tunableDrivePIDF = new TunablePIDF("Drive/" + type.name + "Module/DrivePID/", Constants.CURRENT_MODE == Constants.Mode.REAL ? SwerveConstants.DRIVE_PIDF : SwerveConstants.DRIVE_SIM_PIDF);
+    tunableTurnPIDF = new TunablePIDF("Drive/" + type.name + "Module/TurnPID/", Constants.CURRENT_MODE == Constants.Mode.REAL ? SwerveConstants.TURN_PIDF : SwerveConstants.TURN_SIM_PIDF);
 
-    driveDisconnectedAlert = new Alert("Disconnected drive motor on " + type.name + " module.", Alert.AlertType.kError);
-    turnDisconnectedAlert = new Alert("Disconnected turn motor on " + type.name + " module.", Alert.AlertType.kError);
+    driveDisconnectedAlert = new Alert("Disconnected " + type.name + "Module drive motor (" + type.driveId + ")", Alert.AlertType.kError);
+    turnDisconnectedAlert = new Alert("Disconnected " + type.name + "Module turn motor (" + type.turnId + ")", Alert.AlertType.kError);
   }
 
   public void periodic() {
@@ -57,8 +56,8 @@ public class Module {
       odometryPositions[i] = new SwerveModulePosition(positionMeters, angle);
     }
 
-    drivePIDF.periodic(io::setDrivePIDF, io::setDriveVelocity);
-    turnPIDF.periodic(io::setTurnPIDF, value -> io.setTurnPosition(new Rotation2d(value)));
+    tunableDrivePIDF.periodic(io::setDrivePIDF, io::setDriveVelocity);
+    tunableTurnPIDF.periodic(io::setTurnPIDF, value -> io.setTurnPosition(new Rotation2d(value)));
 
     driveDisconnectedAlert.set(!inputs.driveConnected);
     turnDisconnectedAlert.set(!inputs.turnConnected);
@@ -77,20 +76,20 @@ public class Module {
 
   public void setDrivePIDF(PIDFGains gains) {
     io.setDrivePIDF(gains);
-    drivePIDF.setGains(gains);
+    tunableDrivePIDF.setGains(gains);
   }
 
   public PIDFGains getDrivePIDF() {
-    return drivePIDF.getGains();
+    return tunableDrivePIDF.getGains();
   }
 
   public void setTurnPIDF(PIDFGains gains) {
     io.setTurnPIDF(gains);
-    turnPIDF.setGains(gains);
+    tunableTurnPIDF.setGains(gains);
   }
 
   public PIDFGains getTurnPIDF() {
-    return turnPIDF.getGains();
+    return tunableTurnPIDF.getGains();
   }
 
   public void runDriveCharacterization(double volts) {

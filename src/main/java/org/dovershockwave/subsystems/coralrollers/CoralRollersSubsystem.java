@@ -9,7 +9,7 @@ public class CoralRollersSubsystem extends SubsystemBase {
   private final CoralRollersIO coralIO;
   private final CoralRollersIOInputsAutoLogged coralInputs = new CoralRollersIOInputsAutoLogged();
 
-  private final Alert disconnectedAlert = new Alert("Disconnected motor on the coral roller.", Alert.AlertType.kError);
+  private final Alert disconnectedAlert = new Alert("Disconnected coral roller motor (" + CoralRollersConstants.SPARK_ID + ")", Alert.AlertType.kError);
 
   private CoralRollersState desiredState = CoralRollersState.STOPPED;
 

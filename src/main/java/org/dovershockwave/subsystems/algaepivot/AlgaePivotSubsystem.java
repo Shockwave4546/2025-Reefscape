@@ -13,7 +13,7 @@ public class AlgaePivotSubsystem extends SubsystemBase {
 
   private final TunablePIDF tunablePIDF = new TunablePIDF("AlgaePivot/PID/", AlgaePivotConstants.GAINS);
 
-  private final Alert disconnectedAlert = new Alert("Disconnected motor on the algae pivot motor.", Alert.AlertType.kError);
+  private final Alert disconnectedAlert = new Alert("Disconnected algae pivot motor (" + AlgaePivotConstants.SPARK_ID + ")", Alert.AlertType.kError);
 
   private AlgaePivotState desiredState = AlgaePivotState.STARTING;
 

@@ -13,7 +13,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
   private final TunablePIDF tunablePIDF = new TunablePIDF("Climb/PID/", ClimbConstants.GAINS);
 
-  private final Alert disconnectedAlert = new Alert("Disconnected motor on the climb motor.", Alert.AlertType.kError);
+  private final Alert disconnectedAlert = new Alert("Disconnected climb motor (" + ClimbConstants.SPARK_ID + ")", Alert.AlertType.kError);
 
   private ClimbState desiredState = ClimbState.STARTING;
 

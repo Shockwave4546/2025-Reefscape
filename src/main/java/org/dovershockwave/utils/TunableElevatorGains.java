@@ -11,14 +11,14 @@ public class TunableElevatorGains {
   private final TunableBoolean isManualMode;
   private final TunableNumber manualValue;
 
-  private final TunableNumber p;
-  private final TunableNumber i;
-  private final TunableNumber d;
-
   private final TunableNumber kS;
   private final TunableNumber kG;
   private final TunableNumber kV;
   private final TunableNumber kA;
+
+  private final TunableNumber p;
+  private final TunableNumber i;
+  private final TunableNumber d;
 
   private final TunableNumber maxVelocity;
   private final TunableNumber maxAcceleration;
@@ -30,14 +30,14 @@ public class TunableElevatorGains {
     isManualMode = new TunableBoolean(prefix + "(1) ManualMode", false);
     manualValue = new TunableNumber(prefix + "(2) ManualValue", 0.0, minValue, maxValue);
 
-    p = new TunableNumber(prefix + "(3) P", pidGains.p());
-    i = new TunableNumber(prefix + "(4) I", pidGains.i());
-    d = new TunableNumber(prefix + "(5) D", pidGains.d());
+    kS = new TunableNumber(prefix + "(3) kS", ffGains.kS());
+    kG = new TunableNumber(prefix + "(4) kG", ffGains.kG());
+    kV = new TunableNumber(prefix + "(5) kV", ffGains.kV());
+    kA = new TunableNumber(prefix + "(6) kA", ffGains.kA());
 
-    kS = new TunableNumber(prefix + "(6) kS", ffGains.kS());
-    kG = new TunableNumber(prefix + "(7) kG", ffGains.kG());
-    kV = new TunableNumber(prefix + "(8) kV", ffGains.kV());
-    kA = new TunableNumber(prefix + "(9) kA", ffGains.kA());
+    p = new TunableNumber(prefix + "(7) P", pidGains.p());
+    i = new TunableNumber(prefix + "(8) I", pidGains.i());
+    d = new TunableNumber(prefix + "(9) D", pidGains.d());
 
     maxVelocity = new TunableNumber(prefix + "(10) MaxVelocity", constraints.maxVelocity);
     maxAcceleration = new TunableNumber(prefix + "(11) MaxAcceleration", constraints.maxAcceleration);

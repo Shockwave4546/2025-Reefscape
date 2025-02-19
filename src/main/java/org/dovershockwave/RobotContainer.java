@@ -1,6 +1,5 @@
 package org.dovershockwave;
 
-import au.grapplerobotics.CanBridge;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,8 +27,6 @@ public class RobotContainer {
   protected final LoggedDashboardChooser<Command> autoChooser;
 
   public RobotContainer() {
-    // TODO: 2/2/2025 eventually get rid of this
-    CanBridge.runTCP();
     switch (Constants.CURRENT_MODE) {
       case REAL:
 //        swerve = new SwerveSubsystem(
@@ -48,7 +45,7 @@ public class RobotContainer {
 
         elevator = new ElevatorSubsystem(new ElevatorIOSpark(ElevatorConstants.LEFT_SPARK_ID, ElevatorConstants.RIGHT_SPARK_ID));
 //        coralRollers = new CoralRollersSubsystem(new CoralRollersIOSpark(CoralRollersConstants.SPARK_ID));
-//        algaeRollers = new AlgaeRollerSubsystem(new AlgaeRollersIOSpark(AlgaeRollersConstants.SPARK_ID));
+//        algaeRollers = new AlgaeRollersSubsystem(new AlgaeRollersIOSpark(AlgaeRollersConstants.SPARK_ID));
 //        algaePivot = new AlgaePivotSubsystem(new AlgaePivotIOSpark(AlgaePivotConstants.SPARK_ID));
 //        coralPivot = new CoralPivotSubsystem(new CoralArmIOSpark(CoralPivotConstants.ARM_LEFT_SPARK_ID, CoralPivotConstants.ARM_RIGHT_SPARK_ID), new CoralWristIOSpark(CoralPivotConstants.WRIST_SPARK_ID));
 //        climb = new ClimbSubsystem(new ClimbIOSpark(ClimbConstants.SPARK_ID));
@@ -69,7 +66,7 @@ public class RobotContainer {
 
         elevator = new ElevatorSubsystem(new ElevatorIO() {});
 //        coralRollers = new CoralRollersSubsystem(new CoralRollersIO() {});
-//        algaeRollers = new AlgaeRollerSubsystem(new AlgaeRollersIO() {});
+//        algaeRollers = new AlgaeRollersSubsystem(new AlgaeRollersIO() {});
 //        algaePivot = new AlgaePivotSubsystem(new AlgaePivotIO() {});
 //        coralPivot = new CoralPivotSubsystem(new CoralArmIO() {}, new CoralWristIO() {});
 //        climb = new ClimbSubsystem(new ClimbIO() {});
@@ -80,7 +77,7 @@ public class RobotContainer {
 //        vision = new VisionSubsystem(swerve::addVisionMeasurement, Pair.of(CameraType.NONE, new VisionIO() {}), Pair.of(CameraType.NONE, new VisionIO() {}));
         elevator = new ElevatorSubsystem(new ElevatorIO() {});
 //        coralRollers = new CoralRollersSubsystem(new CoralRollersIO() {});
-//        algaeRollers = new AlgaeRollerSubsystem(new AlgaeRollersIO() {});
+//        algaeRollers = new AlgaeRollersSubsystem(new AlgaeRollersIO() {});
 //        algaePivot = new AlgaePivotSubsystem(new AlgaePivotIO() {});
 //        coralPivot = new CoralPivotSubsystem(new CoralArmIO() {}, new CoralWristIO() {});
 //        climb = new ClimbSubsystem(new ClimbIO() {});
