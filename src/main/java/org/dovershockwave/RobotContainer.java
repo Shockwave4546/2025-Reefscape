@@ -5,18 +5,11 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import org.dovershockwave.subsystems.coralpivot.*;
-import org.dovershockwave.subsystems.coralrollers.*;
-import org.dovershockwave.subsystems.coralrollers.commands.IntakeCoralCommand;
 import org.dovershockwave.subsystems.elevator.ElevatorConstants;
 import org.dovershockwave.subsystems.elevator.ElevatorIO;
 import org.dovershockwave.subsystems.elevator.ElevatorIOSpark;
 import org.dovershockwave.subsystems.elevator.ElevatorSubsystem;
-import org.dovershockwave.subsystems.elevator.lidar.LidarIO;
-import org.dovershockwave.subsystems.elevator.lidar.LidarIOLaserCan;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class RobotContainer {
@@ -53,7 +46,7 @@ public class RobotContainer {
 //                Pair.of(CameraType.LEFT_HUMAN_PLAYER_STATION_CAMERA, new VisionIOPhotonVision(CameraType.LEFT_HUMAN_PLAYER_STATION_CAMERA, swerve::getRotation)),
 //                Pair.of(CameraType.RIGHT_HUMAN_PLAYER_STATION_CAMERA, new VisionIOPhotonVision(CameraType.RIGHT_HUMAN_PLAYER_STATION_CAMERA, swerve::getRotation)));
 
-        elevator = new ElevatorSubsystem(new ElevatorIOSpark(ElevatorConstants.LEFT_SPARK_ID, ElevatorConstants.RIGHT_SPARK_ID), new LidarIOLaserCan());
+        elevator = new ElevatorSubsystem(new ElevatorIOSpark(ElevatorConstants.LEFT_SPARK_ID, ElevatorConstants.RIGHT_SPARK_ID));
 //        coralRollers = new CoralRollersSubsystem(new CoralRollersIOSpark(CoralRollersConstants.SPARK_ID));
 //        algaeRollers = new AlgaeRollerSubsystem(new AlgaeRollersIOSpark(AlgaeRollersConstants.SPARK_ID));
 //        algaePivot = new AlgaePivotSubsystem(new AlgaePivotIOSpark(AlgaePivotConstants.SPARK_ID));
@@ -74,7 +67,7 @@ public class RobotContainer {
 //                Pair.of(CameraType.LEFT_HUMAN_PLAYER_STATION_CAMERA, new VisionIOPhotonVisionSim(CameraType.LEFT_HUMAN_PLAYER_STATION_CAMERA, swerve::getPose)),
 //                Pair.of(CameraType.RIGHT_HUMAN_PLAYER_STATION_CAMERA, new VisionIOPhotonVisionSim(CameraType.RIGHT_HUMAN_PLAYER_STATION_CAMERA, swerve::getPose)));
 
-        elevator = new ElevatorSubsystem(new ElevatorIO() {}, new LidarIO() {});
+        elevator = new ElevatorSubsystem(new ElevatorIO() {});
 //        coralRollers = new CoralRollersSubsystem(new CoralRollersIO() {});
 //        algaeRollers = new AlgaeRollerSubsystem(new AlgaeRollersIO() {});
 //        algaePivot = new AlgaePivotSubsystem(new AlgaePivotIO() {});
@@ -85,7 +78,7 @@ public class RobotContainer {
       default:
 //        swerve = new SwerveSubsystem(new GyroIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {});
 //        vision = new VisionSubsystem(swerve::addVisionMeasurement, Pair.of(CameraType.NONE, new VisionIO() {}), Pair.of(CameraType.NONE, new VisionIO() {}));
-        elevator = new ElevatorSubsystem(new ElevatorIO() {}, new LidarIO() {});
+        elevator = new ElevatorSubsystem(new ElevatorIO() {});
 //        coralRollers = new CoralRollersSubsystem(new CoralRollersIO() {});
 //        algaeRollers = new AlgaeRollerSubsystem(new AlgaeRollersIO() {});
 //        algaePivot = new AlgaePivotSubsystem(new AlgaePivotIO() {});
@@ -137,7 +130,7 @@ public class RobotContainer {
 //    operatorController.povRight().onTrue(new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L4)));
 
 //    operatorController.a().toggleOnTrue(new IntakeCoralCommand(coralRollers));
-//    operatorController.b().whileTrue(new SequentialCommandGroup(new InstantCommand(() -> coralRollers.setDesiredState(CoralRollersState.OUTTAKE)), new WaitCommand(0.25), new InstantCommand(() -> coralRollers.setDesiredState(CoralRollersState.STOPPED))));
+//    operatorController.b().onTrue(new SequentialCommandGroup(new InstantCommand(() -> coralRollers.setDesiredState(CoralRollersState.OUTTAKE)), new WaitCommand(0.25), new InstantCommand(() -> coralRollers.setDesiredState(CoralRollersState.STOPPED))));
     // TODO: 2/2/25 Add Algae commands
 
     SmartDashboard.putData("Reset Elevator Pos", new InstantCommand(elevator::resetPosition).ignoringDisable(true));

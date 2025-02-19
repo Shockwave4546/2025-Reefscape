@@ -5,8 +5,6 @@ import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.dovershockwave.subsystems.elevator.lidar.LidarIO;
-import org.dovershockwave.subsystems.elevator.lidar.LidarIOInputsAutoLogged;
 import org.dovershockwave.subsystems.vision.ReefScoringPosition;
 import org.dovershockwave.utils.TunableElevatorGains;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -15,8 +13,6 @@ import org.littletonrobotics.junction.Logger;
 public class ElevatorSubsystem extends SubsystemBase {
   private final ElevatorIO elevatorIO;
   private final ElevatorIOInputsAutoLogged elevatorInputs = new ElevatorIOInputsAutoLogged();
-  private final LidarIO lidarIO;
-  private final LidarIOInputsAutoLogged lidarInputs = new LidarIOInputsAutoLogged();
 
   private final TunableElevatorGains tunableGains = new TunableElevatorGains(
           "Elevator/Gains/",
@@ -39,16 +35,13 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private ElevatorState desiredState = ElevatorState.STARTING;
 
-  public ElevatorSubsystem(ElevatorIO elevatorIO, LidarIO lidarIO) {
+  public ElevatorSubsystem(ElevatorIO elevatorIO) {
     this.elevatorIO = elevatorIO;
-    this.lidarIO = lidarIO;
   }
 
   @Override public void periodic() {
     elevatorIO.updateInputs(elevatorInputs);
     Logger.processInputs("Elevator", elevatorInputs);
-    lidarIO.updateInputs(lidarInputs);
-    Logger.processInputs("Elevator/Lidar", lidarInputs);
 
     tunableGains.periodic(elevatorIO::setPIDF, ffConstants -> {
       feedforward.setKs(ffConstants.kS());

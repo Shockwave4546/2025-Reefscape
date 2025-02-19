@@ -21,7 +21,4 @@ public class ElevatorConstants {
   public static final TrapezoidProfile.Constraints CONSTRAINTS = new TrapezoidProfile.Constraints(Math.PI, Math.PI);
   public static final ElevatorFeedforwardGains FEEDFORWARD_GAINS = new ElevatorFeedforwardGains(0.0, 0.55, 0.0, 0.0);
   public static final double POSITION_TOLERANCE = Units.degreesToRadians(2.5);
-
-  public static final double LIDAR_STARTING_DISTANCE = 0.0; // TODO: 1/30/25  
-  public static final double LIDAR_STARTING_DISTANCE_TOLERANCE = Units.inchesToMeters(1.0); // TODO: 1/30/25  
 }
