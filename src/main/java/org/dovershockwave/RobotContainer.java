@@ -126,7 +126,9 @@ public class RobotContainer {
 //    operatorController.povUp().onTrue(new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L3)));
 //    operatorController.povRight().onTrue(new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L4)));
 
-//    operatorController.a().toggleOnTrue(new IntakeCoralCommand(coralRollers));
+//    operatorController.a().onTrue(new FullScoreCoralCommand(swerve, vision, coralPivot, coralRollers, elevator, selector));
+//    operatorController.y().toggleOnTrue(new IntakeCoralCommand(coralRollers));
+
 //    operatorController.b().onTrue(new SequentialCommandGroup(new InstantCommand(() -> coralRollers.setDesiredState(CoralRollersState.OUTTAKE)), new WaitCommand(0.25), new InstantCommand(() -> coralRollers.setDesiredState(CoralRollersState.STOPPED))));
     // TODO: 2/2/25 Add Algae commands
 

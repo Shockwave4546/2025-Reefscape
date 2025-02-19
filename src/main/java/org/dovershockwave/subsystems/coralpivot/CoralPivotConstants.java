@@ -26,9 +26,11 @@ public class CoralPivotConstants {
   public static final double ARM_MAX_POS = Math.PI / 2.0;
 
   public static final PIDFGains WRIST_GAINS = new PIDFGains(2.25, 0.0, 0.0, 0.0);
+
+  public static final ArmFeedforwardGains ARM_FEEDFORWARD_GAINS = new ArmFeedforwardGains(0.0, 0.2, 1.6, 0.02);
   public static final PIDFGains ARM_GAINS = new PIDFGains(0.55, 0.0, 0.0, 0.0);
   public static final TrapezoidProfile.Constraints ARM_CONSTRAINTS = new TrapezoidProfile.Constraints(Math.PI, Math.PI);
-  public static final ArmFeedforwardGains ARM_FEEDFORWARD_GAINS = new ArmFeedforwardGains(0.0, 0.2, 1.6, 0.02);
+
   public static final double WRIST_POSITION_TOLERANCE = Units.degreesToRadians(2.5);
   public static final double ARM_POSITION_TOLERANCE =  Units.degreesToRadians(2.5);
 }

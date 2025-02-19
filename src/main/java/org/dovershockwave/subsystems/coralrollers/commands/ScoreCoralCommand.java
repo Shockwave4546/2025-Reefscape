@@ -5,20 +5,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 import org.dovershockwave.subsystems.coralrollers.CoralRollersState;
 import org.dovershockwave.subsystems.coralrollers.CoralRollersSubsystem;
 
-public class IntakeCoralCommand extends Command {
+public class ScoreCoralCommand extends Command {
   /**
-   * The current (A) at which a coral is considered to be within the end effector.
+   * The currents (A) at which a coral is considered to be out of the end effector.
    */
-  private static final double CURRENT_TRIGGER = 7.5;
-  /**
-   * When initially intaking a coral, the current spikes to reach enough torque, however,
-   * afterward it will essentially drop to 0A. A sustained current of {@link #CURRENT_TRIGGER} is
-   * required to consider the coral to be within the end effector.
-   */
-  public final Debouncer currentDebouncer = new Debouncer(0.15);  // TODO: 2/18/2025 Find a better debounceTime
+  private static final double CURRENT_TRIGGER_MIN = -0.5;
+  private static final double CURRENT_TRIGGER_MAX = 0.5;
+  // TODO: 2/18/2025 Find a better debounceTime
+  public final Debouncer currentDebouncer = new Debouncer(0.1);
   public final CoralRollersSubsystem coralRollers;
 
-  public IntakeCoralCommand(CoralRollersSubsystem coralRollers) {
+  public ScoreCoralCommand(CoralRollersSubsystem coralRollers) {
     this.coralRollers = coralRollers;
     addRequirements(coralRollers);
   }
@@ -36,6 +33,7 @@ public class IntakeCoralCommand extends Command {
   }
 
   @Override public boolean isFinished() {
-    return currentDebouncer.calculate(Math.abs(coralRollers.getCurrentAmps()) > CURRENT_TRIGGER);
+    final var current = coralRollers.getCurrentAmps();
+    return currentDebouncer.calculate(current >= CURRENT_TRIGGER_MIN && current <= CURRENT_TRIGGER_MAX);
   }
 }
