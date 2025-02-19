@@ -8,10 +8,6 @@ import org.dovershockwave.utils.PIDFGains;
 public class VisionConstants {
   public static final AprilTagFieldLayout APRIL_TAG_FIELD = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
 
-  /**
-   * Uses the best target for pose estimation
-   */
-  public static final boolean DO_SINGLE_TAG_POSE_ESTIMATE = true;
   public static final double SINGLE_TAG_MAX_AMBIGUITY = 0.3;
   public static final double MAX_Z_ERROR = 0.75;
 
