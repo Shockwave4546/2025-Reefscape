@@ -16,7 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class Robot extends LoggedRobot {
-  private static final Alert LOG_FOLDER_FOUND = new Alert("Logging is enabled.",Alert.AlertType.kInfo);
+  private static final Alert LOG_FOLDER_FOUND = new Alert("Logging is enabled.", Alert.AlertType.kInfo);
   private static final Alert LOG_FOLDER_NOT_FOUND = new Alert("Logging is disabled as the log folder doesn't exist!", Alert.AlertType.kWarning);
   private static final Alert TUNING_MODE_ENABLED = new Alert("Tuning mode is enabled.", Alert.AlertType.kInfo);
   private static final Alert TUNING_MODE_ENABLED_COMP = new Alert("Tuning mode is enabled in a competition round!", Alert.AlertType.kWarning);
