@@ -71,7 +71,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     final var currentState = new TrapezoidProfile.State(elevatorInputs.leftPositionRad, elevatorInputs.leftVelocityRadPerSec);
     final var goalState = new TrapezoidProfile.State(desiredState.positionRad(), 0.0);
     final var nextState = profile.calculate(0.02, currentState, goalState);
-    elevatorIO.setPosition(desiredState.positionRad(), feedforward.calculate(nextState.velocity));
+    elevatorIO.setPosition(desiredState.positionRad(), feedforward.calculateWithVelocities(currentState.velocity, nextState.velocity));
     this.desiredState = desiredState;
   }
 
@@ -82,6 +82,10 @@ public class ElevatorSubsystem extends SubsystemBase {
       case L3 -> setDesiredState(ElevatorState.L3);
       case L4 -> setDesiredState(ElevatorState.L4);
     }
+  }
+
+  public void resetPosition() {
+    elevatorIO.resetPosition();
   }
 
   @AutoLogOutput(key = "Elevator/State")

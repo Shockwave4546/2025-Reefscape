@@ -18,7 +18,7 @@ public class CoralPivotSubsystem extends SubsystemBase {
   private final CoralWristIO coralWristIO;
   private final CoralWristIOInputsAutoLogged coralWristInputs = new CoralWristIOInputsAutoLogged();
 
-  private final TunablePIDF wristTunablePIDF = new TunablePIDF("CoralPivot/Wrist/PID/", CoralPivotConstants.WRIST_GAINS);
+  private final TunablePIDF wristTunablePIDF = new TunablePIDF("CoralPivot/WristPID/", CoralPivotConstants.WRIST_GAINS);
   private final TunableArmGains armTunableGains = new TunableArmGains(
           "CoralPivot/ArmGains/",
           CoralPivotConstants.ARM_GAINS,
@@ -75,6 +75,9 @@ public class CoralPivotSubsystem extends SubsystemBase {
     setDesiredState(desiredState);
   }
 
+  private double previousVelocity;
+
+  @SuppressWarnings("removal")
   public void setDesiredState(CoralPivotState desiredState) {
     this.desiredState = desiredState;
 
@@ -83,7 +86,8 @@ public class CoralPivotSubsystem extends SubsystemBase {
     final var currentState = new TrapezoidProfile.State(coralArmInputs.armRightPositionRad, coralArmInputs.armRightVelocityRadPerSec);
     final var goalState = new TrapezoidProfile.State(desiredState.armPositionRad(), 0.0);
     final var nextState = armProfile.calculate(0.02, currentState, goalState);
-    coralArmIO.setArmPosition(desiredState.armPositionRad(), armFeedforward.calculate(nextState.position, nextState.velocity));
+    final var accel = (nextState.velocity - previousVelocity) /  0.02;
+    coralArmIO.setArmPosition(desiredState.armPositionRad(), armFeedforward.calculate(nextState.position, nextState.velocity, accel));
   }
 
 

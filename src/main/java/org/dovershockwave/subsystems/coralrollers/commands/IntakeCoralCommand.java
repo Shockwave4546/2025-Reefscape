@@ -15,7 +15,7 @@ public class IntakeCoralCommand extends Command {
    * afterward it will essentially drop to 0A. A sustained current of {@link #CURRENT_TRIGGER} is
    * required to consider the coral to be within the end effector.
    */
-  public final Debouncer currentDebouncer = new Debouncer(0.25);
+  public final Debouncer currentDebouncer = new Debouncer(0.15);
   public final CoralRollersSubsystem coralRollers;
 
   public IntakeCoralCommand(CoralRollersSubsystem coralRollers) {
