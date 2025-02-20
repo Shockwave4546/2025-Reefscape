@@ -72,12 +72,13 @@ public class VisionIOPhotonVision implements VisionIO {
               Optional.empty(),
               Optional.empty(),
               Optional.of(new PhotonPoseEstimator.ConstrainedSolvepnpParams(false, HEADING_SCALE_FACTOR.get()))).ifPresent(poseEstimate -> {
-        poseObservations.add(new PoseObservation(
-                result.getTimestampSeconds(), // Timestamp
-                poseEstimate.estimatedPose, // 3D pose estimate
-                poseEstimate.targetsUsed.getFirst().poseAmbiguity, // Ambiguity (This only matters for the first tag since ambiguity is only checked is tag count is 1)
-                poseEstimate.targetsUsed.size(), // Tag count
-                poseEstimate.targetsUsed.stream().mapToDouble(it -> it.getBestCameraToTarget().getTranslation().getNorm()).average().orElse(0.0))); // Average tag distance
+                if (poseEstimate.targetsUsed.isEmpty()) return;
+                poseObservations.add(new PoseObservation(
+                        result.getTimestampSeconds(), // Timestamp
+                        poseEstimate.estimatedPose, // 3D pose estimate
+                        poseEstimate.targetsUsed.get(0).poseAmbiguity, // Ambiguity (This only matters for the first tag since ambiguity is only checked is tag count is 1)
+                        poseEstimate.targetsUsed.size(), // Tag count
+                        poseEstimate.targetsUsed.stream().mapToDouble(it -> it.getBestCameraToTarget().getTranslation().getNorm()).average().orElse(0.0))); // Average tag distance
       });
 
       result.targets.forEach(target -> tagIds.add((short) target.fiducialId));
