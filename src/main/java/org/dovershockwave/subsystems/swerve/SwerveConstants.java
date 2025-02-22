@@ -31,14 +31,14 @@ public class SwerveConstants {
           new Translation2d(-WHEEL_BASE_METERS / 2, -TRACK_WIDTH_METERS / 2)
   };
 
-  public static final boolean DRIVE_MOTOR_INVERTED = true;
+  public static final boolean DRIVE_MOTOR_INVERTED = false;
   /**
    * MAXSwerve Extra High 2 with 14 pinion teeth and 20 spur teeth
    */
   public static final double DRIVE_MOTOR_REDUCTION = (45.0 * 20.0) / (14.0 * 15.0);
   public static final double DRIVE_ENCODER_POSITION_FACTOR = (2 * Math.PI) / DRIVE_MOTOR_REDUCTION;
   public static final double DRIVE_ENCODER_VELOCITY_FACTOR = ((2 * Math.PI) / DRIVE_MOTOR_REDUCTION) / 60.0;
-  public static final PIDFGains DRIVE_PIDF = new PIDFGains(0.0125, 0.0, 0.165, 0.0084);
+  public static final PIDFGains DRIVE_PIDF = new PIDFGains(0.0125, 0.0, 0.165, 0.00709338);
 
   public static final double TURN_MOTOR_REDUCTION = 9424.0 / 203.0; // TODO: 1/24/2025 Double check this value--used for sim only 
   public static final double TURN_ENCODER_POSITION_FACTOR = 2 * Math.PI;
