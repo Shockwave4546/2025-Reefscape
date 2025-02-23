@@ -8,25 +8,25 @@ public enum CameraType {
   LEFT_REEF_CAMERA(
           0,
           "LeftReefCamera",
-          new Transform3d(0.0, 0.0, 0.0, new Rotation3d(0.0, Units.degreesToRadians(20), Units.degreesToRadians(-20))),
+          new Transform3d(0.0698, -0.26, Units.inchesToMeters(17.25), new Rotation3d(0.0, Units.degreesToRadians(20), Units.degreesToRadians(-20))),
           1.0),
 
   RIGHT_REEF_CAMERA(
           0,
           "RightReefCamera",
-          new Transform3d(0.0, 0.0, 0.0, new Rotation3d(0.0, Units.degreesToRadians(20), Units.degreesToRadians(20))),
+          new Transform3d(0.0698, 0.26, 0.0, new Rotation3d(0.0, Units.degreesToRadians(20), Units.degreesToRadians(20))),
           1.0),
 
   LEFT_HUMAN_PLAYER_STATION_CAMERA(
           1,
           "LeftHumanPlayerStationCamera",
-          new Transform3d(0.0, 0.0, 0.0, new Rotation3d(0.0, Units.degreesToRadians(-20), Units.degreesToRadians(-20))),
+          new Transform3d(0.0698, -0.26, 0.0, new Rotation3d(0.0, Units.degreesToRadians(-20), Units.degreesToRadians(-20))),
           1.0),
 
   RIGHT_HUMAN_PLAYER_STATION_CAMERA(
           1,
           "RightHumanPlayerStationCamera",
-          new Transform3d(0.0, 0.0, 0.0, new Rotation3d(0.0, Units.degreesToRadians(-20), Units.degreesToRadians(20))),
+          new Transform3d(0.0698, 0.26, 0.0, new Rotation3d(0.0, Units.degreesToRadians(-20), Units.degreesToRadians(20))),
           1.0),
 
   NONE(

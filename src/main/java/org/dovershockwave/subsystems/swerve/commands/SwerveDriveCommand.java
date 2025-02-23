@@ -35,7 +35,7 @@ public class SwerveDriveCommand extends Command {
   }
 
   private ChassisSpeeds getChassisSpeeds(Translation2d linearVelocity) {
-    var omega = MathUtil.applyDeadband(-controller.getRightX() , Constants.DRIVE_DEADBAND);
+    var omega = MathUtil.applyDeadband(controller.getRightX() , Constants.DRIVE_DEADBAND);
 
     // Square rotation value for more precise control
     omega = Math.copySign(omega * omega, omega);

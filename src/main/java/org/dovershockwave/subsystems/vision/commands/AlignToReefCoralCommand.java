@@ -39,6 +39,7 @@ public class AlignToReefCoralCommand extends Command {
   }
 
   @Override public void execute() {
+    selector.setSide(ReefScoringPosition.ReefScoringSide.RIGHT);
     final var camera = selector.getSide() == ReefScoringPosition.ReefScoringSide.LEFT ? CameraType.RIGHT_REEF_CAMERA : CameraType.LEFT_REEF_CAMERA;
     final var bestTarget = vision.getBestTargetObservation(camera);
 
