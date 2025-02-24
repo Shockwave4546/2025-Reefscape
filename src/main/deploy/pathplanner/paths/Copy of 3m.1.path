@@ -28,12 +28,7 @@
       "linkedName": "3mInReef"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.8925328351449274,
-      "rotationDegrees": 90.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],

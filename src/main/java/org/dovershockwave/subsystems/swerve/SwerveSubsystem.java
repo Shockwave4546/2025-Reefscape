@@ -242,6 +242,15 @@ public class SwerveSubsystem extends SubsystemBase {
     return Arrays.stream(modules).mapToDouble(Module::getVelocityRadPerSec).average().orElse(0.0);
   }
 
+    /** Returns the position of each module in radians. */
+  public double[] getWheelRadiusCharacterizationPositions() {
+    double[] values = new double[4];
+    for (int i = 0; i < 4; i++) {
+      values[i] = modules[i].getWheelRadiusCharacterizationPosition();
+    }
+    return values;
+  }
+
   @AutoLogOutput(key = "Odometry/Robot")
   public Pose2d getPose() {
     return poseEstimator.getEstimatedPosition();

@@ -1,5 +1,6 @@
 package org.dovershockwave;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,8 +17,10 @@ import org.dovershockwave.subsystems.elevator.ElevatorIO;
 import org.dovershockwave.subsystems.elevator.ElevatorIOSpark;
 import org.dovershockwave.subsystems.elevator.ElevatorSubsystem;
 import org.dovershockwave.subsystems.swerve.SwerveSubsystem;
+import org.dovershockwave.subsystems.swerve.commands.DriveLinearVelocityCommand;
 import org.dovershockwave.subsystems.swerve.commands.ResetFieldOrientatedDriveCommand;
 import org.dovershockwave.subsystems.swerve.commands.SwerveDriveCommand;
+import org.dovershockwave.subsystems.swerve.commands.WheelRadiusCharacterizationCommand;
 import org.dovershockwave.subsystems.swerve.gyro.GyroIO;
 import org.dovershockwave.subsystems.swerve.gyro.GyroIONavX;
 import org.dovershockwave.subsystems.swerve.module.ModuleIO;
@@ -25,7 +28,6 @@ import org.dovershockwave.subsystems.swerve.module.ModuleIOSim;
 import org.dovershockwave.subsystems.swerve.module.ModuleIOSpark;
 import org.dovershockwave.subsystems.swerve.module.ModuleType;
 import org.dovershockwave.subsystems.vision.*;
-import org.dovershockwave.subsystems.vision.commands.AlignToReefCoralCommand;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class RobotContainer {
@@ -56,9 +58,9 @@ public class RobotContainer {
         vision = new VisionSubsystem(
                 swerve::addVisionMeasurement,
                 Pair.of(CameraType.LEFT_REEF_CAMERA, new VisionIOPhotonVision(CameraType.LEFT_REEF_CAMERA, swerve::getRotation)),
-                Pair.of(CameraType.RIGHT_REEF_CAMERA, new VisionIOPhotonVision(CameraType.RIGHT_REEF_CAMERA, swerve::getRotation)),
-                Pair.of(CameraType.LEFT_HUMAN_PLAYER_STATION_CAMERA, new VisionIOPhotonVision(CameraType.LEFT_HUMAN_PLAYER_STATION_CAMERA, swerve::getRotation)),
-                Pair.of(CameraType.RIGHT_HUMAN_PLAYER_STATION_CAMERA, new VisionIOPhotonVision(CameraType.RIGHT_HUMAN_PLAYER_STATION_CAMERA, swerve::getRotation)));
+//                Pair.of(CameraType.RIGHT_REEF_CAMERA, new VisionIOPhotonVision(CameraType.RIGHT_REEF_CAMERA, swerve::getRotation)),
+                Pair.of(CameraType.LEFT_HUMAN_PLAYER_STATION_CAMERA, new VisionIOPhotonVision(CameraType.LEFT_HUMAN_PLAYER_STATION_CAMERA, swerve::getRotation)));
+//                Pair.of(CameraType.RIGHT_HUMAN_PLAYER_STATION_CAMERA, new VisionIOPhotonVision(CameraType.RIGHT_HUMAN_PLAYER_STATION_CAMERA, swerve::getRotation)));
 
         elevator = new ElevatorSubsystem(new ElevatorIOSpark(ElevatorConstants.LEFT_SPARK_ID, ElevatorConstants.RIGHT_SPARK_ID));
         coralRollers = new CoralRollersSubsystem(new CoralRollersIOSpark(CoralRollersConstants.SPARK_ID));
@@ -100,7 +102,7 @@ public class RobotContainer {
 //        climb = new ClimbSubsystem(new ClimbIO() {});
     }
 
-    autoChooser = new LoggedDashboardChooser<>("Auto Choices");
+    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
     autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
 
     if (!isCompetitionMatch()) {
@@ -147,6 +149,10 @@ public class RobotContainer {
 
 //    operatorController.a().onTrue(new FullScoreCoralCommand(swerve, vision, coralPivot, coralRollers, elevator, selector));
     operatorController.y().toggleOnTrue(new IntakeCoralCommand(coralRollers));
+    operatorController.x().onTrue(WheelRadiusCharacterizationCommand.cmd(swerve));
+
+    driverController.a().onTrue(new DriveLinearVelocityCommand(swerve, driverController, true));
+    driverController.b().onTrue(new DriveLinearVelocityCommand(swerve, driverController, false));
 
     operatorController.b().onTrue(new SequentialCommandGroup(new InstantCommand(() -> coralRollers.setDesiredState(CoralRollersState.OUTTAKE)), new WaitCommand(0.25), new InstantCommand(() -> coralRollers.setDesiredState(CoralRollersState.STOPPED))));
     // TODO: 2/2/25 Add Algae commands

@@ -12,7 +12,7 @@ import org.dovershockwave.utils.PIDFGains;
 public class SwerveConstants {
   public static final double ODOMETRY_FREQUENCY = 100.0; // Hz
 
-  public static final double WHEEL_RADIUS_METERS = Units.inchesToMeters(1.5);
+  public static final double WHEEL_RADIUS_METERS = Units.inchesToMeters(1.441);
   /**
    * Distance between centers of left and right wheels
    */
@@ -22,8 +22,10 @@ public class SwerveConstants {
    */
   public static final double WHEEL_BASE_METERS = Units.inchesToMeters(26);
   public static final double DRIVE_BASE_RADIUS = Math.sqrt(Math.pow(WHEEL_BASE_METERS / 2, 2) + Math.pow(TRACK_WIDTH_METERS / 2, 2));
-  public static final double MAX_REAL_SPEED_METERS_PER_SECOND = 5.28; // TODO: 1/20/2025 - Update this value
-  public static final double MAX_ANGULAR_SPEED_RAD_PER_SEC = MAX_REAL_SPEED_METERS_PER_SECOND / DRIVE_BASE_RADIUS;
+  public static final double MAX_REAL_SPEED_METERS_PER_SECOND = 4.8;
+  public static final double MAX_REAL_ACCELERATION_METERS_PER_SECOND_SQUARED = 3;
+  public static final double MAX_ANGULAR_SPEED_RAD_PER_SEC = Units.degreesToRadians(540); // MAX_REAL_SPEED_METERS_PER_SECOND / DRIVE_BASE_RADIUS;
+  public static final double MAX_ANGULAR_ACCELERATION_RAD_PER_SEC_SQUARED = Units.degreesToRadians(444); // MAX_ANGULAR_SPEED_RAD_PER_SEC / DRIVE_BASE_RADIUS;
   public static final Translation2d[] MODULE_TRANSLATIONS = {
           new Translation2d(WHEEL_BASE_METERS / 2, TRACK_WIDTH_METERS / 2),
           new Translation2d(WHEEL_BASE_METERS / 2, -TRACK_WIDTH_METERS / 2),
@@ -31,7 +33,7 @@ public class SwerveConstants {
           new Translation2d(-WHEEL_BASE_METERS / 2, -TRACK_WIDTH_METERS / 2)
   };
 
-  public static final boolean DRIVE_MOTOR_INVERTED = false;
+  public static final boolean DRIVE_MOTOR_INVERTED = true;
   /**
    * MAXSwerve Extra High 2 with 14 pinion teeth and 20 spur teeth
    */
@@ -48,14 +50,14 @@ public class SwerveConstants {
   public static final PIDFGains DRIVE_SIM_PIDF = new PIDFGains(0.075, 0.0, 0.01, 0.1);
   public static final PIDFGains TURN_SIM_PIDF = new PIDFGains(20.0, 0.0, 0.0, 0.0);
 
-  public static final PIDConstants TRANSLATION_PID = new PIDConstants(3.0, 0.0, 0.08);
+  public static final PIDConstants TRANSLATION_PID = new PIDConstants(10.0, 0.0, 0.08);
   public static final PIDConstants ROTATION_PID = new PIDConstants(2.91, 0.0, 0.094);
   public static final RobotConfig PATH_PLANNER_ROBOT_CONFIG = new RobotConfig(
-          47.63,  // Robot mass (kg)
-          5,             // Robot MOI (kg m^2)
+          9.5,  // Robot mass (kg)
+          3.440,             // Robot MOI (kg m^2)
           new ModuleConfig(
                   WHEEL_RADIUS_METERS,   // Wheel radius (m)
-                  3.6,                        // Max speed (m/s)
+                  4.0,                        // Max speed (m/s)
                   1.43,                        // Wheel COF (unitless)
                   DCMotor.getNEO(1).withReduction(DRIVE_MOTOR_REDUCTION),
                   Constants.AUTO_DRIVE_NEO_CURRENT_LIMIT,

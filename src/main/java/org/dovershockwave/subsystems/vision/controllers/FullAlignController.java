@@ -3,8 +3,10 @@ package org.dovershockwave.subsystems.vision.controllers;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import org.dovershockwave.Constants;
 import org.dovershockwave.RobotContainer;
+import org.dovershockwave.subsystems.swerve.SwerveConstants;
 import org.dovershockwave.utils.PIDFGains;
 import org.dovershockwave.utils.TunableNumber;
 import org.dovershockwave.utils.TunablePIDF;
@@ -12,6 +14,10 @@ import org.littletonrobotics.junction.Logger;
 
 // TODO: 2/1/2025 Fix robot relative speeds
 public class FullAlignController {
+  private static final TrapezoidProfile.Constraints X_VELOCITY_CONSTRAINTS = new TrapezoidProfile.Constraints(SwerveConstants.MAX_REAL_SPEED_METERS_PER_SECOND, SwerveConstants.MAX_REAL_ACCELERATION_METERS_PER_SECOND_SQUARED);
+  private static final TrapezoidProfile.Constraints Y_VELOCITY_CONSTRAINTS = new TrapezoidProfile.Constraints(SwerveConstants.MAX_REAL_SPEED_METERS_PER_SECOND, SwerveConstants.MAX_REAL_ACCELERATION_METERS_PER_SECOND_SQUARED);
+  private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS = new TrapezoidProfile.Constraints(SwerveConstants.MAX_ANGULAR_SPEED_RAD_PER_SEC, SwerveConstants.MAX_ANGULAR_ACCELERATION_RAD_PER_SEC_SQUARED);
+
   private final String dashboardKey;
   private final TunableNumber headingRadTolerance;
   private final TunableNumber xDistanceMetersTolerance;

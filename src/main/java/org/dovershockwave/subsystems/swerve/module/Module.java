@@ -116,6 +116,10 @@ public class Module {
     return inputs.turnPosition;
   }
 
+  public double getWheelRadiusCharacterizationPosition() {
+    return inputs.drivePositionRad;
+  }
+
   public double getPositionMeters() {
     return inputs.drivePositionRad * SwerveConstants.WHEEL_RADIUS_METERS;
   }

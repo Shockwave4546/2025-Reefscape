@@ -1,0 +1,37 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HumanPlayerNonProcessor-K"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "K-HumanPlayerNonProcessor"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HumanPlayerNonProcessor-L"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L-HumanPlayerNonProcessor"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "NonProcessor",
+  "choreoAuto": false
+}
