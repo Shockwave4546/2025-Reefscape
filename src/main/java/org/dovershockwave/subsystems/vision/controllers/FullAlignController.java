@@ -40,7 +40,6 @@ public class FullAlignController {
     yVelocityPID.reset(currentTranslationMeters.getY());
   }
 
-
   public boolean atGoal() {
     return omegaPID.atGoal() && xVelocityPID.atGoal() && yVelocityPID.atGoal();
   }
