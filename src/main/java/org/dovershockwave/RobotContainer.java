@@ -35,7 +35,7 @@ public class RobotContainer {
   private final VisionSubsystem vision;
   private final ElevatorSubsystem elevator;
   private final CoralRollersSubsystem coralRollers;
-//  private final AlgaeRollerSubsystem algaeRollers; mi
+//  private final AlgaeRollerSubsystem algaeRollers;
 //  private final AlgaePivotSubsystem algaePivot;
   private final CoralPivotSubsystem coralPivot;
 //  private final ClimbSubsystem climb;
@@ -162,5 +162,9 @@ public class RobotContainer {
 
   public static boolean isCompetitionMatch() {
     return DriverStation.isFMSAttached() || DriverStation.getMatchType() != DriverStation.MatchType.None;
+  }
+
+  public static boolean isTuningMode() {
+    return Constants.TUNING_MODE && !isCompetitionMatch();
   }
 }

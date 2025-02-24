@@ -1,13 +1,12 @@
 package org.dovershockwave.utils;
 
 import edu.wpi.first.math.MathUtil;
-import org.dovershockwave.Constants;
 import org.dovershockwave.RobotContainer;
 
 import java.util.function.Consumer;
 
 public class TunablePIDF {
-  private final TunableBoolean isManualMode;
+  protected final TunableBoolean isManualMode;
   private final TunableNumber manualValue;
   private final TunableNumber p;
   private final TunableNumber i;
@@ -33,12 +32,12 @@ public class TunablePIDF {
   }
 
   public void periodic(Consumer<PIDFGains> pidfConfigurator, Consumer<Double> manualValueSetter) {
-    if (!Constants.TUNING_MODE || RobotContainer.isCompetitionMatch()) return;
+    if (!RobotContainer.isTuningMode()) return;
 
     TunableNumber.ifChanged(hashCode(), values -> pidfConfigurator.accept(new PIDFGains(values[0], values[1], values[2], values[3])), p, i, d, ff);
 
     if (isManualMode.get()) {
-      TunableNumber.ifChanged(hashCode() * 2, values -> manualValueSetter.accept(MathUtil.clamp(values[0], minValue, maxValue)), manualValue);
+      TunableNumber.ifChanged(hashCode() + 1, values -> manualValueSetter.accept(MathUtil.clamp(values[0], minValue, maxValue)), manualValue);
     }
   }
 

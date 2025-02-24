@@ -20,9 +20,10 @@ public class TunableNumber {
 
   public TunableNumber(String key, double defaultValue, double minValue, double maxValue) {
     this.defaultValue = defaultValue;
-    if (Constants.TUNING_MODE && !RobotContainer.isCompetitionMatch()) {
+    if (RobotContainer.isTuningMode()) {
       this.dashboardNumber = new LoggedNetworkNumber(Constants.TUNING_TABLE_NAME + "/" + key, defaultValue);
     }
+
     this.minValue = minValue;
     this.maxValue = maxValue;
   }

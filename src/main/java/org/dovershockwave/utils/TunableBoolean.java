@@ -16,7 +16,7 @@ public class TunableBoolean {
 
   public TunableBoolean(String key, boolean defaultValue) {
     this.defaultValue = defaultValue;
-    if (Constants.TUNING_MODE && !RobotContainer.isCompetitionMatch()) {
+    if (RobotContainer.isTuningMode()) {
       this.dashboardBoolean = new LoggedNetworkBoolean(Constants.TUNING_TABLE_NAME + "/" + key, defaultValue);
     }
   }
