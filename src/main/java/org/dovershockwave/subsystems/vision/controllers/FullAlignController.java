@@ -16,12 +16,12 @@ public class FullAlignController {
 
   public FullAlignController(
           String dashboardKey,
-          double headingRadTolerance,
-          double xDistanceMetersTolerance,
-          double yDistanceMetersTolerance,
           PIDFGains omegaPIDGains,
           PIDFGains xVelocityPIDGains,
           PIDFGains yVelocityPIDGains,
+          double headingRadTolerance,
+          double xDistanceMetersTolerance,
+          double yDistanceMetersTolerance,
           TrapezoidProfile.Constraints omegaConstraints,
           TrapezoidProfile.Constraints xVelocityConstraints,
           TrapezoidProfile.Constraints yVelocityConstraints
