@@ -1,9 +1,7 @@
 package org.dovershockwave.subsystems.coralpivot;
 
 import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.spark.SparkBase;
-import com.revrobotics.spark.SparkLowLevel;
-import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.*;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.MathUtil;
@@ -43,13 +41,14 @@ public class CoralWristIOSpark implements CoralWristIO {
     inputs.wristConnected = wristConnectedDebouncer.calculate(!HAS_STICKY_FAULT);
   }
 
-  @Override public void setWristPosition(double rad) {
-    tryUntilOk(wristSpark, 5, spark -> {
-      spark.getClosedLoopController().setReference(
-              MathUtil.clamp(rad, CoralPivotConstants.WRIST_MIN_POS, CoralPivotConstants.WRIST_MAX_POS),
-              SparkBase.ControlType.kPosition
-      );
-    });
+  @Override public void setWristPosition(double rad, double ff) {
+    tryUntilOk(wristSpark, 5, spark -> spark.getClosedLoopController().setReference(
+            MathUtil.clamp(rad, CoralPivotConstants.ARM_MIN_POS, CoralPivotConstants.ARM_MAX_POS),
+            SparkBase.ControlType.kPosition,
+            ClosedLoopSlot.kSlot0,
+            ff,
+            SparkClosedLoopController.ArbFFUnits.kVoltage
+    ));
   }
 
   @Override public void setWristPIDF(PIDFGains gains) {

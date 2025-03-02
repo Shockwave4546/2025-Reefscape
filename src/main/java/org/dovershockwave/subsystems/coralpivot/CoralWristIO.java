@@ -14,7 +14,7 @@ public interface CoralWristIO {
 
   default void updateInputs(CoralWristIOInputs inputs) {}
 
-  default void setWristPosition(double rad) {}
+  default void setWristPosition(double rad, double ff) {}
 
   default void setWristPIDF(PIDFGains gains) {}
 }

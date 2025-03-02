@@ -59,15 +59,13 @@ public class CoralArmIOSpark implements CoralArmIO {
   }
 
   @Override public void setArmPosition(double rad, double ff) {
-    tryUntilOk(armRightSpark, 5, spark -> {
-      spark.getClosedLoopController().setReference(
-              MathUtil.clamp(rad, CoralPivotConstants.ARM_MIN_POS, CoralPivotConstants.ARM_MAX_POS),
-              SparkBase.ControlType.kPosition,
-              ClosedLoopSlot.kSlot0,
-              ff,
-              SparkClosedLoopController.ArbFFUnits.kVoltage
-      );
-    });
+    tryUntilOk(armRightSpark, 5, spark -> spark.getClosedLoopController().setReference(
+            MathUtil.clamp(rad, CoralPivotConstants.ARM_MIN_POS, CoralPivotConstants.ARM_MAX_POS),
+            SparkBase.ControlType.kPosition,
+            ClosedLoopSlot.kSlot0,
+            ff,
+            SparkClosedLoopController.ArbFFUnits.kVoltage
+    ));
   }
 
   @Override public void setArmPIDF(PIDFGains gains) {

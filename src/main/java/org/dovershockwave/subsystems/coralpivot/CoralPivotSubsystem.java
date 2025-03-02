@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.dovershockwave.ReefScoringPosition;
 import org.dovershockwave.utils.TunableArmGains;
-import org.dovershockwave.utils.TunablePIDF;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -18,7 +17,22 @@ public class CoralPivotSubsystem extends SubsystemBase {
   private final CoralWristIO coralWristIO;
   private final CoralWristIOInputsAutoLogged coralWristInputs = new CoralWristIOInputsAutoLogged();
 
-  private final TunablePIDF wristTunablePIDF = new TunablePIDF("CoralPivot/WristPID/", CoralPivotConstants.WRIST_GAINS);
+  private final TunableArmGains wristTunableGains = new TunableArmGains(
+          "CoralPivot/WristGains/",
+          CoralPivotConstants.WRIST_GAINS,
+          CoralPivotConstants.WRIST_FEEDFORWARD_GAINS,
+          CoralPivotConstants.WRIST_CONSTRAINTS,
+          CoralPivotConstants.WRIST_MIN_POS,
+          CoralPivotConstants.WRIST_MAX_POS
+  );
+  private final ArmFeedforward wristFeedforward = new ArmFeedforward(
+          CoralPivotConstants.WRIST_FEEDFORWARD_GAINS.kS(),
+          CoralPivotConstants.WRIST_FEEDFORWARD_GAINS.kG(),
+          CoralPivotConstants.WRIST_FEEDFORWARD_GAINS.kV(),
+          CoralPivotConstants.WRIST_FEEDFORWARD_GAINS.kA()
+  );
+  private TrapezoidProfile wristProfile = new TrapezoidProfile(CoralPivotConstants.WRIST_CONSTRAINTS);
+
   private final TunableArmGains armTunableGains = new TunableArmGains(
           "CoralPivot/ArmGains/",
           CoralPivotConstants.ARM_GAINS,
@@ -52,7 +66,14 @@ public class CoralPivotSubsystem extends SubsystemBase {
     Logger.processInputs("CoralPivot/Arm", coralArmInputs);
     Logger.processInputs("CoralPivot/Wrist", coralWristInputs);
 
-    wristTunablePIDF.periodic(coralWristIO::setWristPIDF, positionRad -> {
+    wristTunableGains.periodic(coralWristIO::setWristPIDF, wristFFConstants -> {
+      wristFeedforward.setKs(wristFFConstants.kS());
+      wristFeedforward.setKg(wristFFConstants.kG());
+      wristFeedforward.setKv(wristFFConstants.kV());
+      wristFeedforward.setKa(wristFFConstants.kA());
+    }, constraints -> {
+      this.wristProfile = new TrapezoidProfile(constraints);
+    }, positionRad -> {
       setDesiredState(new CoralPivotState(positionRad, desiredState.armPositionRad()));
     });
 
@@ -71,25 +92,26 @@ public class CoralPivotSubsystem extends SubsystemBase {
     armLeftDisconnectedAlert.set(!coralArmInputs.armLeftConnected);
     armRightDisconnectedAlert.set(!coralArmInputs.armRightConnected);
 
-    // Update FF values but this feels wrong
+    // Update FF values, but this feels wrong
     setDesiredState(desiredState);
   }
-
-  private double previousVelocity;
 
   @SuppressWarnings("removal")
   public void setDesiredState(CoralPivotState desiredState) {
     this.desiredState = desiredState;
 
-    coralWristIO.setWristPosition(desiredState.wristPositionRad());
+    final var wristCurrentState = new TrapezoidProfile.State(coralWristInputs.wristPositionRad, coralWristInputs.wristVelocityRadPerSec);
+    final var wristGoalState = new TrapezoidProfile.State(desiredState.wristPositionRad(), 0.0);
+    final var wristNextState = wristProfile.calculate(0.02, wristCurrentState, wristGoalState);
+    final var wristAcceleration = (wristNextState.velocity - wristCurrentState.velocity) / 0.02;
+    coralWristIO.setWristPosition(desiredState.wristPositionRad(), wristFeedforward.calculate(wristNextState.position, wristNextState.velocity, wristAcceleration));
 
-    final var currentState = new TrapezoidProfile.State(coralArmInputs.armRightPositionRad, coralArmInputs.armRightVelocityRadPerSec);
-    final var goalState = new TrapezoidProfile.State(desiredState.armPositionRad(), 0.0);
-    final var nextState = armProfile.calculate(0.02, currentState, goalState);
-    final var accel = (nextState.velocity - previousVelocity) /  0.02;
-    coralArmIO.setArmPosition(desiredState.armPositionRad(), armFeedforward.calculate(nextState.position, nextState.velocity, accel));
+    final var armCurrentState = new TrapezoidProfile.State(coralArmInputs.armRightPositionRad, coralArmInputs.armRightVelocityRadPerSec);
+    final var armGoalState = new TrapezoidProfile.State(desiredState.armPositionRad(), 0.0);
+    final var armNextState = armProfile.calculate(0.02, armCurrentState, armGoalState);
+    final var armAcceleration = (armNextState.velocity - armCurrentState.velocity) /  0.02;
+    coralArmIO.setArmPosition(desiredState.armPositionRad(), armFeedforward.calculate(armNextState.position, armNextState.velocity, armAcceleration));
   }
-
 
   public void setDesiredState(ReefScoringPosition.ReefLevel level) {
     switch (level) {
