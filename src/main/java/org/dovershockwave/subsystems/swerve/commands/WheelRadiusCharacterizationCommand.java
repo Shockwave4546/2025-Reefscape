@@ -35,7 +35,7 @@ public class WheelRadiusCharacterizationCommand extends ParallelCommandGroup {
                       final var rotation = swerve.getRotation();
                       state.gyroDelta += Math.abs(rotation.minus(state.lastAngle).getRadians());
                       state.lastAngle = rotation;
-                    }, swerve).finallyDo(() -> {  // When cancelled, calculate and print results
+                    }).finallyDo(() -> {  // When cancelled, calculate and print results
                       final var positions = swerve.getWheelRadiusCharacterizationPositions();
                       var wheelDelta = 0.0;
                       for (int i = 0; i < 4; i++) {
