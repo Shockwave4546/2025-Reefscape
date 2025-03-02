@@ -1,4 +1,4 @@
-package org.dovershockwave.subsystems.vision;
+package org.dovershockwave;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;

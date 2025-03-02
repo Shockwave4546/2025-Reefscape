@@ -3,9 +3,9 @@ package org.dovershockwave.subsystems.swerve.commands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import org.dovershockwave.ReefScoringPosition;
 import org.dovershockwave.subsystems.swerve.SwerveSubsystem;
 import org.dovershockwave.subsystems.vision.CameraType;
-import org.dovershockwave.subsystems.vision.ReefScoringPosition;
 import org.dovershockwave.subsystems.vision.VisionSubsystem;
 
 /**

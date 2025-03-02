@@ -1,6 +1,5 @@
 package org.dovershockwave;
 
-import org.dovershockwave.subsystems.vision.ReefScoringPosition;
 import org.littletonrobotics.junction.AutoLogOutput;
 
 public class ReefScoringSelector {

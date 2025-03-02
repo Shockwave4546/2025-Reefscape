@@ -5,7 +5,7 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.dovershockwave.subsystems.vision.ReefScoringPosition;
+import org.dovershockwave.ReefScoringPosition;
 import org.dovershockwave.utils.TunableArmGains;
 import org.dovershockwave.utils.TunablePIDF;
 import org.littletonrobotics.junction.AutoLogOutput;
