@@ -1,5 +1,6 @@
 package org.dovershockwave;
 
+import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.Threads;
@@ -78,7 +79,7 @@ public class Robot extends LoggedRobot {
 
     Logger.registerURCL(URCL.startExternal());
     Logger.start();
-
+    Pathfinding.setPathfinder();
     if (RobotContainer.isCompetitionMatch() && Constants.TUNING_MODE) TUNING_MODE_ENABLED_COMP.set(true);
     else TUNING_MODE_ENABLED.set(Constants.TUNING_MODE);
 
