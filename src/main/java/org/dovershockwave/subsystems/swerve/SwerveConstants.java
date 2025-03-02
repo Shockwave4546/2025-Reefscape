@@ -60,7 +60,7 @@ public class SwerveConstants {
                   4.0,                        // Max speed (m/s)
                   1.43,                        // Wheel COF (unitless)
                   DCMotor.getNEO(1).withReduction(DRIVE_MOTOR_REDUCTION),
-                  Constants.AUTO_DRIVE_NEO_CURRENT_LIMIT,
+                  Constants.DRIVE_NEO_CURRENT_LIMIT,
                   1
           ),
           MODULE_TRANSLATIONS

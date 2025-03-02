@@ -9,6 +9,15 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import org.dovershockwave.subsystems.algaepivot.AlgaePivotConstants;
+import org.dovershockwave.subsystems.algaepivot.AlgaePivotIO;
+import org.dovershockwave.subsystems.algaepivot.AlgaePivotIOSpark;
+import org.dovershockwave.subsystems.algaepivot.AlgaePivotSubsystem;
+import org.dovershockwave.subsystems.algaerollers.AlgaeRollersConstants;
+import org.dovershockwave.subsystems.algaerollers.AlgaeRollersIO;
+import org.dovershockwave.subsystems.algaerollers.AlgaeRollersIOSpark;
+import org.dovershockwave.subsystems.algaerollers.AlgaeRollersSubsystem;
 import org.dovershockwave.subsystems.coralpivot.*;
 import org.dovershockwave.subsystems.coralrollers.*;
 import org.dovershockwave.subsystems.coralrollers.commands.IntakeCoralCommand;
@@ -17,10 +26,10 @@ import org.dovershockwave.subsystems.elevator.ElevatorIO;
 import org.dovershockwave.subsystems.elevator.ElevatorIOSpark;
 import org.dovershockwave.subsystems.elevator.ElevatorSubsystem;
 import org.dovershockwave.subsystems.swerve.SwerveSubsystem;
-import org.dovershockwave.subsystems.swerve.commands.DriveLinearVelocityCommand;
-import org.dovershockwave.subsystems.swerve.commands.ResetFieldOrientatedDriveCommand;
-import org.dovershockwave.subsystems.swerve.commands.SwerveDriveCommand;
-import org.dovershockwave.subsystems.swerve.commands.WheelRadiusCharacterizationCommand;
+import org.dovershockwave.subsystems.swerve.commands.*;
+import org.dovershockwave.subsystems.swerve.commands.sysid.SysIdDriveDynamicCommand;
+import org.dovershockwave.subsystems.swerve.commands.sysid.SysIdDriveQuasistaticCommand;
+import org.dovershockwave.subsystems.swerve.commands.sysid.SysIdTurnQuasistaticCommand;
 import org.dovershockwave.subsystems.swerve.gyro.GyroIO;
 import org.dovershockwave.subsystems.swerve.gyro.GyroIONavX;
 import org.dovershockwave.subsystems.swerve.module.ModuleIO;
@@ -35,8 +44,8 @@ public class RobotContainer {
   private final VisionSubsystem vision;
   private final ElevatorSubsystem elevator;
   private final CoralRollersSubsystem coralRollers;
-//  private final AlgaeRollerSubsystem algaeRollers;
-//  private final AlgaePivotSubsystem algaePivot;
+  private final AlgaeRollersSubsystem algaeRollers;
+  private final AlgaePivotSubsystem algaePivot;
   private final CoralPivotSubsystem coralPivot;
 //  private final ClimbSubsystem climb;
   protected final CommandXboxController driverController = new CommandXboxController(Constants.DRIVER_CONTROLLER_PORT);
@@ -44,6 +53,7 @@ public class RobotContainer {
   private final ReefScoringSelector selector = new ReefScoringSelector();
 
   protected final LoggedDashboardChooser<Command> autoChooser;
+  protected final LoggedDashboardChooser<Command> testChooser = new LoggedDashboardChooser<>("Test Mode Choices");
 
   public RobotContainer() {
     switch (Constants.CURRENT_MODE) {
@@ -58,14 +68,14 @@ public class RobotContainer {
         vision = new VisionSubsystem(
                 swerve::addVisionMeasurement,
                 Pair.of(CameraType.LEFT_REEF_CAMERA, new VisionIOPhotonVision(CameraType.LEFT_REEF_CAMERA, swerve::getRotation)),
-//                Pair.of(CameraType.RIGHT_REEF_CAMERA, new VisionIOPhotonVision(CameraType.RIGHT_REEF_CAMERA, swerve::getRotation)),
-                Pair.of(CameraType.LEFT_HUMAN_PLAYER_STATION_CAMERA, new VisionIOPhotonVision(CameraType.LEFT_HUMAN_PLAYER_STATION_CAMERA, swerve::getRotation)));
-//                Pair.of(CameraType.RIGHT_HUMAN_PLAYER_STATION_CAMERA, new VisionIOPhotonVision(CameraType.RIGHT_HUMAN_PLAYER_STATION_CAMERA, swerve::getRotation)));
+                Pair.of(CameraType.RIGHT_REEF_CAMERA, new VisionIOPhotonVision(CameraType.RIGHT_REEF_CAMERA, swerve::getRotation)),
+                Pair.of(CameraType.LEFT_HUMAN_PLAYER_STATION_CAMERA, new VisionIOPhotonVision(CameraType.LEFT_HUMAN_PLAYER_STATION_CAMERA, swerve::getRotation)),
+                Pair.of(CameraType.RIGHT_HUMAN_PLAYER_STATION_CAMERA, new VisionIOPhotonVision(CameraType.RIGHT_HUMAN_PLAYER_STATION_CAMERA, swerve::getRotation)));
 
         elevator = new ElevatorSubsystem(new ElevatorIOSpark(ElevatorConstants.LEFT_SPARK_ID, ElevatorConstants.RIGHT_SPARK_ID));
         coralRollers = new CoralRollersSubsystem(new CoralRollersIOSpark(CoralRollersConstants.SPARK_ID));
-//        algaeRollers = new AlgaeRollersSubsystem(new AlgaeRollersIOSpark(AlgaeRollersConstants.SPARK_ID));
-//        algaePivot = new AlgaePivotSubsystem(new AlgaePivotIOSpark(AlgaePivotConstants.SPARK_ID));
+        algaeRollers = new AlgaeRollersSubsystem(new AlgaeRollersIOSpark(AlgaeRollersConstants.SPARK_ID));
+        algaePivot = new AlgaePivotSubsystem(new AlgaePivotIOSpark(AlgaePivotConstants.SPARK_ID));
         coralPivot = new CoralPivotSubsystem(new CoralArmIOSpark(CoralPivotConstants.ARM_LEFT_SPARK_ID, CoralPivotConstants.ARM_RIGHT_SPARK_ID), new CoralWristIOSpark(CoralPivotConstants.WRIST_SPARK_ID));
 //        climb = new ClimbSubsystem(new ClimbIOSpark(ClimbConstants.SPARK_ID));
         break;
@@ -85,8 +95,8 @@ public class RobotContainer {
 
         elevator = new ElevatorSubsystem(new ElevatorIO() {});
         coralRollers = new CoralRollersSubsystem(new CoralRollersIO() {});
-//        algaeRollers = new AlgaeRollersSubsystem(new AlgaeRollersIO() {});
-//        algaePivot = new AlgaePivotSubsystem(new AlgaePivotIO() {});
+        algaeRollers = new AlgaeRollersSubsystem(new AlgaeRollersIO() {});
+        algaePivot = new AlgaePivotSubsystem(new AlgaePivotIO() {});
         coralPivot = new CoralPivotSubsystem(new CoralArmIO() {}, new CoralWristIO() {});
 //        climb = new ClimbSubsystem(new ClimbIO() {});
         break;
@@ -96,8 +106,8 @@ public class RobotContainer {
         vision = new VisionSubsystem(swerve::addVisionMeasurement, Pair.of(CameraType.NONE, new VisionIO() {}), Pair.of(CameraType.NONE, new VisionIO() {}));
         elevator = new ElevatorSubsystem(new ElevatorIO() {});
         coralRollers = new CoralRollersSubsystem(new CoralRollersIO() {});
-//        algaeRollers = new AlgaeRollersSubsystem(new AlgaeRollersIO() {});
-//        algaePivot = new AlgaePivotSubsystem(new AlgaePivotIO() {});
+        algaeRollers = new AlgaeRollersSubsystem(new AlgaeRollersIO() {});
+        algaePivot = new AlgaePivotSubsystem(new AlgaePivotIO() {});
         coralPivot = new CoralPivotSubsystem(new CoralArmIO() {}, new CoralWristIO() {});
 //        climb = new ClimbSubsystem(new ClimbIO() {});
     }
@@ -105,18 +115,19 @@ public class RobotContainer {
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
     autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
 
-    if (!isCompetitionMatch()) {
-//      autoChooser.addOption("Drive Simple FF Characterization", new FeedforwardCharacterizationCommand(swerve));
-//      autoChooser.addOption("Drive SysId (Quasistatic Forward)", new SysIdDriveQuasistaticCommand(swerve, SysIdRoutine.Direction.kForward));
-//      autoChooser.addOption("Drive SysId (Quasistatic Reverse)", new SysIdDriveQuasistaticCommand(swerve, SysIdRoutine.Direction.kReverse));
-//      autoChooser.addOption("Drive SysId (Dynamic Forward)", new SysIdDriveDynamicCommand(swerve, SysIdRoutine.Direction.kForward));
-//      autoChooser.addOption("Drive SysId (Dynamic Reverse)", new SysIdDriveDynamicCommand(swerve, SysIdRoutine.Direction.kReverse));
-//
-//      autoChooser.addOption("Turn SysId (Quasistatic Forward)", new SysIdTurnQuasistaticCommand(swerve, SysIdRoutine.Direction.kForward));
-//      autoChooser.addOption("Turn SysId (Quasistatic Reverse)", new SysIdTurnQuasistaticCommand(swerve, SysIdRoutine.Direction.kReverse));
-//      autoChooser.addOption("Turn SysId (Dynamic Forward)", new SysIdDriveDynamicCommand(swerve, SysIdRoutine.Direction.kForward));
-//      autoChooser.addOption("Turn SysId (Dynamic Reverse)", new SysIdDriveDynamicCommand(swerve, SysIdRoutine.Direction.kReverse));
-    }
+    testChooser.addDefaultOption("Do Nothing", new InstantCommand());
+    testChooser.addOption("Wheel Radius Characterization", new WheelRadiusCharacterizationCommand(swerve));
+    testChooser.addOption("Drive Simple FF Characterization", new FeedforwardCharacterizationCommand(swerve));
+
+    testChooser.addOption("Drive SysId (Quasistatic Forward)", new SysIdDriveQuasistaticCommand(swerve, SysIdRoutine.Direction.kForward));
+    testChooser.addOption("Drive SysId (Quasistatic Reverse)", new SysIdDriveQuasistaticCommand(swerve, SysIdRoutine.Direction.kReverse));
+    testChooser.addOption("Drive SysId (Dynamic Forward)", new SysIdDriveDynamicCommand(swerve, SysIdRoutine.Direction.kForward));
+    testChooser.addOption("Drive SysId (Dynamic Reverse)", new SysIdDriveDynamicCommand(swerve, SysIdRoutine.Direction.kReverse));
+
+    testChooser.addOption("Turn SysId (Quasistatic Forward)", new SysIdTurnQuasistaticCommand(swerve, SysIdRoutine.Direction.kForward));
+    testChooser.addOption("Turn SysId (Quasistatic Reverse)", new SysIdTurnQuasistaticCommand(swerve, SysIdRoutine.Direction.kReverse));
+    testChooser.addOption("Turn SysId (Dynamic Forward)", new SysIdDriveDynamicCommand(swerve, SysIdRoutine.Direction.kForward));
+    testChooser.addOption("Turn SysId (Dynamic Reverse)", new SysIdDriveDynamicCommand(swerve, SysIdRoutine.Direction.kReverse));
 
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
@@ -149,7 +160,6 @@ public class RobotContainer {
 
 //    operatorController.a().onTrue(new FullScoreCoralCommand(swerve, vision, coralPivot, coralRollers, elevator, selector));
     operatorController.y().toggleOnTrue(new IntakeCoralCommand(coralRollers));
-    operatorController.x().onTrue(WheelRadiusCharacterizationCommand.cmd(swerve));
 
     driverController.a().onTrue(new DriveLinearVelocityCommand(swerve, driverController, true));
     driverController.b().onTrue(new DriveLinearVelocityCommand(swerve, driverController, false));

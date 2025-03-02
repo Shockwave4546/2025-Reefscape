@@ -14,12 +14,15 @@ import java.util.OptionalDouble;
 public record ReefScoringPosition(int id, Translation3d position, Rotation2d robotHeading) {
   /**
    * Reef scoring positions with blue alliance wall as reference and robot facing the field.
-   * <p>
+   * Based off <a href="https://github.com/wpilibsuite/allwpilib/blob/main/apriltag/src/main/native/resources/edu/wpi/first/apriltag/2025-reefscape-andymark.json">AndyMark field AprilTag locations</a>
    * TODO: Lowk this might not work based on alliance color, but we'll see (at least the rotation part)
    */
   private static final Map<Integer, Pose2d> REEF_SCORING_POSE_2D = new HashMap<>();
 
   static {
+    /*
+    Blue alliance
+     */
     REEF_SCORING_POSE_2D.put(18, new Pose2d(3.6576, 4.0259, Rotation2d.fromRadians(0.0)));
     REEF_SCORING_POSE_2D.put(17, new Pose2d(4.073905999999999, 4.745482, Rotation2d.fromRadians(Math.PI / 3)));
     REEF_SCORING_POSE_2D.put(22, new Pose2d(4.904739999999999, 3.3063179999999996, Rotation2d.fromRadians(2 * Math.PI / 3)));
@@ -27,22 +30,15 @@ public record ReefScoringPosition(int id, Translation3d position, Rotation2d rob
     REEF_SCORING_POSE_2D.put(20, new Pose2d(4.904739999999999, 4.745482, Rotation2d.fromRadians(-2 * Math.PI / 3)));
     REEF_SCORING_POSE_2D.put(19, new Pose2d(4.073905999999999, 4.745482, Rotation2d.fromRadians(-Math.PI / 3)));
 
-    // TODO: 1/24/2025 do this for red alliance cus im lazy rn
-    // https://github.com/wpilibsuite/allwpilib/blob/main/apriltag/src/main/native/resources/edu/wpi/first/apriltag/2025-reefscape.json
-    /**
-     *             scoringPositions[0] = new ReefScoringPosition(7, Math.PI);
-     *             scoringPositions[1] = new ReefScoringPosition(8, -2 * Math.PI / 3);
-     *             scoringPositions[2] = new ReefScoringPosition(9, -Math.PI / 3);
-     *             scoringPositions[3] = new ReefScoringPosition(10, 0);
-     *             scoringPositions[4] = new ReefScoringPosition(11, Math.PI / 3);
-     *             scoringPositions[5] = new ReefScoringPosition(6, 2 * Math.PI / 3);
+    /*
+    Red Alliance
      */
-    REEF_SCORING_POSE_2D.put(7, new Pose2d(3.6576, 8.342592, Rotation2d.fromRadians(0.0)));
-    REEF_SCORING_POSE_2D.put(8, new Pose2d(4.073905999999999, 9.062214, Rotation2d.fromRadians(0.0)));
-    REEF_SCORING_POSE_2D.put(9, new Pose2d(4.073905999999999, 9.781836, Rotation2d.fromRadians(0.0)));
-    REEF_SCORING_POSE_2D.put(10, new Pose2d(3.6576, 10.501458, Rotation2d.fromRadians(0.0)));
-    REEF_SCORING_POSE_2D.put(11, new Pose2d(4.073905999999999, 11.22108, Rotation2d.fromRadians(0.0)));
-    REEF_SCORING_POSE_2D.put(6, new Pose2d(4.073905999999999, 11.940702, Rotation2d.fromRadians(0.0)));
+    REEF_SCORING_POSE_2D.put(7, new Pose2d(13.890498, 4.0208200000000005, Rotation2d.fromRadians(Math.PI)));
+    REEF_SCORING_POSE_2D.put(8, new Pose2d(13.474446, 4.740402, Rotation2d.fromRadians(-2 * Math.PI / 3)));
+    REEF_SCORING_POSE_2D.put(9, new Pose2d(12.643358, 4.740402, Rotation2d.fromRadians(-Math.PI / 3)));
+    REEF_SCORING_POSE_2D.put(10, new Pose2d(12.227305999999999, 4.0208200000000005, Rotation2d.fromRadians(0.0)));
+    REEF_SCORING_POSE_2D.put(11, new Pose2d(12.643358, 3.3012379999999997, Rotation2d.fromRadians(Math.PI / 3)));
+    REEF_SCORING_POSE_2D.put(6, new Pose2d(13.474446, 3.3012379999999997, Rotation2d.fromRadians(2 * Math.PI / 3)));
   }
 
   public static OptionalDouble getRobotHeading(int id) {

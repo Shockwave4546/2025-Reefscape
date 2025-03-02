@@ -10,6 +10,7 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import org.littletonrobotics.urcl.URCL;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -75,7 +76,7 @@ public class Robot extends LoggedRobot {
         break;
     }
 
-//    Logger.registerURCL(URCL.startExternal());
+    Logger.registerURCL(URCL.startExternal());
     Logger.start();
 
     if (RobotContainer.isCompetitionMatch() && Constants.TUNING_MODE) TUNING_MODE_ENABLED_COMP.set(true);
@@ -103,4 +104,8 @@ public class Robot extends LoggedRobot {
   @Override public void teleopInit() {}
 
   @Override public void teleopPeriodic() {}
+
+  @Override public void testInit() {
+    container.testChooser.get().schedule();
+  }
 }

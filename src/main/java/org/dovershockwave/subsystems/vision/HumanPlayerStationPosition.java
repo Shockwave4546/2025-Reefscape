@@ -42,7 +42,6 @@ public record HumanPlayerStationPosition(double yOffsetMeters, double robotHeadi
       case CENTER -> 0;
     };
 
-
     return Optional.of(new HumanPlayerStationPosition(
             signForOffset * offsetDistance,
             HUMAN_PLAYER_STATION_ROBOT_HEADING.get(id).getRadians())
