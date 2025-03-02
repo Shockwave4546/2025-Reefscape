@@ -12,11 +12,10 @@ public record HumanPlayerStationPosition(double yOffsetMeters, double robotHeadi
   private static final Map<Integer, Rotation2d> HUMAN_PLAYER_STATION_ROBOT_HEADING = new HashMap<>();
 
   static {
-    // TODO: 2/2/25 My brain doesn't work, so idk what the heading is. 
-    HUMAN_PLAYER_STATION_ROBOT_HEADING.put(12, new Rotation2d());
-    HUMAN_PLAYER_STATION_ROBOT_HEADING.put(13, new Rotation2d());
-    HUMAN_PLAYER_STATION_ROBOT_HEADING.put(1, new Rotation2d());
-    HUMAN_PLAYER_STATION_ROBOT_HEADING.put(2, new Rotation2d());
+    HUMAN_PLAYER_STATION_ROBOT_HEADING.put(12, Rotation2d.fromDegrees(-126.0));
+    HUMAN_PLAYER_STATION_ROBOT_HEADING.put(13, Rotation2d.fromDegrees(126.0));
+    HUMAN_PLAYER_STATION_ROBOT_HEADING.put(1, Rotation2d.fromDegrees(-54.0));
+    HUMAN_PLAYER_STATION_ROBOT_HEADING.put(2, Rotation2d.fromDegrees(54.0));
   }
 
   public static Optional<HumanPlayerStationPosition> getPositionFor(int id, HumanPlayerStationSide side) {

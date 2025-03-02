@@ -13,7 +13,7 @@ public class HeadingController {
 
   public HeadingController(String dashboardKey, PIDFGains omegaPIDGains, double headingRadTolerance, TrapezoidProfile.Constraints constraints) {
     this.dashboardKey = dashboardKey;
-    this.omegaPID = new TunableProfiledPIDFController(dashboardKey + "/OmegaPID", omegaPIDGains, headingRadTolerance, constraints);
+    this.omegaPID = new TunableProfiledPIDFController(dashboardKey + "/OmegaPID/", omegaPIDGains, headingRadTolerance, constraints);
 
     omegaPID.enableContinuousInput(-Math.PI, Math.PI);
   }
