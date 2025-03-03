@@ -7,31 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "StartingLineNonProcessor-J"
+            "pathName": "StartNonProcessor-J"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "J-HumanPlayerNonProcessor"
+            "pathName": "J-HumanNonProcessor"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "HumanPlayerNonProcessor-K"
+            "pathName": "HumanNonProcessor-K"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "K-HumanPlayerNonProcessor"
+            "pathName": "K-HumanNonProcessor"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "HumanPlayerNonProcessor-L"
+            "pathName": "HumanNonProcessor-L"
           }
         }
       ]

@@ -3,37 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.1562214,
-        "y": 5.0783998
+        "x": 7.1420714,
+        "y": 4.026
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.288163883122325,
-        "y": 5.181169609258746
+        "x": 6.054147383662129,
+        "y": 4.212557759813415
       },
       "isLocked": false,
-      "linkedName": "StartingLineNonProcessor"
+      "linkedName": "StartingLineCenter"
     },
     {
       "anchor": {
-        "x": 4.99494,
-        "y": 5.23034
+        "x": 5.78605,
+        "y": 4.19021
       },
       "prevControl": {
-        "x": 4.636470649961984,
-        "y": 5.236786654629012
+        "x": 6.951642786865561,
+        "y": 4.099293788680145
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "ReefJ"
+      "linkedName": "ReefH"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.65,
-      "rotationDegrees": -119.99999999999999
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -47,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": "NonProcessor",
+  "folder": "Center",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

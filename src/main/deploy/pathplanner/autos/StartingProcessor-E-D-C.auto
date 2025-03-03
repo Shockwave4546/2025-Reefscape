@@ -7,31 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "StartingLineProcessor-E"
+            "pathName": "StartingProcessor-E"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "E-HumanPlayerProcessor"
+            "pathName": "E-HumanProcessor"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "HumanPlayerProcessor-D"
+            "pathName": "HumanProcessor-D"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "D-HumanPlayerProcessor"
+            "pathName": "D-HumanProcessor"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "HumanPlayerProcessor-C"
+            "pathName": "HumanProcessor-C"
           }
         }
       ]
