@@ -17,4 +17,6 @@ public interface ClimbIO {
   default void setPivotPosition(double rad) {}
 
   default void setPivotPIDF(PIDFGains gains) {}
+
+  default void setVolts(double volts) {}
 }

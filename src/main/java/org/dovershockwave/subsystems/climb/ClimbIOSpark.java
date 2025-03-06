@@ -54,4 +54,8 @@ public class ClimbIOSpark implements ClimbIO {
       spark.configure(config, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
     });
   }
+
+  @Override public void setVolts(double volts) {
+    spark.setVoltage(volts);
+  }
 }

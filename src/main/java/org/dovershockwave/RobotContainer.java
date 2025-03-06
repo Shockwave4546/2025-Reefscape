@@ -18,10 +18,7 @@ import org.dovershockwave.subsystems.algaerollers.AlgaeRollersConstants;
 import org.dovershockwave.subsystems.algaerollers.AlgaeRollersIO;
 import org.dovershockwave.subsystems.algaerollers.AlgaeRollersIOSpark;
 import org.dovershockwave.subsystems.algaerollers.AlgaeRollersSubsystem;
-import org.dovershockwave.subsystems.climb.ClimbConstants;
-import org.dovershockwave.subsystems.climb.ClimbIO;
-import org.dovershockwave.subsystems.climb.ClimbIOSpark;
-import org.dovershockwave.subsystems.climb.ClimbSubsystem;
+import org.dovershockwave.subsystems.climb.*;
 import org.dovershockwave.subsystems.coralpivot.*;
 import org.dovershockwave.subsystems.coralrollers.*;
 import org.dovershockwave.subsystems.coralrollers.commands.IntakeCoralCommand;
@@ -51,7 +48,7 @@ public class RobotContainer {
   private final AlgaeRollersSubsystem algaeRollers;
   private final AlgaePivotSubsystem algaePivot;
   private final CoralPivotSubsystem coralPivot;
-  private final ClimbSubsystem climb;
+//  private final ClimbSubsystem climb;
   protected final CommandXboxController driverController = new CommandXboxController(Constants.DRIVER_CONTROLLER_PORT);
   protected final CommandXboxController operatorController = new CommandXboxController(Constants.OPERATOR_CONTROLLER_PORT);
   private final ReefScoringSelector selector = new ReefScoringSelector();
@@ -81,7 +78,7 @@ public class RobotContainer {
         algaeRollers = new AlgaeRollersSubsystem(new AlgaeRollersIOSpark(AlgaeRollersConstants.SPARK_ID));
         algaePivot = new AlgaePivotSubsystem(new AlgaePivotIOSpark(AlgaePivotConstants.SPARK_ID));
         coralPivot = new CoralPivotSubsystem(new CoralArmIOSpark(CoralPivotConstants.ARM_LEFT_SPARK_ID, CoralPivotConstants.ARM_RIGHT_SPARK_ID), new CoralWristIOSpark(CoralPivotConstants.WRIST_SPARK_ID));
-        climb = new ClimbSubsystem(new ClimbIOSpark(ClimbConstants.SPARK_ID));
+//        climb = new ClimbSubsystem(new ClimbIOSpark(ClimbConstants.SPARK_ID));
         break;
       case SIM:
         swerve = new SwerveSubsystem(new GyroIO() {},
@@ -102,7 +99,7 @@ public class RobotContainer {
         algaeRollers = new AlgaeRollersSubsystem(new AlgaeRollersIO() {});
         algaePivot = new AlgaePivotSubsystem(new AlgaePivotIO() {});
         coralPivot = new CoralPivotSubsystem(new CoralArmIO() {}, new CoralWristIO() {});
-        climb = new ClimbSubsystem(new ClimbIO() {});
+//        climb = new ClimbSubsystem(new ClimbIO() {});
         break;
       case REPLAY:
       default:
@@ -113,7 +110,7 @@ public class RobotContainer {
         algaeRollers = new AlgaeRollersSubsystem(new AlgaeRollersIO() {});
         algaePivot = new AlgaePivotSubsystem(new AlgaePivotIO() {});
         coralPivot = new CoralPivotSubsystem(new CoralArmIO() {}, new CoralWristIO() {});
-        climb = new ClimbSubsystem(new ClimbIO() {});
+//        climb = new ClimbSubsystem(new ClimbIO() {});
     }
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -138,7 +135,7 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    driverController.leftTrigger(0.8).onTrue(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(0.5))).onFalse(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(1.0)));
+    driverController.leftTrigger(0.9).onTrue(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(0.5))).onFalse(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(1.0)));
 //    driverController.leftBumper().whileTrue(new InstantCommand(() -> {
 //      selector.setSide(ReefScoringPosition.ReefScoringSide.LEFT);
 //    }).andThen(new AlignToReefCoralCommand(swerve, vision, selector)));
@@ -160,15 +157,14 @@ public class RobotContainer {
     operatorController.povUp().onTrue(new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L3)));
     operatorController.povRight().onTrue(new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L4)));
 
+//    operatorController.leftBumper().onTrue(new InstantCommand(() -> climb.setDesiredState(ClimbState.STARTING)));
+//    operatorController.rightBumper().onTrue(new InstantCommand(() -> climb.setDesiredState(ClimbState.DOWN)));
+
 //    operatorController.a().onTrue(new AlignToReefCoralCommand(swerve, vision, selector));
 
 //    operatorController.a().onTrue(new FullScoreCoralCommand(swerve, vision, coralPivot, coralRollers, elevator, selector));
+    operatorController.a().onTrue(new SequentialCommandGroup(new InstantCommand(() -> coralRollers.setDesiredState(CoralRollersState.OUTTAKE)), new WaitCommand(1), new InstantCommand(() -> coralRollers.setDesiredState(CoralRollersState.STOPPED))));
     operatorController.y().toggleOnTrue(new IntakeCoralCommand(coralRollers));
-
-    driverController.a().onTrue(new DriveLinearVelocityCommand(swerve, driverController, true));
-    driverController.b().onTrue(new DriveLinearVelocityCommand(swerve, driverController, false));
-
-    operatorController.b().onTrue(new SequentialCommandGroup(new InstantCommand(() -> coralRollers.setDesiredState(CoralRollersState.OUTTAKE)), new WaitCommand(1), new InstantCommand(() -> coralRollers.setDesiredState(CoralRollersState.STOPPED))));
     // TODO: 2/2/25 Add Algae commands
 
     SmartDashboard.putData("Reset Elevator Pos", new InstantCommand(elevator::resetPosition).ignoringDisable(true));

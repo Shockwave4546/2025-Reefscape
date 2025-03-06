@@ -3,6 +3,7 @@ package org.dovershockwave.subsystems.climb;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.dovershockwave.utils.TunableNumber;
 import org.dovershockwave.utils.TunablePIDF;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -17,6 +18,8 @@ public class ClimbSubsystem extends SubsystemBase {
 
   private ClimbState desiredState = ClimbState.STARTING;
 
+  private final TunableNumber volt = new TunableNumber("Climb/VoltIn", 0.0);
+
   public ClimbSubsystem(ClimbIO climbIO) {
     this.climbIO = climbIO;
   }
@@ -25,12 +28,14 @@ public class ClimbSubsystem extends SubsystemBase {
     climbIO.updateInputs(climbInputs);
     Logger.processInputs("Climb", climbInputs);
 
-    tunablePIDF.periodic(climbIO::setPivotPIDF, positionRad -> {
-      climbIO.setPivotPosition(positionRad);
-      setDesiredState(new ClimbState(positionRad));
-    });
+//    tunablePIDF.periodic(climbIO::setPivotPIDF, positionRad -> {
+//      climbIO.setPivotPosition(positionRad);
+//      setDesiredState(new ClimbState(positionRad));
+//    });
 
     disconnectedAlert.set(!climbInputs.connected);
+
+    climbIO.setVolts(volt.get());
   }
 
   public void setDesiredState(ClimbState desiredState) {
