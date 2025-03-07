@@ -6,8 +6,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.dovershockwave.commands.FullIntakeCoralCommand;
@@ -20,14 +18,17 @@ import org.dovershockwave.subsystems.algaerollers.AlgaeRollersConstants;
 import org.dovershockwave.subsystems.algaerollers.AlgaeRollersIO;
 import org.dovershockwave.subsystems.algaerollers.AlgaeRollersIOSpark;
 import org.dovershockwave.subsystems.algaerollers.AlgaeRollersSubsystem;
-import org.dovershockwave.subsystems.climb.*;
 import org.dovershockwave.subsystems.coralpivot.*;
-import org.dovershockwave.subsystems.coralrollers.*;
-import org.dovershockwave.subsystems.coralrollers.commands.IndexCoralCommand;
-import org.dovershockwave.subsystems.coralrollers.commands.IntakeCoralCommand;
+import org.dovershockwave.subsystems.coralrollers.CoralRollersConstants;
+import org.dovershockwave.subsystems.coralrollers.CoralRollersIO;
+import org.dovershockwave.subsystems.coralrollers.CoralRollersIOSpark;
+import org.dovershockwave.subsystems.coralrollers.CoralRollersSubsystem;
 import org.dovershockwave.subsystems.coralrollers.lidar.LidarIO;
 import org.dovershockwave.subsystems.coralrollers.lidar.LidarIOLaserCan;
-import org.dovershockwave.subsystems.elevator.*;
+import org.dovershockwave.subsystems.elevator.ElevatorConstants;
+import org.dovershockwave.subsystems.elevator.ElevatorIO;
+import org.dovershockwave.subsystems.elevator.ElevatorIOSpark;
+import org.dovershockwave.subsystems.elevator.ElevatorSubsystem;
 import org.dovershockwave.subsystems.swerve.SwerveSubsystem;
 import org.dovershockwave.subsystems.swerve.commands.*;
 import org.dovershockwave.subsystems.swerve.commands.sysid.SysIdDriveDynamicCommand;
@@ -167,7 +168,6 @@ public class RobotContainer {
     operatorController.a().onTrue(new FullScoreCoralCommand(swerve, vision, coralPivot, coralRollers, elevator, selector));
     operatorController.y().toggleOnTrue(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));
     // TODO: 2/2/25 Add Algae commands
-
 
     SmartDashboard.putData("Reset Elevator Pos", new InstantCommand(elevator::resetPosition).ignoringDisable(true));
   }
