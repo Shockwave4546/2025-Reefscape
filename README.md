@@ -1,6 +1,6 @@
 # 2025-Reefscape
 
-![Reefscape](/res/misc/reefscape.png)
+![Reefscape](/res/misc/Reefscape.png)
 
 ## CAN Assignments
 FL Swerve Drive: 10 \
