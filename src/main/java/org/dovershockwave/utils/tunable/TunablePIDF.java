@@ -1,7 +1,8 @@
-package org.dovershockwave.utils;
+package org.dovershockwave.utils.tunable;
 
 import edu.wpi.first.math.MathUtil;
 import org.dovershockwave.RobotContainer;
+import org.dovershockwave.utils.PIDFGains;
 
 import java.util.function.Consumer;
 

@@ -3,7 +3,7 @@ package org.dovershockwave.subsystems.vision;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import org.dovershockwave.utils.TunableNumber;
+import org.dovershockwave.utils.tunable.TunableNumber;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 

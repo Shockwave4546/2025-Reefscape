@@ -1,4 +1,4 @@
-package org.dovershockwave.utils;
+package org.dovershockwave.utils.tunable;
 
 import edu.wpi.first.math.MathUtil;
 import org.dovershockwave.Constants;

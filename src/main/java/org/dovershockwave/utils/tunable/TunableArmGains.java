@@ -1,7 +1,9 @@
-package org.dovershockwave.utils;
+package org.dovershockwave.utils.tunable;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import org.dovershockwave.RobotContainer;
+import org.dovershockwave.utils.ArmFeedforwardGains;
+import org.dovershockwave.utils.PIDFGains;
 
 import java.util.function.Consumer;
 

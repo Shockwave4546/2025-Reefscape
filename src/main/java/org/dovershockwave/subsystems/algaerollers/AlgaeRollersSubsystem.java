@@ -2,7 +2,7 @@ package org.dovershockwave.subsystems.algaerollers;
 
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.dovershockwave.utils.TunableNumber;
+import org.dovershockwave.utils.tunable.TunableNumber;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 

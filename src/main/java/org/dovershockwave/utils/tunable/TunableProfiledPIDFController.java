@@ -1,7 +1,8 @@
-package org.dovershockwave.utils;
+package org.dovershockwave.utils.tunable;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import org.dovershockwave.utils.PIDFGains;
 
 public class TunableProfiledPIDFController {
   private final ProfiledPIDController pid;

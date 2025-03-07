@@ -10,7 +10,7 @@ import org.dovershockwave.subsystems.swerve.SwerveConstants;
 import org.dovershockwave.subsystems.swerve.SwerveSubsystem;
 import org.dovershockwave.subsystems.vision.VisionConstants;
 import org.dovershockwave.subsystems.vision.controllers.HeadingController;
-import org.dovershockwave.utils.TunableNumber;
+import org.dovershockwave.utils.tunable.TunableNumber;
 
 /**
  * Command for tuning PID and FF constants for the drive motors of the swerve drive.

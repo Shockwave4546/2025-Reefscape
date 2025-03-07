@@ -5,7 +5,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import org.dovershockwave.RobotContainer;
 import org.dovershockwave.utils.PIDFGains;
-import org.dovershockwave.utils.TunableProfiledPIDFController;
+import org.dovershockwave.utils.tunable.TunableProfiledPIDFController;
 import org.littletonrobotics.junction.Logger;
 
 public class FullAlignController {

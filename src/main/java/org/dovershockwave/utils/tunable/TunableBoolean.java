@@ -1,4 +1,4 @@
-package org.dovershockwave.utils;
+package org.dovershockwave.utils.tunable;
 
 import org.dovershockwave.Constants;
 import org.dovershockwave.RobotContainer;

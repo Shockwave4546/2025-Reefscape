@@ -6,7 +6,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import org.dovershockwave.subsystems.swerve.SwerveSubsystem;
-import org.dovershockwave.utils.TunableNumber;
+import org.dovershockwave.utils.tunable.TunableNumber;
 
 /**
  * Command for tuning PID and FF constants for the drive motors of the swerve drive.

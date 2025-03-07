@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.Alert;
 import org.dovershockwave.Constants;
 import org.dovershockwave.subsystems.swerve.SwerveConstants;
 import org.dovershockwave.utils.PIDFGains;
-import org.dovershockwave.utils.TunablePIDF;
+import org.dovershockwave.utils.tunable.TunablePIDF;
 import org.littletonrobotics.junction.Logger;
 
 import java.util.EnumMap;

@@ -3,7 +3,7 @@ package org.dovershockwave.subsystems.algaepivot;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.dovershockwave.utils.TunablePIDF;
+import org.dovershockwave.utils.tunable.TunablePIDF;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
