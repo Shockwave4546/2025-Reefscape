@@ -1,7 +1,6 @@
 package org.dovershockwave.commands;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.*;
 import org.dovershockwave.ReefScoringSelector;
 import org.dovershockwave.subsystems.coralpivot.CoralPivotSubsystem;
 import org.dovershockwave.subsystems.coralrollers.CoralRollersSubsystem;
@@ -15,10 +14,14 @@ import org.dovershockwave.subsystems.vision.commands.AlignToReefCoralCommand;
 public class FullScoreCoralCommand extends SequentialCommandGroup {
   public FullScoreCoralCommand(SwerveSubsystem swerve, VisionSubsystem vision, CoralPivotSubsystem coralPivot, CoralRollersSubsystem coralRollers, ElevatorSubsystem elevator, ReefScoringSelector selector) {
     addCommands(
-            new InstantCommand(() -> elevator.setDesiredState(selector.getLevel())),
-            new InstantCommand(() -> coralPivot.setDesiredState(selector.getLevel())),
-            new AlignToReefCoralCommand(swerve, vision, selector),
-            new ScoreCoralCommand(coralRollers).withTimeout(0.25)
+            new ParallelCommandGroup(
+                    new InstantCommand(() -> elevator.setDesiredState(selector.getLevel())),
+                    new InstantCommand(() -> coralPivot.setDesiredState(selector.getLevel()))
+            ),
+            new WaitUntilCommand(elevator::atDesiredState),
+            new WaitUntilCommand(coralPivot::atDesiredState),
+//            new AlignToReefCoralCommand(swerve, vision, selector),
+            new ScoreCoralCommand(coralRollers, selector).withTimeout(2)
     );
 
     addRequirements(swerve, vision, coralPivot, coralRollers, elevator);

@@ -43,7 +43,7 @@ public class CoralWristIOSpark implements CoralWristIO {
 
   @Override public void setWristPosition(double rad, double ff) {
     tryUntilOk(wristSpark, 5, spark -> spark.getClosedLoopController().setReference(
-            MathUtil.clamp(rad, CoralPivotConstants.ARM_MIN_POS, CoralPivotConstants.ARM_MAX_POS),
+            MathUtil.clamp(rad, CoralPivotConstants.WRIST_MIN_POS, CoralPivotConstants.WRIST_MAX_POS),
             SparkBase.ControlType.kPosition,
             ClosedLoopSlot.kSlot0,
             ff,

@@ -1,21 +1,11 @@
 package org.dovershockwave.subsystems.coralrollers.commands;
 
-import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj2.command.Command;
+import org.dovershockwave.subsystems.coralrollers.CoralRollersConstants;
 import org.dovershockwave.subsystems.coralrollers.CoralRollersState;
 import org.dovershockwave.subsystems.coralrollers.CoralRollersSubsystem;
 
 public class IntakeCoralCommand extends Command {
-  /**
-   * The current (A) at which a coral is considered to be within the end effector.
-   */
-  private static final double CURRENT_TRIGGER = 7.5;
-  /**
-   * When initially intaking a coral, the current spikes to reach enough torque, however,
-   * afterward it will essentially drop to 0A. A sustained current of {@link #CURRENT_TRIGGER} is
-   * required to consider the coral to be within the end effector.
-   */
-  public final Debouncer currentDebouncer = new Debouncer(0.15);  // TODO: 2/18/2025 Find a better debounceTime
   public final CoralRollersSubsystem coralRollers;
 
   public IntakeCoralCommand(CoralRollersSubsystem coralRollers) {
@@ -36,6 +26,6 @@ public class IntakeCoralCommand extends Command {
   }
 
   @Override public boolean isFinished() {
-    return currentDebouncer.calculate(Math.abs(coralRollers.getCurrentAmps()) > CURRENT_TRIGGER);
+    return coralRollers.getLidarDistanceMeters() < CoralRollersConstants.CORAL_IN_POSITION_LIDAR_DISTANCE_MIN;
   }
 }

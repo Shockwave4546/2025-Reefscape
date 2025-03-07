@@ -20,7 +20,7 @@ public class CoralPivotConstants {
   public static final double ARM_VELOCITY_CONVERSION_FACTOR = (2 * Math.PI) / 60.0;
 
   public static final double WRIST_MIN_POS = -Math.PI / 2.0;
-  public static final double WRIST_MAX_POS = Math.PI / 2.0;
+  public static final double WRIST_MAX_POS = Math.PI;
 
   public static final double ARM_MIN_POS = -Math.PI / 2.0;
   public static final double ARM_MAX_POS = Math.PI / 2.0;
