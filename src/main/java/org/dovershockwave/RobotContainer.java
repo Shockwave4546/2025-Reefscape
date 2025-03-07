@@ -163,8 +163,6 @@ public class RobotContainer {
 //    operatorController.leftBumper().onTrue(new InstantCommand(() -> climb.setDesiredState(ClimbState.STARTING)));
 //    operatorController.rightBumper().onTrue(new InstantCommand(() -> climb.setDesiredState(ClimbState.DOWN)));
 
-//    operatorController.a().onTrue(new AlignToReefCoralCommand(swerve, vision, selector));
-
     operatorController.a().onTrue(new FullScoreCoralCommand(swerve, vision, coralPivot, coralRollers, elevator, selector));
     operatorController.y().toggleOnTrue(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));
     // TODO: 2/2/25 Add Algae commands
