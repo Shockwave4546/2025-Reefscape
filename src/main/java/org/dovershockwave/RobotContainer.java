@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.dovershockwave.commands.FullIntakeCoralCommand;
 import org.dovershockwave.commands.FullScoreCoralCommand;
+import org.dovershockwave.commands.FullScoreCoralL4Command;
 import org.dovershockwave.subsystems.algaepivot.AlgaePivotConstants;
 import org.dovershockwave.subsystems.algaepivot.AlgaePivotIO;
 import org.dovershockwave.subsystems.algaepivot.AlgaePivotIOSpark;
@@ -41,6 +42,8 @@ import org.dovershockwave.subsystems.swerve.module.ModuleIOSim;
 import org.dovershockwave.subsystems.swerve.module.ModuleIOSpark;
 import org.dovershockwave.subsystems.swerve.module.ModuleType;
 import org.dovershockwave.subsystems.vision.*;
+import org.dovershockwave.subsystems.vision.commands.AlignToReefAlgaeCommand;
+import org.dovershockwave.subsystems.vision.commands.AlignToReefCoralCommand;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class RobotContainer {
@@ -139,14 +142,10 @@ public class RobotContainer {
 
   private void configureBindings() {
     driverController.leftTrigger(0.9).onTrue(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(0.5))).onFalse(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(1.0)));
-//    driverController.leftBumper().whileTrue(new InstantCommand(() -> {
-//      selector.setSide(ReefScoringPosition.ReefScoringSide.LEFT);
-//    }).andThen(new AlignToReefCoralCommand(swerve, vision, selector)));
-//
-//    driverController.rightBumper().whileTrue(new InstantCommand(() -> {
-//      selector.setSide(ReefScoringPosition.ReefScoringSide.RIGHT);
-//    }).andThen(new AlignToReefCoralCommand(swerve, vision, selector)));
-//
+    driverController.leftBumper().whileTrue(new AlignToReefCoralCommand(swerve, vision, selector, ReefScoringPosition.ReefScoringSide.LEFT));
+    driverController.rightBumper().whileTrue(new AlignToReefCoralCommand(swerve, vision, selector, ReefScoringPosition.ReefScoringSide.RIGHT));
+    driverController.povDown().whileTrue(new AlignToReefAlgaeCommand(swerve, vision));
+
 //    driverController.a().whileTrue(new AlignToHumanPlayerCommand(swerve, vision, HumanPlayerStationPosition.HumanPlayerStationSide.CLOSE));
 //    driverController.x().whileTrue(new AlignToHumanPlayerCommand(swerve, vision, HumanPlayerStationPosition.HumanPlayerStationSide.CENTER));
 //    driverController.y().whileTrue(new AlignToHumanPlayerCommand(swerve, vision, HumanPlayerStationPosition.HumanPlayerStationSide.FAR));
@@ -163,7 +162,7 @@ public class RobotContainer {
 //    operatorController.leftBumper().onTrue(new InstantCommand(() -> climb.setDesiredState(ClimbState.STARTING)));
 //    operatorController.rightBumper().onTrue(new InstantCommand(() -> climb.setDesiredState(ClimbState.DOWN)));
 
-    operatorController.a().onTrue(new FullScoreCoralCommand(swerve, vision, coralPivot, coralRollers, elevator, selector));
+    operatorController.a().onTrue(new FullScoreCoralL4Command(swerve, vision, coralPivot, coralRollers, elevator, selector));
     operatorController.y().toggleOnTrue(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));
     // TODO: 2/2/25 Add Algae commands
 

@@ -55,15 +55,15 @@ public class AlignToHumanPlayerCommand extends Command {
       this.tagFound = true;
       // TODO: 2/2/25 Fix this xOffset
       final var offsetTranslationGoal = new Translation2d(0.5, position.yOffsetMeters());
-      final var speeds = alignController.calculate(
-              swerve.getRotation().getRadians(),
-              position.robotHeadingRad(),
-              bestTarget.translation().toTranslation2d(),
-              offsetTranslationGoal,
-              String.valueOf(bestTarget.tagId())
-      );
-
-      swerve.runVelocity(speeds, false);
+//      final var speeds = alignController.calculate(
+//              swerve.getRotation().getRadians(),
+//              position.robotHeadingRad(),
+//              bestTarget.translation().toTranslation2d(),
+//              offsetTranslationGoal,
+//              String.valueOf(bestTarget.tagId())
+//      );
+//
+//      swerve.runVelocity(speeds, false);
     }, swerve::stop);
   }
 

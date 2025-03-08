@@ -12,6 +12,8 @@ import org.dovershockwave.utils.PIDFGains;
 public class SwerveConstants {
   public static final double ODOMETRY_FREQUENCY = 100.0; // Hz
 
+  public static final double ROBOT_LENGTH_X_METERS = 0.93;
+  public static final double ROBOT_LENGTH_Y_METERS = 0.93;
   public static final double WHEEL_RADIUS_METERS = Units.inchesToMeters(1.441);
   /**
    * Distance between centers of left and right wheels

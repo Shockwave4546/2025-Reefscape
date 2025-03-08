@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import org.dovershockwave.subsystems.swerve.SwerveConstants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,10 +46,10 @@ public record ReefScoringPosition(int id, Translation3d position, Rotation2d rob
     return OptionalDouble.of(REEF_SCORING_POSE_2D.get(id).getRotation().getRadians());
   }
 
-  public static Optional<ReefScoringPosition> getPositionFor(int id, ReefScoringSide side, ReefLevel level) {
+  public static Optional<ReefScoringPosition> getCoralPositionFor(int id, ReefScoringSide side, ReefLevel level) {
     if (!REEF_SCORING_POSE_2D.containsKey(id)) return Optional.empty();
 
-    final var offsetPose2d = REEF_SCORING_POSE_2D.get(id).transformBy(new Transform2d(0.0, side.yOffset, new Rotation2d()));
+    final var offsetPose2d = REEF_SCORING_POSE_2D.get(id).transformBy(new Transform2d(-SwerveConstants.ROBOT_LENGTH_X_METERS / 2.0, side.yOffset, new Rotation2d()));
     return Optional.of(new ReefScoringPosition(
             id,
             new Translation3d(offsetPose2d.getX(), offsetPose2d.getY(), level.height),
@@ -56,9 +57,20 @@ public record ReefScoringPosition(int id, Translation3d position, Rotation2d rob
     ));
   }
 
+  public static Optional<ReefScoringPosition> getAlgaePositionFor(int id) {
+    if (!REEF_SCORING_POSE_2D.containsKey(id)) return Optional.empty();
+
+    final var offsetPose2d = REEF_SCORING_POSE_2D.get(id).transformBy(new Transform2d(-SwerveConstants.ROBOT_LENGTH_X_METERS / 2.0, 0.0, new Rotation2d()));
+    return Optional.of(new ReefScoringPosition(
+            id,
+            new Translation3d(offsetPose2d.getX(), offsetPose2d.getY(), 0.0),
+            offsetPose2d.getRotation()
+    ));
+  }
+
   public enum ReefScoringSide {
-    LEFT(Units.inchesToMeters(-6.469)),
-    RIGHT(Units.inchesToMeters(6.469));
+    LEFT(Units.inchesToMeters(6.469)),
+    RIGHT(Units.inchesToMeters(-6.469));
 
     public final double yOffset;
 

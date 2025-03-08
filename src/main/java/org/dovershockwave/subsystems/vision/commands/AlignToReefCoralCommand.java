@@ -1,5 +1,6 @@
 package org.dovershockwave.subsystems.vision.commands;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -11,6 +12,7 @@ import org.dovershockwave.subsystems.vision.CameraType;
 import org.dovershockwave.subsystems.vision.VisionConstants;
 import org.dovershockwave.subsystems.vision.VisionSubsystem;
 import org.dovershockwave.subsystems.vision.controllers.FullAlignController;
+import org.littletonrobotics.junction.Logger;
 
 public class AlignToReefCoralCommand extends Command {
   private final FullAlignController alignController = new FullAlignController(
@@ -29,12 +31,15 @@ public class AlignToReefCoralCommand extends Command {
   private final SwerveSubsystem swerve;
   private final VisionSubsystem vision;
   private final ReefScoringSelector selector;
+  private final ReefScoringPosition.ReefScoringSide side;
   private boolean tagFound = false;
 
-  public AlignToReefCoralCommand(SwerveSubsystem swerve, VisionSubsystem vision, ReefScoringSelector selector) {
+  public AlignToReefCoralCommand(SwerveSubsystem swerve, VisionSubsystem vision, ReefScoringSelector selector, ReefScoringPosition.ReefScoringSide side) {
     this.swerve = swerve;
     this.vision = vision;
     this.selector = selector;
+    this.side = side;
+    selector.setSide(side);
     addRequirements(swerve, vision);
   }
 
@@ -47,17 +52,22 @@ public class AlignToReefCoralCommand extends Command {
     final var camera = selector.getSide() == ReefScoringPosition.ReefScoringSide.LEFT ? CameraType.RIGHT_REEF_CAMERA : CameraType.LEFT_REEF_CAMERA;
     final var bestTarget = vision.getBestTargetObservation(camera);
 
-    ReefScoringPosition.getPositionFor(bestTarget.tagId(), selector.getSide(), selector.getLevel()).ifPresentOrElse(position -> {
+    ReefScoringPosition.getCoralPositionFor(bestTarget.tagId(), side, selector.getLevel()).ifPresentOrElse(position -> {
       this.tagFound = true;
-      // TODO: 2/1/2025 Fix this xOffset
-      final var offsetTranslationGoal = new Translation2d(0.5, selector.getSide().yOffset);
+      final var goalPose = new Pose2d(
+              position.position().toTranslation2d(),
+              position.robotHeading()
+      );
       final var speeds = alignController.calculate(
-              swerve.getRotation().getRadians(),
-              position.robotHeading().getRadians(),
-              bestTarget.translation().toTranslation2d(),
-              offsetTranslationGoal,
+              swerve.getPose(),
+              goalPose,
               String.valueOf(bestTarget.tagId())
       );
+
+      Logger.recordOutput("AlignToReefCoralCommand/GoalPose", goalPose);
+      Logger.recordOutput("AlignToReefCoralCommand/Vx", speeds.vxMetersPerSecond);
+      Logger.recordOutput("AlignToReefCoralCommand/Vy", speeds.vyMetersPerSecond);
+      Logger.recordOutput("AlignToReefCoralCommand/Omega", speeds.omegaRadiansPerSecond);
 
       swerve.runVelocity(speeds, false);
     }, swerve::stop);

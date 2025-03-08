@@ -18,13 +18,13 @@ public class FullScoreCoralCommand extends SequentialCommandGroup {
     addCommands(
             new ParallelCommandGroup(
                     new InstantCommand(() -> elevator.setDesiredState(selector.getLevel())),
-                    new InstantCommand(() -> coralPivot.setDesiredState(selector.getLevel())),
-                    new AlignToReefCoralCommand(swerve, vision, selector)
+                    new InstantCommand(() -> coralPivot.setDesiredState(selector.getLevel()))
+//                    new AlignToReefCoralCommand(swerve, vision, selector, selector.getSide())
             ),
             new WaitUntilCommand(elevator::atDesiredState),
             new WaitUntilCommand(coralPivot::atDesiredState),
 //            new WaitUntilCommand(), TODO: Need something to verify we in position
-            new ScoreCoralCommand(coralRollers, selector).withTimeout(2)
+            new ScoreCoralCommand(coralRollers, selector).withTimeout(0.5)
     );
 
     addRequirements(swerve, vision, coralPivot, coralRollers, elevator);

@@ -1,5 +1,6 @@
 package org.dovershockwave.subsystems.vision.controllers;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -48,19 +49,19 @@ public class FullAlignController {
    * @param specificDashboardKey A specific key to use for logging extra information about each calculation.
    */
   public ChassisSpeeds calculate(
-          double currentHeadingRad,
-          double goalHeadingRad,
-          Translation2d currentTranslationMeters,
-          Translation2d goalTranslationMeters,
+          Pose2d currentPose,
+          Pose2d goalPose,
           String specificDashboardKey
   ) {
-    final var omega = omegaPID.calculate(currentHeadingRad, goalHeadingRad);
+    final var currentTranslationMeters = currentPose.getTranslation();
+    final var goalTranslationMeters = goalPose.getTranslation();
+    final var omega = omegaPID.calculate(currentPose.getRotation().getRadians(), goalPose.getRotation().getRadians());
     final var xVelocity = xVelocityPID.calculate(currentTranslationMeters.getX(), goalTranslationMeters.getX());
     final var yVelocity = yVelocityPID.calculate(currentTranslationMeters.getY(), goalTranslationMeters.getY());
 
     if (RobotContainer.isTuningMode()) {
-      Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/HeadingRadCurrent", currentHeadingRad);
-      Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/HeadingRadGoal", goalHeadingRad);
+      Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/HeadingRadCurrent", currentPose.getRotation().getRadians());
+      Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/HeadingRadGoal", goalPose.getRotation().getRadians());
       Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/HeadingRadError", omegaPID.getError());
       Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/Omega", omega);
 

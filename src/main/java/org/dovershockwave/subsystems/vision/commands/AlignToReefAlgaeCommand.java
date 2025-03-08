@@ -1,5 +1,6 @@
 package org.dovershockwave.subsystems.vision.commands;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -10,6 +11,7 @@ import org.dovershockwave.subsystems.vision.CameraType;
 import org.dovershockwave.subsystems.vision.VisionConstants;
 import org.dovershockwave.subsystems.vision.VisionSubsystem;
 import org.dovershockwave.subsystems.vision.controllers.FullAlignController;
+import org.littletonrobotics.junction.Logger;
 
 public class AlignToReefAlgaeCommand extends Command {
   private final FullAlignController alignController = new FullAlignController(
@@ -48,18 +50,22 @@ public class AlignToReefAlgaeCommand extends Command {
       return;
     }
 
-    ReefScoringPosition.getRobotHeading(bestTarget.tagId()).ifPresentOrElse(desiredHeading -> {
+    ReefScoringPosition.getAlgaePositionFor(bestTarget.tagId()).ifPresentOrElse(position -> {
       this.tagFound = true;
-
-      // TODO: 2/2/25 Fix this xOffset
-      final var offsetTranslationGoal = new Translation2d(0.5, 0.0);
+      final var goalPose = new Pose2d(
+              position.position().toTranslation2d(),
+              position.robotHeading()
+      );
       final var speeds = alignController.calculate(
-              swerve.getRotation().getRadians(),
-              desiredHeading,
-              bestTarget.translation().toTranslation2d(),
-              offsetTranslationGoal,
+              swerve.getPose(),
+              goalPose,
               String.valueOf(bestTarget.tagId())
       );
+
+      Logger.recordOutput("AlignToReefAlgaeCommand/GoalPose", goalPose);
+      Logger.recordOutput("AlignToReefAlgaeCommand/Vx", speeds.vxMetersPerSecond);
+      Logger.recordOutput("AlignToReefAlgaeCommand/Vy", speeds.vyMetersPerSecond);
+      Logger.recordOutput("AlignToReefAlgaeCommand/Omega", speeds.omegaRadiansPerSecond);
 
       swerve.runVelocity(speeds, false);
     }, swerve::stop);
