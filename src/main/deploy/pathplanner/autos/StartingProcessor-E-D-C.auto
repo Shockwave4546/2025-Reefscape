@@ -11,6 +11,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ScoreL4"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "E-HumanProcessor"
@@ -23,6 +29,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ScoreL4"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "D-HumanProcessor"
@@ -32,6 +44,12 @@
           "type": "path",
           "data": {
             "pathName": "HumanProcessor-C"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreL4"
           }
         }
       ]

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.6379436366772575,
-        "y": 7.353526271494648
+        "x": 1.6804221854304637,
+        "y": 7.201821192052979
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4526844262295087,
-        "y": 6.333831967213114
+        "x": 2.4951629749827147,
+        "y": 6.182126887771445
       },
       "isLocked": false,
       "linkedName": "HumanPlayerNonProcessor"
@@ -36,7 +36,14 @@
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "L4Positions",
+      "waypointRelativePos": 0.8,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 3.0,

@@ -1,11 +1,14 @@
 package org.dovershockwave;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.events.EventTrigger;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.dovershockwave.commands.*;
@@ -135,6 +138,7 @@ public class RobotContainer {
     testChooser.addOption("Turn SysId (Dynamic Reverse)", new SysIdDriveDynamicCommand(swerve, SysIdRoutine.Direction.kReverse));
 
     configureBindings();
+    registerPP();
     DriverStation.silenceJoystickConnectionWarning(true);
   }
 
@@ -165,6 +169,22 @@ public class RobotContainer {
     // TODO: 2/2/25 Add Algae commands
 
     SmartDashboard.putData("Reset Elevator Pos", new InstantCommand(elevator::resetPosition).ignoringDisable(true));
+  }
+
+  private void registerPP() {
+    final var allL4PositionsCommand = new ParallelCommandGroup(
+            new InstantCommand(() -> elevator.setDesiredState(ReefScoringPosition.ReefLevel.L4)),
+            new InstantCommand(() -> coralPivot.setDesiredState(ReefScoringPosition.ReefLevel.L4))
+    );
+
+    NamedCommands.registerCommand("L4Positions", allL4PositionsCommand);
+    NamedCommands.registerCommand("Intake", new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));
+    NamedCommands.registerCommand("ScoreL4", new AutoFullScoreCoralL4Command(coralPivot, coralRollers, elevator, selector));
+
+    new EventTrigger("L4Positions").onTrue(allL4PositionsCommand);
+    new EventTrigger("Intake").onTrue(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));
+
+    swerve.initializePP();
   }
 
   private Command getFullScoreCoralCommand() {

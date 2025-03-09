@@ -11,6 +11,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ScoreL4"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "J-HumanNonProcessor"
@@ -23,6 +29,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ScoreL4"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "K-HumanNonProcessor"
@@ -32,6 +44,12 @@
           "type": "path",
           "data": {
             "pathName": "HumanNonProcessor-L"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreL4"
           }
         }
       ]

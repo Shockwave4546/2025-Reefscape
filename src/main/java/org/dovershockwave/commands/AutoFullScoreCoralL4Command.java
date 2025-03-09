@@ -14,8 +14,8 @@ import org.dovershockwave.subsystems.elevator.ElevatorSubsystem;
 import org.dovershockwave.subsystems.swerve.SwerveSubsystem;
 import org.dovershockwave.subsystems.vision.VisionSubsystem;
 
-public class FullScoreCoralL4Command extends SequentialCommandGroup {
-  public FullScoreCoralL4Command(SwerveSubsystem swerve, VisionSubsystem vision, CoralPivotSubsystem coralPivot, CoralRollersSubsystem coralRollers, ElevatorSubsystem elevator, ReefScoringSelector selector) {
+public class AutoFullScoreCoralL4Command extends SequentialCommandGroup {
+  public AutoFullScoreCoralL4Command(CoralPivotSubsystem coralPivot, CoralRollersSubsystem coralRollers, ElevatorSubsystem elevator, ReefScoringSelector selector) {
     addCommands(
             new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L4)),
             new InstantCommand(() -> elevator.setDesiredState(selector.getLevel()), elevator),
@@ -28,6 +28,6 @@ public class FullScoreCoralL4Command extends SequentialCommandGroup {
             new InstantCommand(() -> elevator.setDesiredState(ElevatorState.STARTING), elevator)
     );
 
-    addRequirements(swerve, vision, coralPivot, coralRollers, elevator);
+    addRequirements(coralPivot, coralRollers, elevator);
   }
 }

@@ -80,23 +80,6 @@ public class SwerveSubsystem extends SubsystemBase {
             new Module(backRight, ModuleType.BACK_RIGHT)
     };
 
-    AutoBuilder.configure(
-            this::getPose,
-            this::setPose,
-            this::getChassisSpeeds,
-            speeds -> runVelocity(speeds, true),
-            new PPHolonomicDriveController(SwerveConstants.TRANSLATION_PID, SwerveConstants.ROTATION_PID, 0.02),
-            SwerveConstants.PATH_PLANNER_ROBOT_CONFIG,
-            () -> DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue) == DriverStation.Alliance.Red,
-            this
-    );
-    PathPlannerLogging.setLogActivePathCallback((activePath) -> Logger.recordOutput("Odometry/Trajectory", activePath.toArray(new Pose2d[0])));
-    PathPlannerLogging.setLogTargetPoseCallback((targetPose) -> Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose));
-    Pathfinding.setPathfinder(new LocalADStarAK());
-
-    /* https://pathplanner.dev/pplib-pathfinding.html#java-warmup */
-    PathfindingCommand.warmupCommand().schedule();
-
     previousSetpoint = new SwerveSetpoint(getChassisSpeeds(), getModuleStates(), DriveFeedforwards.zeros(4));
     SparkOdometryThread.getInstance().start();
   }
@@ -149,6 +132,25 @@ public class SwerveSubsystem extends SubsystemBase {
 
     // Update gyro alert
     gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.CURRENT_MODE != Constants.Mode.SIM);
+  }
+
+  public void initializePP() {
+    AutoBuilder.configure(
+            this::getPose,
+            this::setPose,
+            this::getChassisSpeeds,
+            speeds -> runVelocity(speeds, true),
+            new PPHolonomicDriveController(SwerveConstants.TRANSLATION_PID, SwerveConstants.ROTATION_PID, 0.02),
+            SwerveConstants.PATH_PLANNER_ROBOT_CONFIG,
+            () -> DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue) == DriverStation.Alliance.Red,
+            this
+    );
+    PathPlannerLogging.setLogActivePathCallback((activePath) -> Logger.recordOutput("Odometry/Trajectory", activePath.toArray(new Pose2d[0])));
+    PathPlannerLogging.setLogTargetPoseCallback((targetPose) -> Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose));
+    Pathfinding.setPathfinder(new LocalADStarAK());
+
+    /* https://pathplanner.dev/pplib-pathfinding.html#java-warmup */
+    PathfindingCommand.warmupCommand().schedule();
   }
 
   /**
