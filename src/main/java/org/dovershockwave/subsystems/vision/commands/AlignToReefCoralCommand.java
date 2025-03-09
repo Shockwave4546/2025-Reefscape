@@ -68,7 +68,7 @@ public class AlignToReefCoralCommand extends Command {
       Logger.recordOutput("AlignToReefCoralCommand/Vy", speeds.vyMetersPerSecond);
       Logger.recordOutput("AlignToReefCoralCommand/Omega", speeds.omegaRadiansPerSecond);
 
-      swerve.runVelocity(speeds, false);
+      swerve.runVelocityFieldRelative(speeds);
     }, swerve::stop);
   }
 

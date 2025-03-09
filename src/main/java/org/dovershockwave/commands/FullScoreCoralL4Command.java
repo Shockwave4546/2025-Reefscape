@@ -1,5 +1,6 @@
 package org.dovershockwave.commands;
 
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -14,12 +15,13 @@ import org.dovershockwave.subsystems.elevator.ElevatorSubsystem;
 import org.dovershockwave.subsystems.swerve.SwerveSubsystem;
 import org.dovershockwave.subsystems.vision.VisionSubsystem;
 
+import java.util.concurrent.locks.Condition;
+
 public class FullScoreCoralL4Command extends SequentialCommandGroup {
   public FullScoreCoralL4Command(SwerveSubsystem swerve, VisionSubsystem vision, CoralPivotSubsystem coralPivot, CoralRollersSubsystem coralRollers, ElevatorSubsystem elevator, ReefScoringSelector selector) {
     addCommands(
-            new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L4)),
             new InstantCommand(() -> elevator.setDesiredState(selector.getLevel()), elevator),
-            new WaitUntilCommand(() -> elevator.getState().positionRad() >= 52.5),
+            selector.getLevel() == ReefScoringPosition.ReefLevel.L4 ? new WaitUntilCommand(() -> elevator.getState().positionRad() >= 52.5) : new InstantCommand(),
             new InstantCommand(() -> coralPivot.setDesiredState(selector.getLevel()), coralPivot),
             new WaitUntilCommand(elevator::atDesiredState),
             new WaitUntilCommand(coralPivot::atDesiredState),

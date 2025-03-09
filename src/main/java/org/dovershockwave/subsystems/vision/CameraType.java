@@ -17,6 +17,7 @@ public enum CameraType {
           new Transform3d(0.0698, -0.260365, 0.0, new Rotation3d(0.0, Units.degreesToRadians(20), Units.degreesToRadians(20))),
           1.0),
 
+
   LEFT_HUMAN_PLAYER_STATION_CAMERA(
           1,
           "LeftHumanPlayerStationCamera",

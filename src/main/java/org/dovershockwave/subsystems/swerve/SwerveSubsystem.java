@@ -153,6 +153,13 @@ public class SwerveSubsystem extends SubsystemBase {
     PathfindingCommand.warmupCommand().schedule();
   }
 
+  public void runVelocityFieldRelative(ChassisSpeeds speeds) {
+    final var isFlipped = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+    runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(
+            speeds,
+            isFlipped ? getRotation().plus(new Rotation2d(Math.PI)) : getRotation()), false);
+  }
+
   /**
    * Runs the drive at the desired velocity.
    *
