@@ -17,7 +17,7 @@ public class VisionIOPhotonVision implements VisionIO {
    * Increase (>1.0) if you trust your provided heading more and want to constrain it strongly.
    * Decrease (<1.0) if you want the solver to rely more on visual reprojection.
    */
-  private static final TunableNumber HEADING_SCALE_FACTOR = new TunableNumber("Vision/HeadingScaleFactor", 1000000.0);
+  private static final TunableNumber HEADING_SCALE_FACTOR = new TunableNumber("Vision/HeadingScaleFactor", 0.0);
   protected final PhotonCamera camera;
   protected final Transform3d robotToCamera;
   private final PhotonPoseEstimator poseEstimator;
