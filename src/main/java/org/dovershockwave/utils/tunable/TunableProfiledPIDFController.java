@@ -25,6 +25,10 @@ public class TunableProfiledPIDFController {
     TunableNumber.ifChanged(hashCode() + 3, values -> pid.setTolerance(values[0]), posTolerance);
   }
 
+  public void setTolerance(double posTolerance) {
+    pid.setTolerance(posTolerance);
+  }
+
   public void enableContinuousInput(double min, double max) {
     pid.enableContinuousInput(min, max);
   }

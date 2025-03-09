@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import org.dovershockwave.RobotContainer;
 import org.dovershockwave.utils.PIDFGains;
 import org.dovershockwave.utils.tunable.TunableProfiledPIDFController;
@@ -32,7 +33,10 @@ public class FullAlignController {
     this.xVelocityPID = new TunableProfiledPIDFController(dashboardKey + "/XVelocityPID", xVelocityPIDGains, xDistanceMetersTolerance, xVelocityConstraints);
     this.yVelocityPID = new TunableProfiledPIDFController(dashboardKey + "/YVelocityPID", yVelocityPIDGains, yDistanceMetersTolerance, yVelocityConstraints);
 
+    omegaPID.setTolerance(Units.degreesToRadians(2.5));
     omegaPID.enableContinuousInput(-Math.PI, Math.PI);
+    xVelocityPID.setTolerance(Units.inchesToMeters(1.5));
+    yVelocityPID.setTolerance(Units.inchesToMeters(1.5));
   }
 
   public void resetPIDErrors(double currentHeadingRad, Translation2d currentTranslationMeters) {
