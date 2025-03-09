@@ -8,9 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import org.dovershockwave.commands.FullIntakeCoralCommand;
-import org.dovershockwave.commands.FullScoreCoralCommand;
-import org.dovershockwave.commands.FullScoreCoralL4Command;
+import org.dovershockwave.commands.*;
 import org.dovershockwave.subsystems.algaepivot.AlgaePivotConstants;
 import org.dovershockwave.subsystems.algaepivot.AlgaePivotIO;
 import org.dovershockwave.subsystems.algaepivot.AlgaePivotIOSpark;
@@ -162,11 +160,20 @@ public class RobotContainer {
 //    operatorController.leftBumper().onTrue(new InstantCommand(() -> climb.setDesiredState(ClimbState.STARTING)));
 //    operatorController.rightBumper().onTrue(new InstantCommand(() -> climb.setDesiredState(ClimbState.DOWN)));
 
-    operatorController.a().onTrue(new FullScoreCoralL4Command(swerve, vision, coralPivot, coralRollers, elevator, selector));
+    operatorController.a().onTrue(getFullScoreCoralCommand());
     operatorController.y().toggleOnTrue(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));
     // TODO: 2/2/25 Add Algae commands
 
     SmartDashboard.putData("Reset Elevator Pos", new InstantCommand(elevator::resetPosition).ignoringDisable(true));
+  }
+
+  private Command getFullScoreCoralCommand() {
+    return switch (selector.getLevel()) {
+      case L4 -> new FullScoreCoralL4Command(swerve, vision, coralPivot, coralRollers, elevator, selector);
+      case L3 -> new FullScoreCoralL3Command(swerve, vision, coralPivot, coralRollers, elevator, selector);
+      case L2 -> new FullScoreCoralL2Command(swerve, vision, coralPivot, coralRollers, elevator, selector);
+      case L1 -> new FullScoreCoralL1Command(swerve, vision, coralPivot, coralRollers, elevator, selector);
+    };
   }
 
   public static boolean isCompetitionMatch() {
