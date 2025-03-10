@@ -263,6 +263,10 @@ public class SwerveSubsystem extends SubsystemBase {
     return poseEstimator.getEstimatedPosition();
   }
 
+  public Rotation2d getRotationFromGyro() {
+    return rawGyroRotation;
+  }
+
   public Rotation2d getRotation() {
     return getPose().getRotation();
   }
@@ -272,6 +276,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds, Matrix<N3, N1> visionMeasurementStdDevs) {
-    poseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
+//    poseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
+    poseEstimator.addVisionMeasurement(new Pose2d(visionRobotPoseMeters.getTranslation(), getRotationFromGyro()), timestampSeconds, visionMeasurementStdDevs);
   }
 }
