@@ -258,6 +258,10 @@ public class SwerveSubsystem extends SubsystemBase {
     return values;
   }
 
+  public void resetGyro() {
+    gyroIO.resetGyro();
+  }
+
   @AutoLogOutput(key = "Odometry/Robot")
   public Pose2d getPose() {
     return poseEstimator.getEstimatedPosition();

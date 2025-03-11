@@ -16,7 +16,7 @@ public class CoralPivotConstants {
   public static final double WRIST_POSITION_CONVERSION_FACTOR = 2 * Math.PI;
   public static final double WRIST_VELOCITY_CONVERSION_FACTOR = (2 * Math.PI) / 60.0;
 
-  public static final double ARM_POSITION_CONVERSION_FACTOR = (2 * Math.PI);
+  public static final double ARM_POSITION_CONVERSION_FACTOR = 2 * Math.PI;
   public static final double ARM_VELOCITY_CONVERSION_FACTOR = (2 * Math.PI) / 60.0;
 
   public static final double WRIST_MIN_POS = -Math.PI / 2.0;
@@ -24,6 +24,9 @@ public class CoralPivotConstants {
 
   public static final double ARM_MIN_POS = -Math.PI / 2.0;
   public static final double ARM_MAX_POS = Math.PI / 2.0;
+
+//  public static final double WRIST_ABS_POS = 0.15;
+//  public static final double ARM_ABS_POS = 0.47;
 
   public static final ArmFeedforwardGains WRIST_FEEDFORWARD_GAINS = new ArmFeedforwardGains(0.0, 0.0, 3.0, 0.0);
   public static final PIDFGains WRIST_GAINS = new PIDFGains(1.5, 0.0, 0.0, 0.0);

@@ -27,4 +27,6 @@ public interface CoralArmIO {
   default void setArmPosition(double rad, double ff) {}
 
   default void setArmPIDF(PIDFGains gains) {}
+
+  default void setArmAbsPosOffset(double offset) {}
 }

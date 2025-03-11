@@ -8,7 +8,10 @@ import org.dovershockwave.subsystems.swerve.SwerveSubsystem;
 public class ResetFieldOrientatedDriveCommand extends InstantCommand {
   public ResetFieldOrientatedDriveCommand(SwerveSubsystem swerve) {
     super(
-            () -> swerve.setPose(new Pose2d(swerve.getPose().getTranslation(), new Rotation2d())),
+            () -> {
+              swerve.resetGyro();
+              swerve.setPose(new Pose2d(swerve.getPose().getTranslation(), new Rotation2d()));
+              },
             swerve
     );
   }

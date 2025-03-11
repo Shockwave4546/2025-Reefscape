@@ -146,9 +146,9 @@ public class RobotContainer {
 
   private void configureBindings() {
     driverController.leftTrigger(0.9).onTrue(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(0.5))).onFalse(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(1.0)));
-    driverController.leftBumper().whileTrue(new AlignToReefCoralCommand(swerve, vision, selector, ReefScoringPosition.ReefScoringSide.LEFT));
-    driverController.leftBumper().whileTrue(new AlignToReefCoralCommand(swerve, vision, selector, ReefScoringPosition.ReefScoringSide.LEFT).andThen(getFullScoreCoralCommand()));
-    driverController.rightBumper().whileTrue(new AlignToReefCoralCommand(swerve, vision, selector, ReefScoringPosition.ReefScoringSide.RIGHT));
+//    driverController.leftBumper().whileTrue(new AlignToReefCoralCommand(swerve, vision, selector, ReefScoringPosition.ReefScoringSide.LEFT));
+    driverController.leftBumper().whileTrue(new AlignToReefCoralCommand(swerve, vision, selector, ReefScoringPosition.ReefScoringSide.LEFT).andThen(new FullScoreCoralL4Command(swerve, vision, coralPivot, coralRollers, elevator, selector)));
+    driverController.rightBumper().whileTrue(new AlignToReefCoralCommand(swerve, vision, selector, ReefScoringPosition.ReefScoringSide.RIGHT).andThen(new FullScoreCoralL4Command(swerve, vision, coralPivot, coralRollers, elevator, selector)));
     driverController.povDown().whileTrue(new AlignToReefAlgaeCommand(swerve, vision));
 
 //    driverController.a().whileTrue(new AlignToHumanPlayerCommand(swerve, vision, HumanPlayerStationPosition.HumanPlayerStationSide.CLOSE));

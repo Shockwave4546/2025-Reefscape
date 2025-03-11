@@ -17,4 +17,6 @@ public interface AlgaePivotIO {
   default void setPivotPosition(double rad) {}
 
   default void setPivotPIDF(PIDFGains gains) {}
+
+  default void setAbsPosOffset(double offset) {}
 }

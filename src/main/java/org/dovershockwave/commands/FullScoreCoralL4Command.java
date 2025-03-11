@@ -21,7 +21,7 @@ public class FullScoreCoralL4Command extends SequentialCommandGroup {
   public FullScoreCoralL4Command(SwerveSubsystem swerve, VisionSubsystem vision, CoralPivotSubsystem coralPivot, CoralRollersSubsystem coralRollers, ElevatorSubsystem elevator, ReefScoringSelector selector) {
     addCommands(
             new InstantCommand(() -> elevator.setDesiredState(selector.getLevel()), elevator),
-            selector.getLevel() == ReefScoringPosition.ReefLevel.L4 ? new WaitUntilCommand(() -> elevator.getState().positionRad() >= 52.5) : new InstantCommand(),
+            selector.getLevel() == ReefScoringPosition.ReefLevel.L4 ? new WaitUntilCommand(() -> elevator.getState().positionRad() >= 90) : new InstantCommand(),
             new InstantCommand(() -> coralPivot.setDesiredState(selector.getLevel()), coralPivot),
             new WaitUntilCommand(elevator::atDesiredState),
             new WaitUntilCommand(coralPivot::atDesiredState),

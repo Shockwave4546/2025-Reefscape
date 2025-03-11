@@ -6,7 +6,9 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.dovershockwave.ReefScoringPosition;
+import org.dovershockwave.subsystems.algaepivot.AlgaePivotConstants;
 import org.dovershockwave.utils.tunable.TunableArmGains;
+import org.dovershockwave.utils.tunable.TunableNumber;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -18,7 +20,7 @@ public class CoralPivotSubsystem extends SubsystemBase {
   private final CoralWristIOInputsAutoLogged coralWristInputs = new CoralWristIOInputsAutoLogged();
 
   private final TunableArmGains wristTunableGains = new TunableArmGains(
-          "CoralPivot/WristGains/",
+          "CoralPivot/Wrist/Gains",
           CoralPivotConstants.WRIST_GAINS,
           CoralPivotConstants.WRIST_FEEDFORWARD_GAINS,
           CoralPivotConstants.WRIST_CONSTRAINTS,
@@ -34,7 +36,7 @@ public class CoralPivotSubsystem extends SubsystemBase {
   private TrapezoidProfile wristProfile = new TrapezoidProfile(CoralPivotConstants.WRIST_CONSTRAINTS);
 
   private final TunableArmGains armTunableGains = new TunableArmGains(
-          "CoralPivot/ArmGains/",
+          "CoralPivot/Arm/Gains",
           CoralPivotConstants.ARM_GAINS,
           CoralPivotConstants.ARM_FEEDFORWARD_GAINS,
           CoralPivotConstants.ARM_CONSTRAINTS,
@@ -48,6 +50,9 @@ public class CoralPivotSubsystem extends SubsystemBase {
           CoralPivotConstants.ARM_FEEDFORWARD_GAINS.kA()
   );
   private TrapezoidProfile armProfile = new TrapezoidProfile(CoralPivotConstants.ARM_CONSTRAINTS);
+
+  private final TunableNumber wristAbsPos = new TunableNumber("CoralPivot/Wrist/AbsPos", AlgaePivotConstants.ABS_POS_OFFSET);
+  private final TunableNumber armAbsPos = new TunableNumber("CoralPivot/Arm/AbsPos", AlgaePivotConstants.ABS_POS_OFFSET);
 
   private final Alert wristDisconnectedAlert = new Alert("Disconnected coral wrist motor (" + CoralPivotConstants.WRIST_SPARK_ID + ")", Alert.AlertType.kError);
   private final Alert armLeftDisconnectedAlert = new Alert("Disconnected coral left arm motor (" + CoralPivotConstants.ARM_LEFT_SPARK_ID, Alert.AlertType.kError);
@@ -65,6 +70,9 @@ public class CoralPivotSubsystem extends SubsystemBase {
     coralWristIO.updateInputs(coralWristInputs);
     Logger.processInputs("CoralPivot/Arm", coralArmInputs);
     Logger.processInputs("CoralPivot/Wrist", coralWristInputs);
+
+//    TunableNumber.ifChanged(hashCode() + 30, values -> coralWristIO.setWristAbsPosOffset(values[0]), wristAbsPos);
+//    TunableNumber.ifChanged(hashCode() + 31, values -> coralArmIO.setArmAbsPosOffset(values[0]), armAbsPos);
 
     wristTunableGains.periodic(coralWristIO::setWristPIDF, wristFFConstants -> {
       wristFeedforward.setKs(wristFFConstants.kS());
