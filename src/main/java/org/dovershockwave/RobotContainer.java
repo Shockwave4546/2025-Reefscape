@@ -9,7 +9,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import org.dovershockwave.commands.*;
+import org.dovershockwave.commands.FullIntakeCoralCommand;
+import org.dovershockwave.commands.FullScoreCoralCommand;
 import org.dovershockwave.subsystems.algaepivot.AlgaePivotConstants;
 import org.dovershockwave.subsystems.algaepivot.AlgaePivotIO;
 import org.dovershockwave.subsystems.algaepivot.AlgaePivotIOSpark;
@@ -146,9 +147,8 @@ public class RobotContainer {
 
   private void configureBindings() {
     driverController.leftTrigger(0.9).onTrue(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(0.5))).onFalse(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(1.0)));
-//    driverController.leftBumper().whileTrue(new AlignToReefCoralCommand(swerve, vision, selector, ReefScoringPosition.ReefScoringSide.LEFT));
-    driverController.leftBumper().whileTrue(new AlignToReefCoralCommand(swerve, vision, selector, ReefScoringPosition.ReefScoringSide.LEFT).andThen(new FullScoreCoralL4Command(swerve, vision, coralPivot, coralRollers, elevator, selector)));
-    driverController.rightBumper().whileTrue(new AlignToReefCoralCommand(swerve, vision, selector, ReefScoringPosition.ReefScoringSide.RIGHT).andThen(new FullScoreCoralL4Command(swerve, vision, coralPivot, coralRollers, elevator, selector)));
+    driverController.leftBumper().whileTrue(new AlignToReefCoralCommand(swerve, vision, selector, ReefScoringPosition.ReefScoringSide.LEFT).andThen(new FullScoreCoralCommand(coralPivot, coralRollers, elevator, selector)));
+    driverController.rightBumper().whileTrue(new AlignToReefCoralCommand(swerve, vision, selector, ReefScoringPosition.ReefScoringSide.RIGHT).andThen(new FullScoreCoralCommand(coralPivot, coralRollers, elevator, selector)));
     driverController.povDown().whileTrue(new AlignToReefAlgaeCommand(swerve, vision));
 
 //    driverController.a().whileTrue(new AlignToHumanPlayerCommand(swerve, vision, HumanPlayerStationPosition.HumanPlayerStationSide.CLOSE));
@@ -167,7 +167,7 @@ public class RobotContainer {
 //    operatorController.leftBumper().onTrue(new InstantCommand(() -> climb.setDesiredState(ClimbState.STARTING)));
 //    operatorController.rightBumper().onTrue(new InstantCommand(() -> climb.setDesiredState(ClimbState.DOWN)));
 
-    operatorController.a().onTrue(new FullScoreCoralL4Command(swerve, vision, coralPivot, coralRollers, elevator, selector));
+    operatorController.a().onTrue(new FullScoreCoralCommand(coralPivot, coralRollers, elevator, selector));
     operatorController.y().toggleOnTrue(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));
     // TODO: 2/2/25 Add Algae commands
 
@@ -188,15 +188,6 @@ public class RobotContainer {
 //    new EventTrigger("Intake").onTrue(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));
 
     swerve.initializePP();
-  }
-
-  private Command getFullScoreCoralCommand() {
-    return switch (selector.getLevel()) {
-      case L4 -> new FullScoreCoralL4Command(swerve, vision, coralPivot, coralRollers, elevator, selector);
-      case L3 -> new FullScoreCoralL3Command(swerve, vision, coralPivot, coralRollers, elevator, selector);
-      case L2 -> new FullScoreCoralL2Command(swerve, vision, coralPivot, coralRollers, elevator, selector);
-      case L1 -> new FullScoreCoralL1Command(swerve, vision, coralPivot, coralRollers, elevator, selector);
-    };
   }
 
   public static boolean isCompetitionMatch() {

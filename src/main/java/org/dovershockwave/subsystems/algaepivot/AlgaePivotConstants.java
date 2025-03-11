@@ -12,6 +12,4 @@ public class AlgaePivotConstants {
   public static final double VELOCITY_CONVERSION_FACTOR = (2 * Math.PI) / 60.0;
   public static final PIDFGains GAINS = new PIDFGains(0.0, 0.0, 0.0, 0.0);
   public static final double POSITION_TOLERANCE = Units.degreesToRadians(2.5);
-
-  public static final double ABS_POS_OFFSET = 0.575;
 }

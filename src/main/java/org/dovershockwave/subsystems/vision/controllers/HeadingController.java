@@ -2,6 +2,7 @@ package org.dovershockwave.subsystems.vision.controllers;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import org.dovershockwave.RobotContainer;
 import org.dovershockwave.utils.PIDFGains;
 import org.dovershockwave.utils.tunable.TunableProfiledPIDFController;
@@ -15,6 +16,7 @@ public class HeadingController {
     this.dashboardKey = dashboardKey;
     this.omegaPID = new TunableProfiledPIDFController(dashboardKey + "/OmegaPID/", omegaPIDGains, headingRadTolerance, constraints);
 
+    omegaPID.setTolerance(Units.degreesToRadians(2.5));
     omegaPID.enableContinuousInput(-Math.PI, Math.PI);
   }
 

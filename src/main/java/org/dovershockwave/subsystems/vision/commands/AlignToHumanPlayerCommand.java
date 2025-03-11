@@ -40,7 +40,7 @@ public class AlignToHumanPlayerCommand extends Command {
 
   @Override public void initialize() {
     // TODO: 2/24/2025 fact check this line
-    alignController.resetPIDErrors(swerve.getRotation().getRadians(), swerve.getPose().getTranslation());
+    alignController.resetPIDErrors(swerve.getPose());
   }
 
   @Override public void execute() {

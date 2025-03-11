@@ -1,7 +1,6 @@
 package org.dovershockwave.subsystems.vision.controllers;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -39,10 +38,10 @@ public class FullAlignController {
     yVelocityPID.setTolerance(Units.inchesToMeters(1.5));
   }
 
-  public void resetPIDErrors(double currentHeadingRad, Translation2d currentTranslationMeters) {
-    omegaPID.reset(currentHeadingRad);
-    xVelocityPID.reset(currentTranslationMeters.getX());
-    yVelocityPID.reset(currentTranslationMeters.getY());
+  public void resetPIDErrors(Pose2d currentPose) {
+    omegaPID.reset(currentPose.getRotation().getRadians());
+    xVelocityPID.reset(currentPose.getX());
+    yVelocityPID.reset(currentPose.getY());
   }
 
   public boolean atGoal() {
@@ -58,10 +57,9 @@ public class FullAlignController {
           String specificDashboardKey
   ) {
     final var currentTranslationMeters = currentPose.getTranslation();
-    final var goalTranslationMeters = goalPose.getTranslation();
     final var omega = omegaPID.calculate(currentPose.getRotation().getRadians(), goalPose.getRotation().getRadians());
-    final var xVelocity = xVelocityPID.calculate(currentTranslationMeters.getX(), goalTranslationMeters.getX());
-    final var yVelocity = yVelocityPID.calculate(currentTranslationMeters.getY(), goalTranslationMeters.getY());
+    final var xVelocity = xVelocityPID.calculate(currentTranslationMeters.getX(), goalPose.getX());
+    final var yVelocity = yVelocityPID.calculate(currentTranslationMeters.getY(), goalPose.getY());
 
     if (RobotContainer.isTuningMode()) {
       Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/HeadingRadCurrent", currentPose.getRotation().getRadians());
@@ -69,13 +67,13 @@ public class FullAlignController {
       Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/HeadingRadError", omegaPID.getError());
       Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/Omega", omega);
 
-      Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/XDistanceMetersCurrent", currentTranslationMeters.getX());
-      Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/XDistanceMetersGoal", goalTranslationMeters.getX());
+      Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/XDistanceMetersCurrent", currentPose.getX());
+      Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/XDistanceMetersGoal", goalPose.getX());
       Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/XDistanceMetersError", xVelocityPID.getError());
       Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/XVelocity", xVelocity);
 
-      Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/YDistanceMetersCurrent", currentTranslationMeters.getY());
-      Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/YDistanceMetersGoal", goalTranslationMeters.getY());
+      Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/YDistanceMetersCurrent", currentPose.getY());
+      Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/YDistanceMetersGoal", goalPose.getY());
       Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/YDistanceMetersError", yVelocityPID.getError());
       Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/YVelocity", yVelocity);
 

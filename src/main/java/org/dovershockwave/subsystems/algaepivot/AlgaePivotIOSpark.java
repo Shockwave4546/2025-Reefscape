@@ -4,12 +4,10 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.filter.Debouncer;
 import org.dovershockwave.utils.PIDFGains;
-import org.dovershockwave.utils.tunable.TunableNumber;
 
 import java.util.function.DoubleSupplier;
 
@@ -52,17 +50,6 @@ public class AlgaePivotIOSpark implements AlgaePivotIO {
 
   @Override public void setPivotPIDF(PIDFGains gains) {
     final var config = new SparkMaxConfig().apply(new ClosedLoopConfig().pidf(gains.p(), gains.i(), gains.d(), gains.ff()));
-    tryUntilOk(spark, 5, spark -> {
-      spark.configure(config, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
-    });
-  }
-
-  /**
-   * @param offset [0, 1)
-   */
-  @Override public void setAbsPosOffset(double offset) {
-    System.out.println(offset);
-    final var config = new SparkMaxConfig().apply(new AbsoluteEncoderConfig().zeroOffset(offset));
     tryUntilOk(spark, 5, spark -> {
       spark.configure(config, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
     });

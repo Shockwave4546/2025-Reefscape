@@ -1,7 +1,6 @@
 package org.dovershockwave.subsystems.vision.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import org.dovershockwave.ReefScoringPosition;
@@ -39,7 +38,7 @@ public class AlignToReefAlgaeCommand extends Command {
 
   @Override public void initialize() {
     // TODO: 2/24/2025 fact check this line
-    alignController.resetPIDErrors(swerve.getRotation().getRadians(), swerve.getPose().getTranslation());
+    alignController.resetPIDErrors(swerve.getPose());
   }
 
   @Override public void execute() {

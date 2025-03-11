@@ -3,7 +3,6 @@ package org.dovershockwave.subsystems.algaepivot;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.dovershockwave.utils.tunable.TunableNumber;
 import org.dovershockwave.utils.tunable.TunablePIDF;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -16,8 +15,6 @@ public class AlgaePivotSubsystem extends SubsystemBase {
 
   private final Alert disconnectedAlert = new Alert("Disconnected algae pivot motor (" + AlgaePivotConstants.SPARK_ID + ")", Alert.AlertType.kError);
 
-  private final TunableNumber absPos = new TunableNumber("AlgaePivot/AbsPos", AlgaePivotConstants.ABS_POS_OFFSET);
-
   private AlgaePivotState desiredState = AlgaePivotState.STARTING;
 
   public AlgaePivotSubsystem(AlgaePivotIO algaePivotIO) {
@@ -27,8 +24,6 @@ public class AlgaePivotSubsystem extends SubsystemBase {
   @Override public void periodic() {
     algaePivotIO.updateInputs(algaePivotInputs);
     Logger.processInputs("AlgaePivot", algaePivotInputs);
-
-//    TunableNumber.ifChanged(hashCode() + 5, values -> algaePivotIO.setAbsPosOffset(values[0]), absPos);
 
     tunablePIDF.periodic(algaePivotIO::setPivotPIDF, positionRad -> {
       algaePivotIO.setPivotPosition(positionRad);

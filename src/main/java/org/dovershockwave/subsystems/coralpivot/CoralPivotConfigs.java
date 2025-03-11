@@ -20,7 +20,6 @@ public class CoralPivotConfigs {
             .voltageCompensation(12.0);
     WRIST_CONFIG.absoluteEncoder
             .zeroCentered(true)
-//            .zeroOffset(CoralPivotConstants.WRIST_ABS_POS)
             .positionConversionFactor(CoralPivotConstants.WRIST_POSITION_CONVERSION_FACTOR)
             .velocityConversionFactor(CoralPivotConstants.WRIST_VELOCITY_CONVERSION_FACTOR)
             .averageDepth(2);
@@ -44,7 +43,6 @@ public class CoralPivotConfigs {
     ARM_RIGHT_CONFIG.absoluteEncoder
             .inverted(true)
             .zeroCentered(true)
-//            .zeroOffset(CoralPivotConstants.ARM_ABS_POS)
             .positionConversionFactor(CoralPivotConstants.ARM_POSITION_CONVERSION_FACTOR)
             .velocityConversionFactor(CoralPivotConstants.ARM_VELOCITY_CONVERSION_FACTOR)
             .averageDepth(2);

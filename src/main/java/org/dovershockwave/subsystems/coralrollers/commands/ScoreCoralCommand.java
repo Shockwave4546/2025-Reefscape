@@ -5,6 +5,7 @@ import org.dovershockwave.ReefScoringSelector;
 import org.dovershockwave.subsystems.coralrollers.CoralRollersState;
 import org.dovershockwave.subsystems.coralrollers.CoralRollersSubsystem;
 
+// TODO: 3/11/2025 Could use a current limit here
 public class ScoreCoralCommand extends Command {
   private final CoralRollersSubsystem coralRollers;
   private final ReefScoringSelector selector;

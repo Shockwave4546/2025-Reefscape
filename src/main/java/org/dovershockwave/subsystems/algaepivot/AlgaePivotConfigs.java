@@ -17,7 +17,6 @@ public class AlgaePivotConfigs {
             .smartCurrentLimit(Constants.NEO_CURRENT_LIMIT)
             .voltageCompensation(12.0);
     PIVOT_CONFIG.absoluteEncoder
-//            .zeroOffset(AlgaePivotConstants.ABS_POS_OFFSET)
             .inverted(true)
             .zeroCentered(true)
             .positionConversionFactor(AlgaePivotConstants.POSITION_CONVERSION_FACTOR)

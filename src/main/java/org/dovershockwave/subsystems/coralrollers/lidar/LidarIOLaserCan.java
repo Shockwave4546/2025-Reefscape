@@ -1,6 +1,5 @@
 package org.dovershockwave.subsystems.coralrollers.lidar;
 
-import au.grapplerobotics.CanBridge;
 import au.grapplerobotics.ConfigurationFailedException;
 import au.grapplerobotics.LaserCan;
 
@@ -8,7 +7,6 @@ public class LidarIOLaserCan implements LidarIO {
   private final LaserCan laserCan = new LaserCan(41);
 
   public LidarIOLaserCan() {
-    CanBridge.runTCP();
     try {
       laserCan.setRangingMode(LaserCan.RangingMode.SHORT);
       laserCan.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 6, 6));
