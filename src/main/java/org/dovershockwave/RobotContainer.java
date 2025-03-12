@@ -144,10 +144,10 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    driverController.leftTrigger(0.9).onTrue(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(0.5))).onFalse(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(1.0)));
+    driverController.leftTrigger(0.8).onTrue(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(0.5))).onFalse(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(1.0)));
     driverController.leftBumper().whileTrue(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT).andThen(new FullScoreCoralCommand(coralPivot, coralRollers, elevator, selector)));
     driverController.rightBumper().whileTrue(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.RIGHT).andThen(new FullScoreCoralCommand(coralPivot, coralRollers, elevator, selector)));
-    driverController.povDown().whileTrue(new AlignToReefAlgaeCommand(swerve));
+    driverController.rightTrigger(0.8).whileTrue(new AlignToReefAlgaeCommand(swerve));
 
     driverController.x().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.CLOSE).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
     driverController.a().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.CENTER).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
@@ -165,8 +165,8 @@ public class RobotContainer {
 //    operatorController.leftBumper().onTrue(new InstantCommand(() -> climb.setDesiredState(ClimbState.STARTING)));
 //    operatorController.rightBumper().onTrue(new InstantCommand(() -> climb.setDesiredState(ClimbState.DOWN)));
 
-    operatorController.leftTrigger().onTrue(new ResetStatesCommand(coralRollers, elevator, coralPivot));
-    operatorController.rightTrigger().onTrue(new ResetStatesCommand(coralRollers, elevator, coralPivot));
+    operatorController.leftTrigger(0.8).onTrue(new ResetStatesCommand(coralRollers, elevator, coralPivot, algaePivot, algaeRollers));
+    operatorController.rightTrigger(0.8).onTrue(new ResetStatesCommand(coralRollers, elevator, coralPivot, algaePivot, algaeRollers));
 
     operatorController.a().onTrue(new FullScoreCoralCommand(coralPivot, coralRollers, elevator, selector));
     operatorController.y().toggleOnTrue(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));

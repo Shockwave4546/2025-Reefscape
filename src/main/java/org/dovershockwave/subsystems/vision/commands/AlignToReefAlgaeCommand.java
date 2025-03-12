@@ -12,7 +12,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class AlignToReefAlgaeCommand extends Command {
   private final FullAlignController alignController = new FullAlignController(
-          "AlignToAlgaeCommand",
+          "AlignToReefAlgaeCommand",
           VisionConstants.ALIGNMENT_OMEGA_PID,
           VisionConstants.ALIGNMENT_X_VELOCITY_PID,
           VisionConstants.ALIGNMENT_Y_VELOCITY_PID,
