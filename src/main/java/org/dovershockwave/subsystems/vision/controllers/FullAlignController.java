@@ -34,10 +34,8 @@ public class FullAlignController {
 
     omegaPID.setTolerance(Units.degreesToRadians(2.5));
     omegaPID.enableContinuousInput(-Math.PI, Math.PI);
-    xVelocityPID.setTolerance(Units.inchesToMeters(4));
-    yVelocityPID.setTolerance(Units.inchesToMeters(4));
-
-    // Used to be 1.5
+    xVelocityPID.setTolerance(Units.inchesToMeters(1.5));
+    yVelocityPID.setTolerance(Units.inchesToMeters(1.5));
   }
 
   public void resetPIDErrors(Pose2d currentPose) {
