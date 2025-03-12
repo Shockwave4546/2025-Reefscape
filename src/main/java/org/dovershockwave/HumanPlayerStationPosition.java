@@ -11,8 +11,15 @@ import java.util.Map;
 import java.util.Optional;
 
 public record HumanPlayerStationPosition(Pose2d pose, int id) {
-  private static final double CLOSE_Y_OFFSET_DISTANCE_METERS = 0.5;
-  private static final double FAR_Y_OFFSET_DISTANCE_METERS = 0.5;
+  /**
+   * Groove distance: 1.25"
+   * Higher up plate distance: 6.75"
+   * From the middle of the AprilTag: (1.25 / 2) + (2 * 6.75) + (1.25 / 2) + 1.25 = 16"
+   * 0.93 / 2 = 0.465" from the center of the robot to the edge of the robot, so
+   * we need to make sure the robot is 0.465" away from the wall.
+   */
+  private static final double CLOSE_Y_OFFSET_DISTANCE_METERS = Units.inchesToMeters(16);
+  private static final double FAR_Y_OFFSET_DISTANCE_METERS = Units.inchesToMeters(16);
   private static final Map<Integer, Pose2d> HUMAN_PLAYER_STATION_POSE_2D = new HashMap<>();
 
   static {
