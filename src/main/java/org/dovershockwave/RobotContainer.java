@@ -149,10 +149,10 @@ public class RobotContainer {
     driverController.rightBumper().whileTrue(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.RIGHT).andThen(new FullScoreCoralCommand(coralPivot, coralRollers, elevator, selector)));
     driverController.povDown().whileTrue(new AlignToReefAlgaeCommand(swerve));
 
-    driverController.a().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.CLOSE).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
-    driverController.x().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.CENTER).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
-    driverController.y().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.FAR).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
-    driverController.b().whileTrue(new TemporaryHeadingCommand(swerve, vision));
+    driverController.x().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.CLOSE).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
+    driverController.a().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.CENTER).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
+    driverController.b().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.FAR).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
+    driverController.y().whileTrue(new TemporaryHeadingCommand(swerve, vision));
 
     swerve.setDefaultCommand(new SwerveDriveCommand(swerve, driverController));
     SmartDashboard.putData("Reset Field Orientated Drive", new ResetFieldOrientatedDriveCommand(swerve));

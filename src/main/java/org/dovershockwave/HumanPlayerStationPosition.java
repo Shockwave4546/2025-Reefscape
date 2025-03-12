@@ -27,14 +27,14 @@ public record HumanPlayerStationPosition(Pose2d pose, int id) {
 
     final var signForYOffset = switch (side) {
       case CLOSE -> switch (id) {
-        case 1, 13 -> -1;
-        case 2, 12 -> 1;
+        case 1, 13 -> 1;
+        case 2, 12 -> -1;
         default -> 0;
       };
       case CENTER -> 1;
       case FAR -> switch (id) {
-        case 1, 13 -> 1;
-        case 2, 12 -> -1;
+        case 1, 13 -> -1;
+        case 2, 12 -> 1;
         default -> 0;
       };
     };
