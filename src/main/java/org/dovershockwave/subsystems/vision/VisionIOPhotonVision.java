@@ -40,7 +40,6 @@ public class VisionIOPhotonVision implements VisionIO {
     for (var result : camera.getAllUnreadResults()) {
       // Update latest target observation
       if (result.hasTargets()) {
-        // TODO: 2/18/2025 this is stupid, fix this
         final var bestTarget = result.getBestTarget();
         final var bestTargetPose = bestTarget.getBestCameraToTarget();
         inputs.bestTargetObservation = new TargetObservation(

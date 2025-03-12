@@ -44,7 +44,7 @@ public class SwerveConstants {
   public static final double DRIVE_ENCODER_VELOCITY_FACTOR = ((2 * Math.PI) / DRIVE_MOTOR_REDUCTION) / 60.0;
   public static final PIDFGains DRIVE_PIDF = new PIDFGains(0.0125, 0.0, 0.165, 0.00709338);
 
-  public static final double TURN_MOTOR_REDUCTION = 9424.0 / 203.0; // TODO: 1/24/2025 Double check this value--used for sim only 
+  public static final double TURN_MOTOR_REDUCTION = 9424.0 / 203.0;
   public static final double TURN_ENCODER_POSITION_FACTOR = 2 * Math.PI;
   public static final double TURN_ENCODER_VELOCITY_FACTOR = (2 * Math.PI) / 60.0;
   public static final PIDFGains TURN_PIDF = new PIDFGains(3.1, 0.0, 0.875, 0.0);

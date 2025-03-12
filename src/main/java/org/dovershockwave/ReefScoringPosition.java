@@ -15,8 +15,7 @@ import java.util.OptionalDouble;
 public record ReefScoringPosition(int id, Translation3d position, Rotation2d robotHeading) {
   /**
    * Reef scoring positions with blue alliance wall as reference and robot facing the field.
-   * Based off <a href="https://github.com/wpilibsuite/allwpilib/blob/main/apriltag/src/main/native/resources/edu/wpi/first/apriltag/2025-reefscape-andymark.json">AndyMark field AprilTag locations</a>
-   * TODO: Lowk this might not work based on alliance color, but we'll see (at least the rotation part)
+   * Based off <a href="https://github.com/wpilibsuite/allwpilib/blob/main/apriltag/src/main/native/resources/edu/wpi/first/apriltag/2025-reefscape-andymark.json">AndyMark field AprilTag locations</a>.
    */
   private static final Map<Integer, Pose2d> REEF_SCORING_POSE_2D = new HashMap<>();
 
