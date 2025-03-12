@@ -1,25 +1,31 @@
 package org.dovershockwave;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.util.Units;
+import org.dovershockwave.subsystems.swerve.SwerveConstants;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public record HumanPlayerStationPosition(double yOffsetMeters, double robotHeadingRad) {
-  private static final double CLOSE_Y_OFFSET_DISTANCE_METERS = 1;
-  private static final double FAR_Y_OFFSET_DISTANCE_METERS = 1;
-  private static final Map<Integer, Rotation2d> HUMAN_PLAYER_STATION_ROBOT_HEADING = new HashMap<>();
+public record HumanPlayerStationPosition(Pose2d pose) {
+  private static final double CLOSE_Y_OFFSET_DISTANCE_METERS = 0.5;
+  private static final double FAR_Y_OFFSET_DISTANCE_METERS = 0.5;
+  private static final Map<Integer, Pose2d> HUMAN_PLAYER_STATION_POSE_2D = new HashMap<>();
 
   static {
-    HUMAN_PLAYER_STATION_ROBOT_HEADING.put(12, Rotation2d.fromDegrees(-126.0));
-    HUMAN_PLAYER_STATION_ROBOT_HEADING.put(13, Rotation2d.fromDegrees(126.0));
-    HUMAN_PLAYER_STATION_ROBOT_HEADING.put(1, Rotation2d.fromDegrees(-54.0));
-    HUMAN_PLAYER_STATION_ROBOT_HEADING.put(2, Rotation2d.fromDegrees(54.0));
+    HUMAN_PLAYER_STATION_POSE_2D.put(12, new Pose2d(0.8613139999999999, 0.628142, Rotation2d.fromDegrees(-126.0)));
+    HUMAN_PLAYER_STATION_POSE_2D.put(13, new Pose2d(0.8613139999999999, 7.414259999999999, Rotation2d.fromDegrees(126.0)));
+    HUMAN_PLAYER_STATION_POSE_2D.put(1, new Pose2d(16.687292, 0.628142, Rotation2d.fromDegrees(-54.0)));
+    HUMAN_PLAYER_STATION_POSE_2D.put(2, new Pose2d(16.687292, 7.414259999999999, Rotation2d.fromDegrees(54.0)));
   }
 
   public static Optional<HumanPlayerStationPosition> getPositionFor(int id, HumanPlayerStationSide side) {
-    final var signForOffset = switch (side) {
+    if (!HUMAN_PLAYER_STATION_POSE_2D.containsKey(id)) return Optional.empty();
+
+    final var signForYOffset = switch (side) {
       case CLOSE -> switch (id) {
         case 1, 13 -> -1;
         case 2, 12 -> 1;
@@ -33,17 +39,17 @@ public record HumanPlayerStationPosition(double yOffsetMeters, double robotHeadi
       };
     };
 
-    if (signForOffset == 0) return Optional.empty();
+    if (signForYOffset == 0) return Optional.empty();
 
-    final var offsetDistance = switch (side) {
+    final var offsetXDistance = (-SwerveConstants.ROBOT_LENGTH_X_METERS / 2.0) - Units.inchesToMeters(13.5);
+    final var offsetYDistance = switch (side) {
       case CLOSE -> CLOSE_Y_OFFSET_DISTANCE_METERS;
       case FAR -> FAR_Y_OFFSET_DISTANCE_METERS;
       case CENTER -> 0;
     };
 
-    return Optional.of(new HumanPlayerStationPosition(
-            signForOffset * offsetDistance,
-            HUMAN_PLAYER_STATION_ROBOT_HEADING.get(id).getRadians())
+    return Optional.of(new HumanPlayerStationPosition(HUMAN_PLAYER_STATION_POSE_2D.get(id).transformBy(
+            new Transform2d(offsetXDistance, offsetYDistance * signForYOffset, new Rotation2d())))
     );
   }
 

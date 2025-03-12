@@ -12,20 +12,18 @@ public class ReefScoringSelector {
   private ReefScoringPosition.ReefLevel level = ReefScoringPosition.ReefLevel.L1;
 
   public ReefScoringSelector() {
-     for (final var level : ReefScoringPosition.ReefLevel.values()) {
-       reefLevelIndicators.put(level, new ShuffleboardBoolean(Tab.MATCH, level.name(), false));
-     }
+    for (final var level : ReefScoringPosition.ReefLevel.values()) {
+      reefLevelIndicators.put(level, new ShuffleboardBoolean(Tab.MATCH, level.name(), false));
+    }
 
-     setLevel(ReefScoringPosition.ReefLevel.L1);
+    setLevel(ReefScoringPosition.ReefLevel.L1);
   }
 
-  // TODO: 3/7/25 double check this is logging
   @AutoLogOutput(key = "Reef/ScoringLevel")
   public ReefScoringPosition.ReefLevel getLevel() {
     return level;
   }
 
-  // TODO: 3/7/25 double check this is logging
   @AutoLogOutput(key = "Reef/ScoringSide")
   public ReefScoringPosition.ReefScoringSide getSide() {
     return side;

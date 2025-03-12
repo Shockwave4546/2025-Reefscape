@@ -22,8 +22,10 @@ public class FullIntakeCoralCommand extends SequentialCommandGroup {
             ),
             new WaitUntilCommand(elevator::atDesiredState),
             new WaitUntilCommand(coralPivot::atDesiredState),
-            new IndexCoralCommand(coralRollers),
-            new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING), coralPivot)
+            new ParallelCommandGroup(
+                    new IndexCoralCommand(coralRollers),
+                    new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING), coralPivot)
+            )
     );
 
     addRequirements(coralPivot, coralRollers);

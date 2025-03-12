@@ -26,7 +26,6 @@ public class AlgaePivotSubsystem extends SubsystemBase {
     Logger.processInputs("AlgaePivot", algaePivotInputs);
 
     tunablePIDF.periodic(algaePivotIO::setPivotPIDF, positionRad -> {
-      algaePivotIO.setPivotPosition(positionRad);
       setDesiredState(new AlgaePivotState(positionRad));
     });
 

@@ -34,8 +34,10 @@ public class FullAlignController {
 
     omegaPID.setTolerance(Units.degreesToRadians(2.5));
     omegaPID.enableContinuousInput(-Math.PI, Math.PI);
-    xVelocityPID.setTolerance(Units.inchesToMeters(1.5));
-    yVelocityPID.setTolerance(Units.inchesToMeters(1.5));
+    xVelocityPID.setTolerance(Units.inchesToMeters(4));
+    yVelocityPID.setTolerance(Units.inchesToMeters(4));
+
+    // Used to be 1.5
   }
 
   public void resetPIDErrors(Pose2d currentPose) {
@@ -66,16 +68,19 @@ public class FullAlignController {
       Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/HeadingRadGoal", goalPose.getRotation().getRadians());
       Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/HeadingRadError", omegaPID.getError());
       Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/Omega", omega);
+      Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/OmegaAtGoal", omegaPID.atGoal());
 
       Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/XDistanceMetersCurrent", currentPose.getX());
       Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/XDistanceMetersGoal", goalPose.getX());
       Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/XDistanceMetersError", xVelocityPID.getError());
       Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/XVelocity", xVelocity);
+      Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/XVelocityAtGoal", xVelocityPID.atGoal());
 
       Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/YDistanceMetersCurrent", currentPose.getY());
       Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/YDistanceMetersGoal", goalPose.getY());
       Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/YDistanceMetersError", yVelocityPID.getError());
       Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/YVelocity", yVelocity);
+      Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/YVelocityAtGoal", yVelocityPID.atGoal());
 
       Logger.recordOutput(dashboardKey + "/" + specificDashboardKey + "/AtGoal", atGoal());
     }

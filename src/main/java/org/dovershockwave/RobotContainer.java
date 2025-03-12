@@ -7,18 +7,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import org.dovershockwave.commands.FullIntakeCoralCommand;
-import org.dovershockwave.commands.FullScoreCoralCommand;
-import org.dovershockwave.subsystems.algaepivot.AlgaePivotConstants;
-import org.dovershockwave.subsystems.algaepivot.AlgaePivotIO;
-import org.dovershockwave.subsystems.algaepivot.AlgaePivotIOSpark;
-import org.dovershockwave.subsystems.algaepivot.AlgaePivotSubsystem;
-import org.dovershockwave.subsystems.algaerollers.AlgaeRollersConstants;
-import org.dovershockwave.subsystems.algaerollers.AlgaeRollersIO;
-import org.dovershockwave.subsystems.algaerollers.AlgaeRollersIOSpark;
-import org.dovershockwave.subsystems.algaerollers.AlgaeRollersSubsystem;
+import org.dovershockwave.commands.*;
+import org.dovershockwave.subsystems.algaepivot.*;
+import org.dovershockwave.subsystems.algaerollers.*;
 import org.dovershockwave.subsystems.climb.ClimbConstants;
 import org.dovershockwave.subsystems.climb.ClimbIO;
 import org.dovershockwave.subsystems.climb.ClimbIOSpark;
@@ -46,6 +40,7 @@ import org.dovershockwave.subsystems.swerve.module.ModuleIOSim;
 import org.dovershockwave.subsystems.swerve.module.ModuleIOSpark;
 import org.dovershockwave.subsystems.swerve.module.ModuleType;
 import org.dovershockwave.subsystems.vision.*;
+import org.dovershockwave.subsystems.vision.commands.AlignToHumanPlayerCommand;
 import org.dovershockwave.subsystems.vision.commands.AlignToReefAlgaeCommand;
 import org.dovershockwave.subsystems.vision.commands.AlignToReefCoralCommand;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -151,25 +146,36 @@ public class RobotContainer {
     driverController.rightBumper().whileTrue(new AlignToReefCoralCommand(swerve, vision, selector, ReefScoringPosition.ReefScoringSide.RIGHT).andThen(new FullScoreCoralCommand(coralPivot, coralRollers, elevator, selector)));
     driverController.povDown().whileTrue(new AlignToReefAlgaeCommand(swerve, vision));
 
-//    driverController.a().whileTrue(new AlignToHumanPlayerCommand(swerve, vision, HumanPlayerStationPosition.HumanPlayerStationSide.CLOSE));
-//    driverController.x().whileTrue(new AlignToHumanPlayerCommand(swerve, vision, HumanPlayerStationPosition.HumanPlayerStationSide.CENTER));
-//    driverController.y().whileTrue(new AlignToHumanPlayerCommand(swerve, vision, HumanPlayerStationPosition.HumanPlayerStationSide.FAR));
+    driverController.a().whileTrue(new AlignToHumanPlayerCommand(swerve, vision, HumanPlayerStationPosition.HumanPlayerStationSide.CLOSE).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
+    driverController.x().whileTrue(new AlignToHumanPlayerCommand(swerve, vision, HumanPlayerStationPosition.HumanPlayerStationSide.CENTER).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
+    driverController.y().whileTrue(new AlignToHumanPlayerCommand(swerve, vision, HumanPlayerStationPosition.HumanPlayerStationSide.FAR).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
     driverController.b().whileTrue(new TemporaryHeadingCommand(swerve, vision));
 
     swerve.setDefaultCommand(new SwerveDriveCommand(swerve, driverController));
     SmartDashboard.putData("Reset Field Orientated Drive", new ResetFieldOrientatedDriveCommand(swerve));
 
-    operatorController.povDown().onTrue(new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L1)));
-    operatorController.povLeft().onTrue(new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L2)));
-    operatorController.povUp().onTrue(new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L3)));
-    operatorController.povRight().onTrue(new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L4)));
+    operatorController.povDown().onTrue(new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L1)).ignoringDisable(true));
+    operatorController.povLeft().onTrue(new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L2)).ignoringDisable(true));
+    operatorController.povUp().onTrue(new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L3)).ignoringDisable(true));
+    operatorController.povRight().onTrue(new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L4)).ignoringDisable(true));
 
 //    operatorController.leftBumper().onTrue(new InstantCommand(() -> climb.setDesiredState(ClimbState.STARTING)));
 //    operatorController.rightBumper().onTrue(new InstantCommand(() -> climb.setDesiredState(ClimbState.DOWN)));
 
+    operatorController.leftTrigger().onTrue(new ResetStatesCommand(coralRollers, elevator, coralPivot));
+    operatorController.rightTrigger().onTrue(new ResetStatesCommand(coralRollers, elevator, coralPivot));
+
     operatorController.a().onTrue(new FullScoreCoralCommand(coralPivot, coralRollers, elevator, selector));
     operatorController.y().toggleOnTrue(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));
-    // TODO: 2/2/25 Add Algae commands
+
+    operatorController.b().whileTrue(new FullScoreAlgaeCommand(algaePivot, algaeRollers));
+    operatorController.x().whileTrue(new RunCommand(() -> {
+     algaePivot.setDesiredState(AlgaePivotState.INTAKE);
+     algaeRollers.setDesiredState(AlgaeRollersState.INTAKE);
+    }, algaePivot, algaeRollers).finallyDo(() -> {
+      algaePivot.setDesiredState(AlgaePivotState.INTAKE_AFTER);
+      algaeRollers.setDesiredState(AlgaeRollersState.INTAKE);
+    }));
 
     SmartDashboard.putData("Reset Elevator Pos", new InstantCommand(elevator::resetPosition).ignoringDisable(true));
   }

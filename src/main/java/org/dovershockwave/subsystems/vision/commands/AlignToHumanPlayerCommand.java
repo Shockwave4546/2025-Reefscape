@@ -1,5 +1,6 @@
 package org.dovershockwave.subsystems.vision.commands;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -10,8 +11,8 @@ import org.dovershockwave.subsystems.vision.CameraType;
 import org.dovershockwave.subsystems.vision.VisionConstants;
 import org.dovershockwave.subsystems.vision.VisionSubsystem;
 import org.dovershockwave.subsystems.vision.controllers.FullAlignController;
+import org.littletonrobotics.junction.Logger;
 
-// TODO: 2/2/25 Decide on cameras for this still
 public class AlignToHumanPlayerCommand extends Command {
   private final FullAlignController alignController = new FullAlignController(
           "AlignToHumanPlayerCommand",
@@ -39,7 +40,6 @@ public class AlignToHumanPlayerCommand extends Command {
   }
 
   @Override public void initialize() {
-    // TODO: 2/24/2025 fact check this line
     alignController.resetPIDErrors(swerve.getPose());
   }
 
@@ -53,17 +53,18 @@ public class AlignToHumanPlayerCommand extends Command {
     final var bestTarget = vision.getBestTargetObservation(camera);
     HumanPlayerStationPosition.getPositionFor(bestTarget.tagId(), side).ifPresentOrElse(position -> {
       this.tagFound = true;
-      // TODO: 2/2/25 Fix this xOffset
-      final var offsetTranslationGoal = new Translation2d(0.5, position.yOffsetMeters());
-//      final var speeds = alignController.calculate(
-//              swerve.getRotation().getRadians(),
-//              position.robotHeadingRad(),
-//              bestTarget.translation().toTranslation2d(),
-//              offsetTranslationGoal,
-//              String.valueOf(bestTarget.tagId())
-//      );
-//
-//      swerve.runVelocity(speeds, false);
+      final var speeds = alignController.calculate(
+              swerve.getPose(),
+              position.pose(),
+              String.valueOf(bestTarget.tagId())
+      );
+
+      Logger.recordOutput("AlignToHumanPlayerCommand/GoalPose", position.pose());
+      Logger.recordOutput("AlignToHumanPlayerCommand/Vx", speeds.vxMetersPerSecond);
+      Logger.recordOutput("AlignToHumanPlayerCommand/Vy", speeds.vyMetersPerSecond);
+      Logger.recordOutput("AlignToHumanPlayerCommand/Omega", speeds.omegaRadiansPerSecond);
+
+      swerve.runVelocityFieldRelative(speeds);
     }, swerve::stop);
   }
 

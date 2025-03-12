@@ -52,7 +52,13 @@ public record ReefScoringPosition(int id, Translation3d position, Rotation2d rob
   public static Optional<ReefScoringPosition> getCoralPositionFor(int id, ReefScoringSide side, ReefLevel level) {
     if (!REEF_SCORING_POSE_2D.containsKey(id)) return Optional.empty();
 
-    final var offsetPose2d = REEF_SCORING_POSE_2D.get(id).transformBy(new Transform2d(-SwerveConstants.ROBOT_LENGTH_X_METERS / 2.0, side.yOffset, new Rotation2d()));
+    final var additionalXOffset = switch (level) {
+      case L1 -> 0.24;
+      case L2, L3 -> 0.065;
+      case L4 -> 0.0;
+    };
+    final var xOffset = (-SwerveConstants.ROBOT_LENGTH_X_METERS / 2.0) - additionalXOffset;
+    final var offsetPose2d = REEF_SCORING_POSE_2D.get(id).transformBy(new Transform2d(xOffset, side.yOffset, new Rotation2d()));
     return Optional.of(new ReefScoringPosition(
             id,
             new Translation3d(offsetPose2d.getX(), offsetPose2d.getY(), level.height),
