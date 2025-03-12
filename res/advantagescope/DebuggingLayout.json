@@ -119,7 +119,11 @@
             "/Tuning/AlgaePivot/PID",
             "/AdvantageKit/Vision/LeftReefCamera/BestTargetObservation",
             "/PathPlanner",
-            "/AdvantageKit/RealOutputs/PathPlanner"
+            "/AdvantageKit/RealOutputs/PathPlanner",
+            "/AdvantageKit/RealOutputs/AlignToReefCoralCommand",
+            "/AdvantageKit/RealOutputs/AlignToReefCommand",
+            "/AdvantageKit/RealOutputs/AlignToHumanPlayerCommand",
+            "/AdvantageKit/RealOutputs/AlignToReefAlgaeCommand"
           ]
         },
         "tabs": {
@@ -232,6 +236,33 @@
                       "color": "#ff0000",
                       "size": "normal"
                     }
+                  },
+                  {
+                    "type": "ghost",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/AlignToReefCoralCommand/GoalPose",
+                    "logType": "Pose2d",
+                    "visible": true,
+                    "options": {
+                      "color": "#ff8c00"
+                    }
+                  },
+                  {
+                    "type": "ghost",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/AlignToHumanPlayerCommand/GoalPose",
+                    "logType": "Pose2d",
+                    "visible": true,
+                    "options": {
+                      "color": "#ff8c00"
+                    }
+                  },
+                  {
+                    "type": "ghost",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/AlignToReefAlgaeCommand/GoalPose",
+                    "logType": "Pose2d",
+                    "visible": true,
+                    "options": {
+                      "color": "#00ffff"
+                    }
                   }
                 ],
                 "game": "2025 Field (AndyMark)",
@@ -242,7 +273,7 @@
               },
               "controllerUUID": "s4uqdckw3inbfw5odhzfa2p6pgaghddj",
               "renderer": null,
-              "controlsHeight": 200
+              "controlsHeight": 306
             },
             {
               "type": 3,
@@ -287,6 +318,36 @@
                       "color": "#ff0000",
                       "size": "normal"
                     }
+                  },
+                  {
+                    "type": "ghost",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/AlignToReefCoralCommand/GoalPose",
+                    "logType": "Pose2d",
+                    "visible": true,
+                    "options": {
+                      "model": "Crab Bot",
+                      "color": "#ff8c00"
+                    }
+                  },
+                  {
+                    "type": "ghost",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/AlignToHumanPlayerCommand/GoalPose",
+                    "logType": "Pose2d",
+                    "visible": true,
+                    "options": {
+                      "model": "Crab Bot",
+                      "color": "#ff8c00"
+                    }
+                  },
+                  {
+                    "type": "ghost",
+                    "logKey": "NT:/AdvantageKit/RealOutputs/AlignToReefAlgaeCommand/GoalPose",
+                    "logType": "Pose2d",
+                    "visible": true,
+                    "options": {
+                      "model": "Crab Bot",
+                      "color": "#00ffff"
+                    }
                   }
                 ],
                 "game": "2025 Field (AndyMark)",
@@ -297,14 +358,14 @@
                 "cameraIndex": -1,
                 "orbitFov": 60,
                 "cameraPosition": [
-                  -6.257144047132225,
-                  9.897753852791562,
-                  -5.997189687844975
+                  10.627370737788866,
+                  9.447314366306221,
+                  -0.609187843776624
                 ],
                 "cameraTarget": [
-                  -6.371988493381283,
-                  0.6986975903909697,
-                  -0.6027992008749246
+                  3.696793033103309,
+                  0.6941398520215549,
+                  -2.48343563584978
                 ]
               },
               "controlsHeight": 292
