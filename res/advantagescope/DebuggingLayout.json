@@ -3,8 +3,8 @@
     {
       "x": -8,
       "y": -8,
-      "width": 2064,
-      "height": 1120,
+      "width": 2048,
+      "height": 1104,
       "state": {
         "sidebar": {
           "width": 378,
@@ -127,7 +127,7 @@
           ]
         },
         "tabs": {
-          "selected": 1,
+          "selected": 2,
           "tabs": [
             {
               "type": 0,
@@ -273,7 +273,7 @@
               },
               "controllerUUID": "s4uqdckw3inbfw5odhzfa2p6pgaghddj",
               "renderer": null,
-              "controlsHeight": 306
+              "controlsHeight": 399
             },
             {
               "type": 3,
@@ -358,9 +358,9 @@
                 "cameraIndex": -1,
                 "orbitFov": 60,
                 "cameraPosition": [
-                  10.627370737788866,
+                  10.627370737788869,
                   9.447314366306221,
-                  -0.609187843776624
+                  -0.6091878437766234
                 ],
                 "cameraTarget": [
                   3.696793033103309,
@@ -1027,5 +1027,5 @@
     }
   ],
   "satellites": [],
-  "version": "4.1.1"
+  "version": "4.1.4"
 }
