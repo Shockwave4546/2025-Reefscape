@@ -7,9 +7,7 @@ import org.dovershockwave.ReefScoringPosition;
 import org.dovershockwave.ReefScoringSelector;
 import org.dovershockwave.subsystems.swerve.SwerveConstants;
 import org.dovershockwave.subsystems.swerve.SwerveSubsystem;
-import org.dovershockwave.subsystems.vision.CameraType;
 import org.dovershockwave.subsystems.vision.VisionConstants;
-import org.dovershockwave.subsystems.vision.VisionSubsystem;
 import org.dovershockwave.subsystems.vision.controllers.FullAlignController;
 import org.littletonrobotics.junction.Logger;
 
@@ -28,18 +26,16 @@ public class AlignToReefCoralCommand extends Command {
   );
 
   private final SwerveSubsystem swerve;
-  private final VisionSubsystem vision;
   private final ReefScoringSelector selector;
   private final ReefScoringPosition.ReefScoringSide side;
   private boolean tagFound = false;
 
-  public AlignToReefCoralCommand(SwerveSubsystem swerve, VisionSubsystem vision, ReefScoringSelector selector, ReefScoringPosition.ReefScoringSide side) {
+  public AlignToReefCoralCommand(SwerveSubsystem swerve, ReefScoringSelector selector, ReefScoringPosition.ReefScoringSide side) {
     this.swerve = swerve;
-    this.vision = vision;
     this.selector = selector;
     this.side = side;
     selector.setSide(side);
-    addRequirements(swerve, vision);
+    addRequirements(swerve);
   }
 
   @Override public void initialize() {
@@ -47,10 +43,7 @@ public class AlignToReefCoralCommand extends Command {
   }
 
   @Override public void execute() {
-    final var camera = selector.getSide() == ReefScoringPosition.ReefScoringSide.LEFT ? CameraType.RIGHT_REEF_CAMERA : CameraType.LEFT_REEF_CAMERA;
-    final var bestTarget = vision.getBestTargetObservation(camera);
-
-    ReefScoringPosition.getCoralPositionFor(bestTarget.tagId(), side, selector.getLevel()).ifPresentOrElse(position -> {
+    ReefScoringPosition.getCoralPositionFor(swerve.getPose(), side, selector.getLevel()).ifPresentOrElse(position -> {
       this.tagFound = true;
       final var goalPose = new Pose2d(
               position.position().toTranslation2d(),
@@ -59,7 +52,7 @@ public class AlignToReefCoralCommand extends Command {
       final var speeds = alignController.calculate(
               swerve.getPose(),
               goalPose,
-              String.valueOf(bestTarget.tagId())
+              String.valueOf(position.id())
       );
 
       Logger.recordOutput("AlignToReefCoralCommand/GoalPose", goalPose);

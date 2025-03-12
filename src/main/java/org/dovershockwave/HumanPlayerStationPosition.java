@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public record HumanPlayerStationPosition(Pose2d pose) {
+public record HumanPlayerStationPosition(Pose2d pose, int id) {
   private static final double CLOSE_Y_OFFSET_DISTANCE_METERS = 0.5;
   private static final double FAR_Y_OFFSET_DISTANCE_METERS = 0.5;
   private static final Map<Integer, Pose2d> HUMAN_PLAYER_STATION_POSE_2D = new HashMap<>();
@@ -49,8 +49,20 @@ public record HumanPlayerStationPosition(Pose2d pose) {
     };
 
     return Optional.of(new HumanPlayerStationPosition(HUMAN_PLAYER_STATION_POSE_2D.get(id).transformBy(
-            new Transform2d(offsetXDistance, offsetYDistance * signForYOffset, new Rotation2d())))
-    );
+            new Transform2d(offsetXDistance, offsetYDistance * signForYOffset, new Rotation2d())),
+            id
+    ));
+  }
+
+  public static Optional<HumanPlayerStationPosition> getPositionFor(Pose2d robotPose, HumanPlayerStationSide side) {
+    return HUMAN_PLAYER_STATION_POSE_2D.keySet().stream().min((id1, id2) -> {
+      final var pose1 = HUMAN_PLAYER_STATION_POSE_2D.get(id1);
+      final var pose2 = HUMAN_PLAYER_STATION_POSE_2D.get(id2);
+      return Double.compare(
+              robotPose.getTranslation().getDistance(pose1.getTranslation()),
+              robotPose.getTranslation().getDistance(pose2.getTranslation())
+      );
+    }).flatMap(closestId -> getPositionFor(closestId, side)); // Return empty if no closest ID is found
   }
 
   public enum HumanPlayerStationSide {

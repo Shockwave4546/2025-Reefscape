@@ -10,7 +10,10 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import org.dovershockwave.commands.*;
+import org.dovershockwave.commands.FullIntakeCoralCommand;
+import org.dovershockwave.commands.FullScoreAlgaeCommand;
+import org.dovershockwave.commands.FullScoreCoralCommand;
+import org.dovershockwave.commands.ResetStatesCommand;
 import org.dovershockwave.subsystems.algaepivot.*;
 import org.dovershockwave.subsystems.algaerollers.*;
 import org.dovershockwave.subsystems.climb.ClimbConstants;
@@ -142,13 +145,13 @@ public class RobotContainer {
 
   private void configureBindings() {
     driverController.leftTrigger(0.9).onTrue(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(0.5))).onFalse(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(1.0)));
-    driverController.leftBumper().whileTrue(new AlignToReefCoralCommand(swerve, vision, selector, ReefScoringPosition.ReefScoringSide.LEFT).andThen(new FullScoreCoralCommand(coralPivot, coralRollers, elevator, selector)));
-    driverController.rightBumper().whileTrue(new AlignToReefCoralCommand(swerve, vision, selector, ReefScoringPosition.ReefScoringSide.RIGHT).andThen(new FullScoreCoralCommand(coralPivot, coralRollers, elevator, selector)));
-    driverController.povDown().whileTrue(new AlignToReefAlgaeCommand(swerve, vision));
+    driverController.leftBumper().whileTrue(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT).andThen(new FullScoreCoralCommand(coralPivot, coralRollers, elevator, selector)));
+    driverController.rightBumper().whileTrue(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.RIGHT).andThen(new FullScoreCoralCommand(coralPivot, coralRollers, elevator, selector)));
+    driverController.povDown().whileTrue(new AlignToReefAlgaeCommand(swerve));
 
-    driverController.a().whileTrue(new AlignToHumanPlayerCommand(swerve, vision, HumanPlayerStationPosition.HumanPlayerStationSide.CLOSE).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
-    driverController.x().whileTrue(new AlignToHumanPlayerCommand(swerve, vision, HumanPlayerStationPosition.HumanPlayerStationSide.CENTER).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
-    driverController.y().whileTrue(new AlignToHumanPlayerCommand(swerve, vision, HumanPlayerStationPosition.HumanPlayerStationSide.FAR).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
+    driverController.a().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.CLOSE).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
+    driverController.x().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.CENTER).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
+    driverController.y().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.FAR).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
     driverController.b().whileTrue(new TemporaryHeadingCommand(swerve, vision));
 
     swerve.setDefaultCommand(new SwerveDriveCommand(swerve, driverController));

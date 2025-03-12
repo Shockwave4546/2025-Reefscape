@@ -7,16 +7,16 @@ import org.littletonrobotics.junction.AutoLogOutput;
 import java.util.EnumMap;
 
 public class ReefScoringSelector {
-   private final EnumMap<ReefScoringPosition.ReefLevel, ShuffleboardBoolean> reefLevelIndicators = new EnumMap<>(ReefScoringPosition.ReefLevel.class);
+  private final EnumMap<ReefScoringPosition.ReefLevel, ShuffleboardBoolean> reefLevelIndicators = new EnumMap<>(ReefScoringPosition.ReefLevel.class);
   private ReefScoringPosition.ReefScoringSide side = ReefScoringPosition.ReefScoringSide.LEFT;
-  private ReefScoringPosition.ReefLevel level = ReefScoringPosition.ReefLevel.L1;
+  private ReefScoringPosition.ReefLevel level = ReefScoringPosition.ReefLevel.L2;
 
   public ReefScoringSelector() {
     for (final var level : ReefScoringPosition.ReefLevel.values()) {
       reefLevelIndicators.put(level, new ShuffleboardBoolean(Tab.MATCH, level.name(), false));
     }
 
-    setLevel(ReefScoringPosition.ReefLevel.L1);
+    setLevel(ReefScoringPosition.ReefLevel.L2);
   }
 
   @AutoLogOutput(key = "Reef/ScoringLevel")

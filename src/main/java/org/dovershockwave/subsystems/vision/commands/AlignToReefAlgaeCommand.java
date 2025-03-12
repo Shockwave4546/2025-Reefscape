@@ -6,9 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import org.dovershockwave.ReefScoringPosition;
 import org.dovershockwave.subsystems.swerve.SwerveConstants;
 import org.dovershockwave.subsystems.swerve.SwerveSubsystem;
-import org.dovershockwave.subsystems.vision.CameraType;
 import org.dovershockwave.subsystems.vision.VisionConstants;
-import org.dovershockwave.subsystems.vision.VisionSubsystem;
 import org.dovershockwave.subsystems.vision.controllers.FullAlignController;
 import org.littletonrobotics.junction.Logger;
 
@@ -27,29 +25,19 @@ public class AlignToReefAlgaeCommand extends Command {
   );
 
   private final SwerveSubsystem swerve;
-  private final VisionSubsystem vision;
   private boolean tagFound = false;
 
-  public AlignToReefAlgaeCommand(SwerveSubsystem swerve, VisionSubsystem vision) {
+  public AlignToReefAlgaeCommand(SwerveSubsystem swerve) {
     this.swerve = swerve;
-    this.vision = vision;
-    addRequirements(swerve, vision);
+    addRequirements(swerve);
   }
 
   @Override public void initialize() {
-    // TODO: 2/24/2025 fact check this line
     alignController.resetPIDErrors(swerve.getPose());
   }
 
   @Override public void execute() {
-    final var camera = vision.getBestTargetObservation(CameraType.LEFT_REEF_CAMERA).hasObservation() ? CameraType.LEFT_REEF_CAMERA : CameraType.RIGHT_REEF_CAMERA;
-    final var bestTarget = vision.getBestTargetObservation(camera);
-    if (!bestTarget.hasObservation()) {
-      swerve.stop();
-      return;
-    }
-
-    ReefScoringPosition.getAlgaePositionFor(bestTarget.tagId()).ifPresentOrElse(position -> {
+    ReefScoringPosition.getAlgaePositionFor(swerve.getPose()).ifPresentOrElse(position -> {
       this.tagFound = true;
       final var goalPose = new Pose2d(
               position.position().toTranslation2d(),
@@ -58,7 +46,7 @@ public class AlignToReefAlgaeCommand extends Command {
       final var speeds = alignController.calculate(
               swerve.getPose(),
               goalPose,
-              String.valueOf(bestTarget.tagId())
+              String.valueOf(position.id())
       );
 
       Logger.recordOutput("AlignToReefAlgaeCommand/GoalPose", goalPose);

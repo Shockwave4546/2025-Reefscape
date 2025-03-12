@@ -28,7 +28,7 @@ public record ReefScoringPosition(int id, Translation3d position, Rotation2d rob
     Blue alliance
      */
     REEF_SCORING_POSE_2D.put(18, new Pose2d(3.6576, 4.0259, Rotation2d.fromRadians(0.0)));
-    REEF_SCORING_POSE_2D.put(17, new Pose2d(4.073905999999999,  3.3012379999999997, Rotation2d.fromRadians(Math.PI / 3)));
+    REEF_SCORING_POSE_2D.put(17, new Pose2d(4.073905999999999, 3.3012379999999997, Rotation2d.fromRadians(Math.PI / 3)));
     REEF_SCORING_POSE_2D.put(22, new Pose2d(4.904739999999999, 3.3063179999999996, Rotation2d.fromRadians(2 * Math.PI / 3)));
     REEF_SCORING_POSE_2D.put(21, new Pose2d(5.321046, 4.0259, Rotation2d.fromRadians(Math.PI)));
     REEF_SCORING_POSE_2D.put(20, new Pose2d(4.904739999999999, 4.745482, Rotation2d.fromRadians(-2 * Math.PI / 3)));
@@ -66,6 +66,17 @@ public record ReefScoringPosition(int id, Translation3d position, Rotation2d rob
     ));
   }
 
+  public static Optional<ReefScoringPosition> getCoralPositionFor(Pose2d robotPose, ReefScoringSide side, ReefLevel level) {
+    return REEF_SCORING_POSE_2D.keySet().stream().min((id1, id2) -> {
+      final var pose1 = REEF_SCORING_POSE_2D.get(id1);
+      final var pose2 = REEF_SCORING_POSE_2D.get(id2);
+      return Double.compare(
+              robotPose.getTranslation().getDistance(pose1.getTranslation()),
+              robotPose.getTranslation().getDistance(pose2.getTranslation())
+      );
+    }).flatMap(closestId -> getCoralPositionFor(closestId, side, level)); // Return empty if no closest ID is found
+  }
+
   public static Optional<ReefScoringPosition> getAlgaePositionFor(int id) {
     if (!REEF_SCORING_POSE_2D.containsKey(id)) return Optional.empty();
 
@@ -75,6 +86,17 @@ public record ReefScoringPosition(int id, Translation3d position, Rotation2d rob
             new Translation3d(offsetPose2d.getX(), offsetPose2d.getY(), 0.0),
             offsetPose2d.getRotation()
     ));
+  }
+
+  public static Optional<ReefScoringPosition> getAlgaePositionFor(Pose2d robotPose) {
+    return REEF_SCORING_POSE_2D.keySet().stream().min((id1, id2) -> {
+      final var pose1 = REEF_SCORING_POSE_2D.get(id1);
+      final var pose2 = REEF_SCORING_POSE_2D.get(id2);
+      return Double.compare(
+              robotPose.getTranslation().getDistance(pose1.getTranslation()),
+              robotPose.getTranslation().getDistance(pose2.getTranslation())
+      );
+    }).flatMap(ReefScoringPosition::getAlgaePositionFor); // Return empty if no closest ID is found
   }
 
   public enum ReefScoringSide {

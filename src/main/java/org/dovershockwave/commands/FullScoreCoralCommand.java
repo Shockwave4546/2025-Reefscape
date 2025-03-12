@@ -7,7 +7,6 @@ import org.dovershockwave.subsystems.coralpivot.CoralPivotState;
 import org.dovershockwave.subsystems.coralpivot.CoralPivotSubsystem;
 import org.dovershockwave.subsystems.coralrollers.CoralRollersState;
 import org.dovershockwave.subsystems.coralrollers.CoralRollersSubsystem;
-import org.dovershockwave.subsystems.coralrollers.commands.ScoreCoralCommand;
 import org.dovershockwave.subsystems.elevator.ElevatorState;
 import org.dovershockwave.subsystems.elevator.ElevatorSubsystem;
 
