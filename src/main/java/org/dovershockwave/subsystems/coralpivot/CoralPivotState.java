@@ -9,4 +9,7 @@ public record CoralPivotState(double wristPositionRad, double armPositionRad) {
   public static final CoralPivotState L2 = new CoralPivotState(2.4, -0.125);
   public static final CoralPivotState L3 = new CoralPivotState(2.4, -0.125);
   public static final CoralPivotState L4 = new CoralPivotState(1.0, 0.75);
+
+  public static final CoralPivotState ALGAE_KNOCK_OFF_INTERMEDIATE = new CoralPivotState(0, 0);
+  public static final CoralPivotState ALGAE_KNOCK_OFF = new CoralPivotState(0, 0);
 }

@@ -10,10 +10,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import org.dovershockwave.commands.FullIntakeCoralCommand;
-import org.dovershockwave.commands.FullScoreAlgaeCommand;
-import org.dovershockwave.commands.FullScoreCoralCommand;
-import org.dovershockwave.commands.ResetStatesCommand;
+import org.dovershockwave.commands.*;
 import org.dovershockwave.subsystems.algaepivot.*;
 import org.dovershockwave.subsystems.algaerollers.*;
 import org.dovershockwave.subsystems.climb.ClimbConstants;
@@ -148,9 +145,9 @@ public class RobotContainer {
 
   private void configureBindings() {
     driverController.leftTrigger(0.8).onTrue(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(0.5))).onFalse(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(1.0)));
-    driverController.leftBumper().whileTrue(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT).andThen(new FullScoreCoralCommand(coralPivot, coralRollers, elevator, selector)));
-    driverController.rightBumper().whileTrue(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.RIGHT).andThen(new FullScoreCoralCommand(coralPivot, coralRollers, elevator, selector)));
-    driverController.rightTrigger(0.8).whileTrue(new AlignToReefAlgaeCommand(swerve));
+    driverController.leftBumper().whileTrue(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT).andThen(new FullScoreCoralCopyCommand(coralPivot, coralRollers, elevator, selector)));
+    driverController.rightBumper().whileTrue(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.RIGHT).andThen(new FullScoreCoralCopyCommand(coralPivot, coralRollers, elevator, selector)));
+    driverController.rightTrigger(0.8).whileTrue(new AlignToReefAlgaeCommand(swerve).andThen(new FullAlgaeKnockoffCommand(coralPivot)));
 
     driverController.x().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.CLOSE).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
     driverController.a().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.CENTER).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
