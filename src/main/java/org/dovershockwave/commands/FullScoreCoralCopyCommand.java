@@ -23,9 +23,9 @@ public class FullScoreCoralCopyCommand extends SequentialCommandGroup {
               coralPivot.setDesiredState(CoralPivotState.MOVING);
               coralRollers.setDesiredState(CoralRollersState.STOPPED);
 
-              while (!coralPivot.atDesiredState()) {
-                coralPivot.setDesiredState(CoralPivotState.MOVING);
-              }
+//              while (!coralPivot.atDesiredState()) {
+//                coralPivot.setDesiredState(CoralPivotState.MOVING);
+//              }
               elevator.setDesiredState(ElevatorState.STARTING);
             })
     );
