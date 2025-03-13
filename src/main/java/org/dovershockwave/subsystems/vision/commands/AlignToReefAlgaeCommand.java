@@ -25,7 +25,6 @@ public class AlignToReefAlgaeCommand extends Command {
   );
 
   private final SwerveSubsystem swerve;
-  private boolean tagFound = false;
 
   public AlignToReefAlgaeCommand(SwerveSubsystem swerve) {
     this.swerve = swerve;
@@ -38,7 +37,6 @@ public class AlignToReefAlgaeCommand extends Command {
 
   @Override public void execute() {
     ReefScoringPosition.getAlgaePositionFor(swerve.getPose()).ifPresentOrElse(position -> {
-      this.tagFound = true;
       final var goalPose = new Pose2d(
               position.position().toTranslation2d(),
               position.robotHeading()
@@ -63,6 +61,6 @@ public class AlignToReefAlgaeCommand extends Command {
   }
 
   @Override public boolean isFinished() {
-    return tagFound && alignController.atGoal();
+    return alignController.atGoal();
   }
 }

@@ -145,8 +145,8 @@ public class RobotContainer {
 
   private void configureBindings() {
     driverController.leftTrigger(0.8).onTrue(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(0.5))).onFalse(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(1.0)));
-    driverController.leftBumper().whileTrue(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT).andThen(new FullScoreCoralCopyCommand(coralPivot, coralRollers, elevator, selector)));
-    driverController.rightBumper().whileTrue(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.RIGHT).andThen(new FullScoreCoralCopyCommand(coralPivot, coralRollers, elevator, selector)));
+    driverController.leftBumper().whileTrue(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController).andThen(new FullScoreCoralCopyCommand(coralPivot, coralRollers, elevator, selector)));
+    driverController.rightBumper().whileTrue(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.RIGHT, driverController).andThen(new FullScoreCoralCopyCommand(coralPivot, coralRollers, elevator, selector)));
     driverController.rightTrigger(0.8).whileTrue(new AlignToReefAlgaeCommand(swerve).andThen(new FullAlgaeKnockoffCommand(coralPivot)));
 
     driverController.x().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.CLOSE).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));

@@ -25,7 +25,6 @@ public class AlignToHumanPlayerCommand extends Command {
 
   private final SwerveSubsystem swerve;
   private final HumanPlayerStationPosition.HumanPlayerStationSide side;
-  private boolean tagFound = false;
 
   public AlignToHumanPlayerCommand(SwerveSubsystem swerve, HumanPlayerStationPosition.HumanPlayerStationSide side) {
     this.swerve = swerve;
@@ -39,7 +38,6 @@ public class AlignToHumanPlayerCommand extends Command {
 
   @Override public void execute() {
     HumanPlayerStationPosition.getPositionFor(swerve.getPose(), side).ifPresentOrElse(position -> {
-      this.tagFound = true;
       final var speeds = alignController.calculate(
               swerve.getPose(),
               position.pose(),
@@ -60,6 +58,6 @@ public class AlignToHumanPlayerCommand extends Command {
   }
 
   @Override public boolean isFinished() {
-    return tagFound && alignController.atGoal();
+    return alignController.atGoal();
   }
 }
