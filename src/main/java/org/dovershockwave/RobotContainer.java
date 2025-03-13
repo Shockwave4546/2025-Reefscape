@@ -189,6 +189,7 @@ public class RobotContainer {
             new InstantCommand(() -> coralPivot.setDesiredState(ReefScoringPosition.ReefLevel.L4))
     );
 
+//    NamedCommands.registerCommand("AutoAlignScoreL4", new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController).andThen(new FullScoreCoralCopyCommand(coralPivot, coralRollers, elevator, selector)));
 //    NamedCommands.registerCommand("L4Positions", allL4PositionsCommand);
 //    NamedCommands.registerCommand("Intake", new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));
 //    NamedCommands.registerCommand("ScoreL4", new AutoFullScoreCoralL4Command(coralPivot, coralRollers, elevator, selector));
@@ -207,3 +208,9 @@ public class RobotContainer {
     return Constants.TUNING_MODE && !isCompetitionMatch();
   }
 }
+
+/**
+ * ReefJ 4.995, 5.230, -120
+ * ReefE 4.995, 2.821, 120
+ *
+ */

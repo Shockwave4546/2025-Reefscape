@@ -1,0 +1,25 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "StartingProcessor-E"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoAlignScoreL4"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Processor",
+  "choreoAuto": false
+}
