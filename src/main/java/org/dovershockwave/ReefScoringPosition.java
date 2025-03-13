@@ -53,7 +53,7 @@ public record ReefScoringPosition(int id, Translation3d position, Rotation2d rob
 
     final var additionalXOffset = switch (level) {
       case L1 -> 0.24;
-      case L2, L3 -> 0.065;
+      case L2, L3 -> 0.075;
       case L4 -> 0.0;
     };
     final var xOffset = (-SwerveConstants.ROBOT_LENGTH_X_METERS / 2.0) - additionalXOffset;

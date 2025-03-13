@@ -57,6 +57,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     leftDisconnectedAlert.set(!elevatorInputs.leftConnected);
     rightDisconnectedAlert.set(!elevatorInputs.rightConnected);
 
+    if (elevatorInputs.limitSwitchValue) {
+      elevatorIO.resetPosition();
+    }
+
     setDesiredState(desiredState);
   }
 

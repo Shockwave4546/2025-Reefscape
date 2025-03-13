@@ -6,6 +6,7 @@ import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.wpilibj.DigitalInput;
 import org.dovershockwave.utils.PIDFGains;
 
 import java.util.function.DoubleSupplier;
@@ -21,8 +22,12 @@ public class ElevatorIOSpark implements ElevatorIO {
   private final SparkBase rightSpark;
   private final RelativeEncoder rightEncoder;
 
+  private final DigitalInput limitSwitch = new DigitalInput(9);
+
   private final Debouncer leftConnectedDebouncer = new Debouncer(0.5);
   private final Debouncer rightConnectedDebouncer = new Debouncer(0.5);
+
+  private final Debouncer limitSwitchDebouncer = new Debouncer(0.1);
 
   public ElevatorIOSpark(int leftCanId, int rightCanId) {
     this.leftSpark = new SparkMax(leftCanId, SparkLowLevel.MotorType.kBrushless);
@@ -62,6 +67,8 @@ public class ElevatorIOSpark implements ElevatorIO {
             () -> HAS_STICKY_FAULT = true);
     useValueIfOk(rightSpark, rightSpark::getOutputCurrent, (value) -> inputs.rightCurrentAmps = value, () -> HAS_STICKY_FAULT = true);
     inputs.rightConnected = rightConnectedDebouncer.calculate(!HAS_STICKY_FAULT);
+
+    inputs.limitSwitchValue = limitSwitchDebouncer.calculate(limitSwitch.get());
   }
 
   @Override public void setPosition(double rad, double ff) {

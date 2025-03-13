@@ -23,7 +23,7 @@ public class CoralPivotConstants {
   public static final double WRIST_MAX_POS = Math.PI;
 
   public static final double ARM_MIN_POS = -Math.PI / 2.0;
-  public static final double ARM_MAX_POS = Math.PI / 2.0;
+  public static final double ARM_MAX_POS = 2.05;
 
   public static final ArmFeedforwardGains WRIST_FEEDFORWARD_GAINS = new ArmFeedforwardGains(0.0, 0.0, 3.0, 0.0);
   public static final PIDFGains WRIST_GAINS = new PIDFGains(1.5, 0.0, 0.0, 0.0);
