@@ -21,8 +21,6 @@ public record ReefScoringPosition(int id, Translation3d position, Rotation2d rob
 
   static {
 
-    // Rotation2d.fromDegrees(180 - (60 * face)
-    //
     /*
     Blue alliance
      */
