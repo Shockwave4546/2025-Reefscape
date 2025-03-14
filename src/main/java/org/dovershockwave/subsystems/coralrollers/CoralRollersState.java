@@ -8,4 +8,6 @@ public record CoralRollersState(double volts) {
   public static final CoralRollersState L3_OUTTAKE = new CoralRollersState(-12.0);
   public static final CoralRollersState L4_OUTTAKE = new CoralRollersState(-12.0);
   public static final CoralRollersState INDEX = new CoralRollersState(2);
+
+  public static final CoralRollersState KNOCKOFF_ALGAE = new CoralRollersState(12);
 }
