@@ -3,6 +3,7 @@ package org.dovershockwave.subsystems.swerve;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.PathPlannerLogging;
@@ -21,6 +22,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.dovershockwave.Constants;
@@ -30,9 +32,11 @@ import org.dovershockwave.subsystems.swerve.gyro.GyroIOInputsAutoLogged;
 import org.dovershockwave.subsystems.swerve.module.Module;
 import org.dovershockwave.subsystems.swerve.module.ModuleIO;
 import org.dovershockwave.subsystems.swerve.module.ModuleType;
+import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 import static edu.wpi.first.units.Units.Volts;
@@ -82,6 +86,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
     previousSetpoint = new SwerveSetpoint(getChassisSpeeds(), getModuleStates(), DriveFeedforwards.zeros(4));
     SparkOdometryThread.getInstance().start();
+
+    resetGyro();
+    setAngleAdjustment(DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue ? 0.0 : 180.0);
   }
 
   @Override public void periodic() {
@@ -155,9 +162,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public void runVelocityFieldRelative(ChassisSpeeds speeds) {
     final var isFlipped = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
-    runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(
-            speeds,
-            isFlipped ? getRotation().plus(new Rotation2d(Math.PI)) : getRotation()), false);
+    runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getRotationFromGyro()), false);
+//    runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(
+//            speeds,
+//            isFlipped ? getRotationFromGyro().plus(new Rotation2d(Math.PI)) : getRotationFromGyro()), false);
   }
 
   /**
@@ -275,12 +283,30 @@ public class SwerveSubsystem extends SubsystemBase {
     return getPose().getRotation();
   }
 
+  public void setAngleAdjustment(double angleAdjustment) {
+    gyroIO.setAngleAdjustment(angleAdjustment);
+  }
+
+  public void setAngleAdjustmentFromAuto(String autoName) {
+    resetGyro(); // Reference from 0 degrees.
+
+    try {
+      final var allianceAngleOffset = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Blue ? 0.0 : 180.0;
+      final var autoPoseDegrees = PathPlannerPath.fromPathFile(autoName).getStartingHolonomicPose().get().getRotation().getDegrees();
+      gyroIO.setAngleAdjustment(autoPoseDegrees + allianceAngleOffset);
+    } catch (IOException | ParseException e) {
+      SmartDashboard.putString("Damnnnn", e.getMessage());
+      e.printStackTrace();
+    }
+  }
+
   public void setPose(Pose2d pose) {
-    poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose);
+//    gyroIO.setAngle(edu.wpi.first.math.util.Units.radiansToDegrees(pose.getRotation().getRadians()));
+    poseEstimator.resetPosition(pose.getRotation(), getModulePositions(), pose);
   }
 
   public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds, Matrix<N3, N1> visionMeasurementStdDevs) {
 //    poseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
-    poseEstimator.addVisionMeasurement(new Pose2d(visionRobotPoseMeters.getTranslation(), getRotationFromGyro()), timestampSeconds, visionMeasurementStdDevs);
+    poseEstimator.addVisionMeasurement(new Pose2d(visionRobotPoseMeters.getTranslation(), rawGyroRotation), timestampSeconds, visionMeasurementStdDevs);
   }
 }

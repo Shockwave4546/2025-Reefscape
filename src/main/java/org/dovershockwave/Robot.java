@@ -4,6 +4,9 @@ import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -95,7 +98,11 @@ public class Robot extends LoggedRobot {
   }
 
   @Override public void autonomousInit() {
-    container.autoChooser.get().schedule();
+    new SequentialCommandGroup(
+           new InstantCommand(() -> container.swerve.setAngleAdjustmentFromAuto(container.autoChooser.getSendableChooser().getSelected())),
+            new WaitCommand(1),
+            container.autoChooser.get()
+    ).schedule();
   }
 
   @Override public void autonomousPeriodic() {}

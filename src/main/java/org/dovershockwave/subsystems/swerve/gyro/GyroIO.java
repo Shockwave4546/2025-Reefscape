@@ -15,4 +15,6 @@ public interface GyroIO {
   default void updateInputs(GyroIOInputs inputs) {}
 
   default void resetGyro() {}
+
+  default void setAngleAdjustment(double angle) {}
 }

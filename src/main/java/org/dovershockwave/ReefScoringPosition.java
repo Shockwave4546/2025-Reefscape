@@ -99,7 +99,7 @@ public record ReefScoringPosition(int id, Translation3d position, Rotation2d rob
 
   public enum ReefScoringSide {
     LEFT(Units.inchesToMeters(6.469)),
-    RIGHT(Units.inchesToMeters(-6.469));
+    RIGHT(Units.inchesToMeters(-7.5));
 
     public final double yOffset;
 

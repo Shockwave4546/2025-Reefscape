@@ -7,13 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center-G"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoAlignScoreL4Left"
+            "pathName": "CenterOut"
           }
         }
       ]

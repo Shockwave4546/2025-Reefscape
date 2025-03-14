@@ -191,7 +191,8 @@ public class RobotContainer {
             new InstantCommand(() -> coralPivot.setDesiredState(ReefScoringPosition.ReefLevel.L4))
     );
 
-//    NamedCommands.registerCommand("AutoAlignScoreL4", new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController).andThen(new FullScoreCoralCopyCommand(coralPivot, coralRollers, elevator, selector)));
+//    NamedCommands.registerCommand("AutoAlignScoreL4Left", new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L4)).andThen(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController).andThen(new FullScoreCoralCopyCommand(coralPivot, coralRollers, elevator, selector))));
+//    NamedCommands.registerCommand("AutoAlignScoreL4Right", new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L4)).andThen(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.RIGHT, driverController).andThen(new FullScoreCoralCopyCommand(coralPivot, coralRollers, elevator, selector))));
 //    NamedCommands.registerCommand("L4Positions", allL4PositionsCommand);
 //    NamedCommands.registerCommand("Intake", new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));
 //    NamedCommands.registerCommand("ScoreL4", new AutoFullScoreCoralL4Command(coralPivot, coralRollers, elevator, selector));
