@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.6804221854304637,
-        "y": 7.201821192052979
+        "x": 1.6654,
+        "y": 7.0003
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.315506781329135,
-        "y": 6.376221655810631
+        "x": 2.392326558021316,
+        "y": 6.12326507906444
       },
       "isLocked": false,
       "linkedName": "HumanPlayerNonProcessor"
@@ -20,8 +20,8 @@
         "y": 5.06603
       },
       "prevControl": {
-        "x": 3.0954117726862878,
-        "y": 5.886233345206463
+        "x": 3.14454595534334,
+        "y": 5.779454567591965
       },
       "nextControl": null,
       "isLocked": false,
