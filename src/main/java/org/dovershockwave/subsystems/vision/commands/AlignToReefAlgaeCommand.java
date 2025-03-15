@@ -1,7 +1,9 @@
 package org.dovershockwave.subsystems.vision.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import org.dovershockwave.ReefScoringPosition;
 import org.dovershockwave.subsystems.swerve.SwerveConstants;
@@ -41,11 +43,14 @@ public class AlignToReefAlgaeCommand extends Command {
               position.position().toTranslation2d(),
               position.robotHeading()
       );
-      final var speeds = alignController.calculate(
+      var speeds = alignController.calculate(
               swerve.getPose(),
               goalPose,
               String.valueOf(position.id())
       );
+      if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+        speeds = new ChassisSpeeds(-speeds.vxMetersPerSecond, -speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
+      }
 
       Logger.recordOutput("AlignToReefAlgaeCommand/GoalPose", goalPose);
       Logger.recordOutput("AlignToReefAlgaeCommand/Vx", speeds.vxMetersPerSecond);

@@ -1,7 +1,9 @@
 package org.dovershockwave.subsystems.vision.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import org.dovershockwave.ReefScoringPosition;
@@ -62,7 +64,7 @@ public class AlignToReefCoralCommand extends Command {
               position.position().toTranslation2d(),
               position.robotHeading()
       );
-      final var speeds = selector.getLevel() == ReefScoringPosition.ReefLevel.L1 ?
+      var speeds = selector.getLevel() == ReefScoringPosition.ReefLevel.L1 ?
               xHeadingAlignController.calculate(
                       swerve.getPose(),
                       goalPose,
@@ -74,6 +76,9 @@ public class AlignToReefCoralCommand extends Command {
                       goalPose,
                       String.valueOf(position.id())
               );
+      if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+        speeds = new ChassisSpeeds(-speeds.vxMetersPerSecond, -speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
+      }
 
       Logger.recordOutput("AlignToReefCoralCommand/GoalPose", goalPose);
       Logger.recordOutput("AlignToReefCoralCommand/Vx", speeds.vxMetersPerSecond);

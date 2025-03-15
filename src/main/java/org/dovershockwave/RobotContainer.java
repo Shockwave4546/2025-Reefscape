@@ -176,7 +176,7 @@ public class RobotContainer {
       algaeRollers.setDesiredState(AlgaeRollersState.INTAKE);
     }, algaePivot, algaeRollers).finallyDo(() -> {
       algaePivot.setDesiredState(AlgaePivotState.INTAKE_AFTER);
-      algaeRollers.setDesiredState(AlgaeRollersState.INTAKE);
+      algaeRollers.setDesiredState(AlgaeRollersState.STOPPED);
     }));
 
     SmartDashboard.putData("Reset Elevator Pos", new InstantCommand(elevator::resetPosition).ignoringDisable(true));
@@ -190,8 +190,8 @@ public class RobotContainer {
 
 //    NamedCommands.registerCommand("AutoAlignScoreL4", new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController).andThen(new FullScoreCoralCopyCommand(coralPivot, coralRollers, elevator, selector)));
 //    NamedCommands.registerCommand("L4Positions", allL4PositionsCommand);
-    NamedCommands.registerCommand("Intake", new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));
-    NamedCommands.registerCommand("ScoreL4", new AutoFullScoreCoralL4Command(coralPivot, coralRollers, elevator));
+//    NamedCommands.registerCommand("Intake", new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));
+//    NamedCommands.registerCommand("ScoreL4", new AutoFullScoreCoralL4Command(coralPivot, coralRollers, elevator));
 //
 //    new EventTrigger("L4Positions").onTrue(allL4PositionsCommand);
 //    new EventTrigger("Intake").onTrue(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));

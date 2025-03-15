@@ -29,9 +29,10 @@ public class SwerveDriveCommand extends Command {
     final var linearVelocity = getLinearVelocityFromJoysticks(xVelocity, yVelocity);
     final var speeds = getChassisSpeeds(linearVelocity);
     final var isFlipped = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
-    swerve.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(
-            speeds,
-            isFlipped ? swerve.getRotation().plus(new Rotation2d(Math.PI)) : swerve.getRotation()), false);
+    swerve.runVelocityFieldRelative(speeds);
+//    swerve.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(
+//            speeds,
+//            isFlipped ? swerve.getRotation().plus(new Rotation2d(Math.PI)) : swerve.getRotation()), false);
   }
 
   private ChassisSpeeds getChassisSpeeds(Translation2d linearVelocity) {

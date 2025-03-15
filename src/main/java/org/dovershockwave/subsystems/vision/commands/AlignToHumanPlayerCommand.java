@@ -1,6 +1,8 @@
 package org.dovershockwave.subsystems.vision.commands;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import org.dovershockwave.HumanPlayerStationPosition;
 import org.dovershockwave.subsystems.swerve.SwerveConstants;
@@ -38,11 +40,15 @@ public class AlignToHumanPlayerCommand extends Command {
 
   @Override public void execute() {
     HumanPlayerStationPosition.getPositionFor(swerve.getPose(), side).ifPresentOrElse(position -> {
-      final var speeds = alignController.calculate(
+      var speeds = alignController.calculate(
               swerve.getPose(),
               position.pose(),
               String.valueOf(position.id())
       );
+
+      if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+        speeds = new ChassisSpeeds(-speeds.vxMetersPerSecond, -speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
+      }
 
       Logger.recordOutput("AlignToHumanPlayerCommand/GoalPose", position.pose());
       Logger.recordOutput("AlignToHumanPlayerCommand/Vx", speeds.vxMetersPerSecond);
