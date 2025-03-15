@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.072287248943823,
-        "y": 5.248018556684729
+        "x": 5.962877965804159,
+        "y": 5.15197819496824
       },
       "isLocked": false,
       "linkedName": "StartingLineNonProcessor"
     },
     {
       "anchor": {
-        "x": 5.065563543345237,
-        "y": 5.355244555057154
+        "x": 4.99494,
+        "y": 5.23034
       },
       "prevControl": {
-        "x": 4.628386253788673,
-        "y": 5.403798447412153
+        "x": 4.577203098572636,
+        "y": 5.26160205650849
       },
       "nextControl": null,
       "isLocked": false,

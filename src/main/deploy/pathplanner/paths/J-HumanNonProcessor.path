@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.065563543345237,
-        "y": 5.355244555057154
+        "x": 4.99494,
+        "y": 5.23034
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.265693575756481,
-        "y": 6.118994447582358
+        "x": 4.0113838053596185,
+        "y": 5.951053647282033
       },
       "isLocked": false,
       "linkedName": "ReefJ"
@@ -20,12 +20,12 @@
         "y": 6.21155737704918
       },
       "prevControl": {
-        "x": 4.420531936446533,
-        "y": 5.566564042513178
+        "x": 4.6662598068393475,
+        "y": 5.548644201619906
       },
       "nextControl": {
-        "x": 2.606371913566517,
-        "y": 7.200056006129502
+        "x": 2.323451492829017,
+        "y": 7.1629719295233
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +36,8 @@
         "y": 7.201821192052979
       },
       "prevControl": {
-        "x": 1.9115755370225613,
-        "y": 7.06282140049199
+        "x": 1.8655562138182216,
+        "y": 7.033817050636998
       },
       "nextControl": null,
       "isLocked": false,
@@ -52,14 +52,7 @@
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "Intake",
-      "waypointRelativePos": 1.7984876353975088,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 3.0,

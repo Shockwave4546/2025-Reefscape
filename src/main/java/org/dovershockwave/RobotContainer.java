@@ -1,6 +1,7 @@
 package org.dovershockwave;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,10 +14,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.dovershockwave.commands.*;
 import org.dovershockwave.subsystems.algaepivot.*;
 import org.dovershockwave.subsystems.algaerollers.*;
-import org.dovershockwave.subsystems.climb.ClimbConstants;
-import org.dovershockwave.subsystems.climb.ClimbIO;
-import org.dovershockwave.subsystems.climb.ClimbIOSpark;
-import org.dovershockwave.subsystems.climb.ClimbSubsystem;
 import org.dovershockwave.subsystems.coralpivot.*;
 import org.dovershockwave.subsystems.coralrollers.CoralRollersConstants;
 import org.dovershockwave.subsystems.coralrollers.CoralRollersIO;
@@ -193,8 +190,8 @@ public class RobotContainer {
 
 //    NamedCommands.registerCommand("AutoAlignScoreL4", new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController).andThen(new FullScoreCoralCopyCommand(coralPivot, coralRollers, elevator, selector)));
 //    NamedCommands.registerCommand("L4Positions", allL4PositionsCommand);
-//    NamedCommands.registerCommand("Intake", new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));
-//    NamedCommands.registerCommand("ScoreL4", new AutoFullScoreCoralL4Command(coralPivot, coralRollers, elevator, selector));
+    NamedCommands.registerCommand("Intake", new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));
+    NamedCommands.registerCommand("ScoreL4", new AutoFullScoreCoralL4Command(coralPivot, coralRollers, elevator));
 //
 //    new EventTrigger("L4Positions").onTrue(allL4PositionsCommand);
 //    new EventTrigger("Intake").onTrue(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));
@@ -210,9 +207,3 @@ public class RobotContainer {
     return Constants.TUNING_MODE && !isCompetitionMatch();
   }
 }
-
-/**
- * ReefJ 4.995, 5.230, -120
- * ReefE 4.995, 2.821, 120
- *
- */
