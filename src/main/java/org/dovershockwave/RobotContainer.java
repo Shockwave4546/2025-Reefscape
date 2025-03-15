@@ -155,6 +155,7 @@ public class RobotContainer {
 
     swerve.setDefaultCommand(new SwerveDriveCommand(swerve, driverController));
     SmartDashboard.putData("Reset Field Orientated Drive", new ResetFieldOrientatedDriveCommand(swerve));
+    driverController.povLeft().onTrue(new ResetFieldOrientatedDriveCommand(swerve));
 
     operatorController.povDown().onTrue(new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L1)).ignoringDisable(true));
     operatorController.povLeft().onTrue(new InstantCommand(() -> selector.setLevel(ReefScoringPosition.ReefLevel.L2)).ignoringDisable(true));
@@ -191,7 +192,7 @@ public class RobotContainer {
 //    NamedCommands.registerCommand("AutoAlignScoreL4", new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController).andThen(new FullScoreCoralCopyCommand(coralPivot, coralRollers, elevator, selector)));
 //    NamedCommands.registerCommand("L4Positions", allL4PositionsCommand);
 //    NamedCommands.registerCommand("Intake", new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));
-//    NamedCommands.registerCommand("ScoreL4", new AutoFullScoreCoralL4Command(coralPivot, coralRollers, elevator));
+    NamedCommands.registerCommand("ScoreL4", new AutoFullScoreCoralL4Command(coralPivot, coralRollers, elevator));
 //
 //    new EventTrigger("L4Positions").onTrue(allL4PositionsCommand);
 //    new EventTrigger("Intake").onTrue(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));
