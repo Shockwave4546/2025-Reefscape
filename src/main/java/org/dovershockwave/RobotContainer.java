@@ -56,7 +56,7 @@ public class RobotContainer {
   private final AlgaeRollersSubsystem algaeRollers;
   private final AlgaePivotSubsystem algaePivot;
   private final CoralPivotSubsystem coralPivot;
-  private final ClimbSubsystem climb;
+//  private final ClimbSubsystem climb;
   protected final CommandXboxController driverController = new CommandXboxController(Constants.DRIVER_CONTROLLER_PORT);
   protected final CommandXboxController operatorController = new CommandXboxController(Constants.OPERATOR_CONTROLLER_PORT);
   private final ReefScoringSelector selector = new ReefScoringSelector();
@@ -86,7 +86,7 @@ public class RobotContainer {
         algaeRollers = new AlgaeRollersSubsystem(new AlgaeRollersIOSpark(AlgaeRollersConstants.SPARK_ID));
         algaePivot = new AlgaePivotSubsystem(new AlgaePivotIOSpark(AlgaePivotConstants.SPARK_ID));
         coralPivot = new CoralPivotSubsystem(new CoralArmIOSpark(CoralPivotConstants.ARM_LEFT_SPARK_ID, CoralPivotConstants.ARM_RIGHT_SPARK_ID), new CoralWristIOSpark(CoralPivotConstants.WRIST_SPARK_ID));
-        climb = new ClimbSubsystem(new ClimbIOSpark(ClimbConstants.SPARK_ID));
+//        climb = new ClimbSubsystem(new ClimbIOSpark(ClimbConstants.SPARK_ID));
         break;
       case SIM:
         swerve = new SwerveSubsystem(new GyroIO() {},
@@ -107,7 +107,7 @@ public class RobotContainer {
         algaeRollers = new AlgaeRollersSubsystem(new AlgaeRollersIO() {});
         algaePivot = new AlgaePivotSubsystem(new AlgaePivotIO() {});
         coralPivot = new CoralPivotSubsystem(new CoralArmIO() {}, new CoralWristIO() {});
-        climb = new ClimbSubsystem(new ClimbIO() {});
+//        climb = new ClimbSubsystem(new ClimbIO() {});
         break;
       case REPLAY:
       default:
@@ -118,7 +118,7 @@ public class RobotContainer {
         algaeRollers = new AlgaeRollersSubsystem(new AlgaeRollersIO() {});
         algaePivot = new AlgaePivotSubsystem(new AlgaePivotIO() {});
         coralPivot = new CoralPivotSubsystem(new CoralArmIO() {}, new CoralWristIO() {});
-        climb = new ClimbSubsystem(new ClimbIO() {});
+//        climb = new ClimbSubsystem(new ClimbIO() {});
     }
 
     testChooser.addDefaultOption("Do Nothing", new InstantCommand());
@@ -147,7 +147,9 @@ public class RobotContainer {
     driverController.leftTrigger(0.8).onTrue(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(0.5))).onFalse(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(1.0)));
     driverController.leftBumper().whileTrue(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController).andThen(new FullScoreCoralCopyCommand(coralPivot, coralRollers, elevator, selector)));
     driverController.rightBumper().whileTrue(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.RIGHT, driverController).andThen(new FullScoreCoralCopyCommand(coralPivot, coralRollers, elevator, selector)));
-    driverController.rightTrigger(0.8).whileTrue(new AlignToReefAlgaeCommand(swerve).andThen(new FullAlgaeKnockoffCommand(coralPivot)));
+    driverController.rightTrigger(0.8).whileTrue(new FullAlgaeKnockoffCommand(coralPivot, elevator, coralRollers, selector).andThen(new AlignToReefAlgaeCommand(swerve)).finallyDo(() -> {
+      coralPivot.setDesiredState(CoralPivotState.MOVING);
+    }));
 
     driverController.x().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.CLOSE).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
     driverController.a().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.CENTER).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
@@ -173,8 +175,8 @@ public class RobotContainer {
 
     operatorController.b().whileTrue(new FullScoreAlgaeCommand(algaePivot, algaeRollers));
     operatorController.x().whileTrue(new RunCommand(() -> {
-     algaePivot.setDesiredState(AlgaePivotState.INTAKE);
-     algaeRollers.setDesiredState(AlgaeRollersState.INTAKE);
+      algaePivot.setDesiredState(AlgaePivotState.INTAKE);
+      algaeRollers.setDesiredState(AlgaeRollersState.INTAKE);
     }, algaePivot, algaeRollers).finallyDo(() -> {
       algaePivot.setDesiredState(AlgaePivotState.INTAKE_AFTER);
       algaeRollers.setDesiredState(AlgaeRollersState.INTAKE);

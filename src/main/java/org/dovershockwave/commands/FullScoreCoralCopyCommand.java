@@ -22,12 +22,9 @@ public class FullScoreCoralCopyCommand extends SequentialCommandGroup {
             new RunCommand(() -> coralRollers.setDesiredState(selector.getLevel()), coralRollers).withTimeout(0.5).finallyDo(() -> {
               coralPivot.setDesiredState(CoralPivotState.MOVING);
               coralRollers.setDesiredState(CoralRollersState.STOPPED);
-
-//              while (!coralPivot.atDesiredState()) {
-//                coralPivot.setDesiredState(CoralPivotState.MOVING);
-//              }
-              elevator.setDesiredState(ElevatorState.STARTING);
-            })
+            }),
+            new WaitUntilCommand(coralPivot::atDesiredState),
+            new InstantCommand(() -> elevator.setDesiredState(ElevatorState.STARTING), elevator)
     );
 
     addRequirements(coralPivot, coralRollers, elevator);
