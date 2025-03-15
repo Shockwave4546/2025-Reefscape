@@ -53,7 +53,7 @@ public class CoralPivotSubsystem extends SubsystemBase {
   private final Alert armLeftDisconnectedAlert = new Alert("Disconnected coral left arm motor (" + CoralPivotConstants.ARM_LEFT_SPARK_ID, Alert.AlertType.kError);
   private final Alert armRightDisconnectedAlert = new Alert("Disconnected coral right arm motor (" + CoralPivotConstants.ARM_RIGHT_SPARK_ID + ")", Alert.AlertType.kError);
 
-  private CoralPivotState desiredState = CoralPivotState.MOVING;
+  private CoralPivotState desiredState = CoralPivotState.STARTING;
 
   public CoralPivotSubsystem(CoralArmIO coralArmIO, CoralWristIO coralWristIO) {
     this.coralArmIO = coralArmIO;
