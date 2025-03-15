@@ -13,7 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoAlignScoreL4Right"
+            "name": "ScoreL4"
           }
         }
       ]

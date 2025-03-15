@@ -52,7 +52,7 @@ public class SwerveConstants {
   public static final PIDFGains DRIVE_SIM_PIDF = new PIDFGains(0.075, 0.0, 0.01, 0.1);
   public static final PIDFGains TURN_SIM_PIDF = new PIDFGains(20.0, 0.0, 0.0, 0.0);
 
-  public static final PIDConstants TRANSLATION_PID = new PIDConstants(7.5, 0.0, 0.08);
+  public static final PIDConstants TRANSLATION_PID = new PIDConstants(10.0, 0.0, 0.08);
   public static final PIDConstants ROTATION_PID = new PIDConstants(2.91, 0.0, 0.094);
   public static final RobotConfig PATH_PLANNER_ROBOT_CONFIG = new RobotConfig(
           9.5,  // Robot mass (kg)

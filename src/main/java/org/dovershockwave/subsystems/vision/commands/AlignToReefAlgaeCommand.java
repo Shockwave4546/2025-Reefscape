@@ -52,7 +52,7 @@ public class AlignToReefAlgaeCommand extends Command {
       Logger.recordOutput("AlignToReefAlgaeCommand/Vy", speeds.vyMetersPerSecond);
       Logger.recordOutput("AlignToReefAlgaeCommand/Omega", speeds.omegaRadiansPerSecond);
 
-      swerve.runVelocityFieldRelative(speeds);
+      swerve.runVelocity(speeds, false);
     }, swerve::stop);
   }
 
