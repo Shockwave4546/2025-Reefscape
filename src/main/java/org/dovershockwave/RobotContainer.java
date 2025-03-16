@@ -3,6 +3,7 @@ package org.dovershockwave;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.Pair;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -164,6 +165,9 @@ public class RobotContainer {
 
 //    operatorController.leftBumper().onTrue(new InstantCommand(() -> climb.setDesiredState(ClimbState.STARTING)));
 //    operatorController.rightBumper().onTrue(new InstantCommand(() -> climb.setDesiredState(ClimbState.DOWN)));
+
+    operatorController.leftBumper().onTrue(new InstantCommand(() -> coralPivot.setDesiredState(new CoralPivotState(coralPivot.getDesiredState().wristPositionRad(), coralPivot.getDesiredState().armPositionRad() - Units.degreesToRadians(2)))));
+    operatorController.rightBumper().onTrue(new InstantCommand(() -> coralPivot.setDesiredState(new CoralPivotState(coralPivot.getDesiredState().wristPositionRad(), coralPivot.getDesiredState().armPositionRad() + Units.degreesToRadians(2)))));
 
     operatorController.leftTrigger(0.8).onTrue(new ResetStatesCommand(coralRollers, elevator, coralPivot, algaePivot, algaeRollers));
     operatorController.rightTrigger(0.8).onTrue(new ResetStatesCommand(coralRollers, elevator, coralPivot, algaePivot, algaeRollers));
