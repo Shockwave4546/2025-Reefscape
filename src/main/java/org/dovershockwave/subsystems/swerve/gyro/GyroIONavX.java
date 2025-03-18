@@ -3,6 +3,7 @@ package org.dovershockwave.subsystems.swerve.gyro;
 import com.studica.frc.AHRS;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import org.dovershockwave.subsystems.swerve.SparkOdometryThread;
 import org.dovershockwave.subsystems.swerve.SwerveConstants;
 
@@ -20,10 +21,10 @@ public class GyroIONavX implements GyroIO {
 
   @Override public void updateInputs(GyroIOInputs inputs) {
     inputs.connected = navX.isConnected();
-    inputs.yawPosition = Rotation2d.fromDegrees(-navX.getAngle());
+    inputs.yawPosition = Rotation2d.fromDegrees(-navX.getAngle() + (DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue) == DriverStation.Alliance.Blue ? 180 : 0));
     inputs.yawVelocityRadPerSec = Units.degreesToRadians(-navX.getRawGyroZ());
     inputs.odometryYawTimestamps = yawTimestampQueue.stream().mapToDouble((Double value) -> value).toArray();
-    inputs.odometryYawPositions = yawPositionQueue.stream().map((Double value) -> Rotation2d.fromDegrees(-value)).toArray(Rotation2d[]::new);
+    inputs.odometryYawPositions = yawPositionQueue.stream().map((Double value) -> Rotation2d.fromDegrees(-value).plus(Rotation2d.fromDegrees(DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue) == DriverStation.Alliance.Blue ? 180 : 0))).toArray(Rotation2d[]::new);
 
     yawTimestampQueue.clear();
     yawPositionQueue.clear();

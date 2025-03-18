@@ -28,6 +28,6 @@ public class FullIntakeCoralCommand extends SequentialCommandGroup {
             )
     );
 
-    addRequirements(coralPivot, coralRollers);
+    addRequirements(coralPivot, coralRollers, elevator);
   }
 }

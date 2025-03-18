@@ -72,6 +72,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     this.desiredState = desiredState;
   }
 
+
   public void setDesiredState(ReefScoringPosition.ReefLevel level) {
     switch (level) {
       case L1 -> setDesiredState(ElevatorState.L1);

@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.402095795471814,
-        "y": 2.8245873200653224
+        "x": 5.147157405077515,
+        "y": 2.988853078582377
       },
       "isLocked": false,
       "linkedName": "StartingLineProcessor"
@@ -20,8 +20,8 @@
         "y": 2.98577
       },
       "prevControl": {
-        "x": 5.525752382385354,
-        "y": 3.029122771077847
+        "x": 5.529284305624868,
+        "y": 2.9970740615688465
       },
       "nextControl": null,
       "isLocked": false,
@@ -36,14 +36,7 @@
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "L4Positions",
-      "waypointRelativePos": 0.8,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 3.0,

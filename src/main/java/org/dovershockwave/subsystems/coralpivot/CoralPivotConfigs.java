@@ -41,7 +41,7 @@ public class CoralPivotConfigs {
             .smartCurrentLimit(Constants.NEO_CURRENT_LIMIT)
             .voltageCompensation(12.0);
     ARM_RIGHT_CONFIG.absoluteEncoder
-            .inverted(true)
+            .inverted(false)
             .zeroCentered(true)
             .positionConversionFactor(CoralPivotConstants.ARM_POSITION_CONVERSION_FACTOR)
             .velocityConversionFactor(CoralPivotConstants.ARM_VELOCITY_CONVERSION_FACTOR)

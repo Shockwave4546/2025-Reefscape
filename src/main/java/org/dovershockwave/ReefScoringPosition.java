@@ -52,9 +52,8 @@ public record ReefScoringPosition(int id, Translation3d position, Rotation2d rob
     if (!REEF_SCORING_POSE_2D.containsKey(id)) return Optional.empty();
 
     final var additionalXOffset = switch (level) {
-      case L1 -> 0.24;
-      // Used to be 0.075
-      case L2, L3 -> 0.080;
+      case L1 -> 0.45;
+      case L2, L3 -> 0.1;
       case L4 -> 0.0;
     };
     final var xOffset = (-SwerveConstants.ROBOT_LENGTH_X_METERS / 2.0) - additionalXOffset;
@@ -101,7 +100,7 @@ public record ReefScoringPosition(int id, Translation3d position, Rotation2d rob
 
   public enum ReefScoringSide {
     LEFT(Units.inchesToMeters(6.469)),
-    RIGHT(Units.inchesToMeters(-6.469));
+    RIGHT(Units.inchesToMeters(-7.5));
 
     public final double yOffset;
 

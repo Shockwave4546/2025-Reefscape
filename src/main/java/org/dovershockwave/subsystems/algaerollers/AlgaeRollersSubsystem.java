@@ -18,8 +18,6 @@ public class AlgaeRollersSubsystem extends SubsystemBase {
 
   public AlgaeRollersSubsystem(AlgaeRollersIO algaeIO) {
     this.algaeIO = algaeIO;
-
-    setDefaultCommand(new IdleAlgaeRollersCommand(this));
   }
 
   @Override public void periodic() {

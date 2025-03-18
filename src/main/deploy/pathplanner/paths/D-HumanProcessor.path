@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.4899377829895966,
-        "y": 2.7354933435066204
+        "x": 2.7893283461426135,
+        "y": 2.3502727167898074
       },
       "isLocked": false,
       "linkedName": "ReefD"
     },
     {
       "anchor": {
-        "x": 1.646523178807947,
-        "y": 0.8966059602649011
+        "x": 1.6653,
+        "y": 1.0427
       },
       "prevControl": {
-        "x": 1.2016713959632312,
-        "y": 0.7857668841365828
+        "x": 1.4674513262908842,
+        "y": 0.8336998491099281
       },
       "nextControl": null,
       "isLocked": false,
@@ -36,14 +36,7 @@
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "Intake",
-      "waypointRelativePos": 0.8,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
