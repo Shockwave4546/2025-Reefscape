@@ -13,6 +13,8 @@ public class TunableProfiledPIDFController {
     pid = new ProfiledPIDController(pidGains.p(), pidGains.i(), pidGains.d(), constraints);
     tunableGains = new TunableProfiledPIDF(prefix, pidGains, constraints);
     this.posTolerance = new TunableNumber(prefix + "(9) PosTolerance", posTolerance);
+
+    pid.setTolerance(posTolerance);
   }
 
   public void periodic() {
