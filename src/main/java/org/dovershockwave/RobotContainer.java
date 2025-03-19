@@ -134,26 +134,25 @@ public class RobotContainer {
 
   private void configureBindings() {
     driverController.leftTrigger(0.8).onTrue(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(0.5))).onFalse(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(1.0)));
-    driverController.leftBumper().whileTrue(
-            new AlignToReefCoralIntermediateCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController).andThen(
-                    new SequentialCommandGroup(
-                            new InstantCommand(() -> elevator.setDesiredState(selector.getLevel()), elevator),
-                            new WaitUntilCommand(elevator::atDesiredState),
-                            new InstantCommand(() -> coralPivot.setDesiredState(selector.getLevel()), coralPivot),
-                            new WaitUntilCommand(coralPivot::atDesiredState)
-                    )
-            ).andThen(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController)).andThen(
-                    new SequentialCommandGroup(
-                            new RunCommand(() -> coralRollers.setDesiredState(selector.getLevel()), coralRollers).withTimeout(0.25).andThen(new ParallelCommandGroup(
-                                    new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING), coralPivot).andThen(
-                                            new WaitUntilCommand(coralPivot::atDesiredState),
-                                            new InstantCommand(() -> elevator.setDesiredState(ElevatorState.STARTING), elevator)
-                                    ),
-                                    new InstantCommand(() -> coralRollers.setDesiredState(CoralRollersState.STOPPED), coralRollers)
-                            ))
-                    )
-            )
-    );
+    driverController.leftBumper()
+            .whileTrue(new SequentialCommandGroup(
+                    new AlignToReefCoralIntermediateCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController),
+                    new InstantCommand(() -> elevator.setDesiredState(selector.getLevel()), elevator),
+                    new WaitUntilCommand(elevator::atDesiredState),
+                    new InstantCommand(() -> coralPivot.setDesiredState(selector.getLevel()), coralPivot),
+                    new WaitUntilCommand(coralPivot::atDesiredState),
+                    new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController),
+                    new RunCommand(() -> coralRollers.setDesiredState(selector.getLevel()), coralRollers).withTimeout(0.25))
+            ).onFalse(new SequentialCommandGroup(
+                    // TODO 3/19/25: Need to make this safer here, with like a "WaitForPoseToBeFarAwayFromTheReef"
+                    new ParallelCommandGroup(
+                            new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING), coralPivot),
+                            new InstantCommand(() -> coralRollers.setDesiredState(CoralRollersState.STOPPED), coralRollers)
+                    ),
+                    new WaitUntilCommand(coralPivot::atDesiredState),
+                    new InstantCommand(() -> elevator.setDesiredState(ElevatorState.STARTING), elevator)
+            ));
+
 
 //    driverController.leftBumper().whileTrue(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController).andThen(new FullScoreCoralCommand(coralPivot, coralRollers, elevator, selector)));
     driverController.rightBumper().whileTrue(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.RIGHT, driverController).andThen(new FullScoreCoralCommand(coralPivot, coralRollers, elevator, selector)));
