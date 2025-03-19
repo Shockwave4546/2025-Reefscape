@@ -3,6 +3,7 @@ package org.dovershockwave;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.Pair;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
@@ -144,7 +145,7 @@ public class RobotContainer {
                     new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController),
                     new RunCommand(() -> coralRollers.setDesiredState(selector.getLevel()), coralRollers).withTimeout(0.25))
             ).onFalse(new SequentialCommandGroup(
-                    // TODO 3/19/25: Need to make this safer here, with like a "WaitForPoseToBeFarAwayFromTheReef"
+                    new WaitUntilCommand(this::isSafeToStow),
                     new ParallelCommandGroup(
                             new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING), coralPivot),
                             new InstantCommand(() -> coralRollers.setDesiredState(CoralRollersState.STOPPED), coralRollers)
@@ -199,6 +200,15 @@ public class RobotContainer {
     SmartDashboard.putData("Three", new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.SAFE_POSITION_AFTER_START_THREE)));
     SmartDashboard.putData("Four", new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.SAFE_POSITION_AFTER_START_FOUR)));
     SmartDashboard.putData("GetOutOfStarting", new GetOutOfStartingCommand(coralPivot));
+  }
+
+  /**
+    * Checks if all detected AprilTags are at least 7 inches away
+    */
+  private boolean isSafeToStow() {
+    return VisionConstants.APRIL_TAG_FIELD.getTags().stream()
+            .map(tag -> tag.pose.getTranslation().toTranslation2d().getDistance(swerve.getPose().getTranslation()))
+            .allMatch(distance -> distance > Units.inchesToMeters(7));
   }
 
   private void registerPP() {
