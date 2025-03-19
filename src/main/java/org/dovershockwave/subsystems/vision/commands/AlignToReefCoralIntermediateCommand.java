@@ -3,7 +3,6 @@ package org.dovershockwave.subsystems.vision.commands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -16,18 +15,18 @@ import org.dovershockwave.subsystems.vision.controllers.FullAlignController;
 import org.dovershockwave.subsystems.vision.controllers.XHeadingAlignController;
 import org.littletonrobotics.junction.Logger;
 
-public class AlignToReefCoralCommand extends Command {
+public class AlignToReefCoralIntermediateCommand extends Command {
   private final FullAlignController fullAlignController = new FullAlignController(
           "AlignToReefCoralCommand",
           VisionConstants.ALIGNMENT_OMEGA_PID,
           VisionConstants.ALIGNMENT_X_VELOCITY_PID,
           VisionConstants.ALIGNMENT_Y_VELOCITY_PID,
           VisionConstants.ALIGNMENT_RAD_TOLERANCE,
-          Units.inchesToMeters(0.5),
-          Units.inchesToMeters(0.5),
+          VisionConstants.ALIGNMENT_X_METERS_TOLERANCE,
+          VisionConstants.ALIGNMENT_Y_METERS_TOLERANCE,
           new TrapezoidProfile.Constraints(SwerveConstants.MAX_ANGULAR_SPEED_RAD_PER_SEC, SwerveConstants.MAX_ANGULAR_ACCELERATION_RAD_PER_SEC_SQUARED),
-          new TrapezoidProfile.Constraints(SwerveConstants.MAX_REAL_SPEED_METERS_PER_SECOND, SwerveConstants.MAX_REAL_ACCELERATION_METERS_PER_SECOND_SQUARED),
-          new TrapezoidProfile.Constraints(SwerveConstants.MAX_REAL_SPEED_METERS_PER_SECOND, SwerveConstants.MAX_REAL_ACCELERATION_METERS_PER_SECOND_SQUARED)
+          new TrapezoidProfile.Constraints(2, 0.5),
+          new TrapezoidProfile.Constraints(2, 0.5)
   );
 
   private final XHeadingAlignController xHeadingAlignController;
@@ -36,7 +35,7 @@ public class AlignToReefCoralCommand extends Command {
   private final ReefScoringSelector selector;
   private final ReefScoringPosition.ReefScoringSide side;
 
-  public AlignToReefCoralCommand(SwerveSubsystem swerve, ReefScoringSelector selector, ReefScoringPosition.ReefScoringSide side, CommandXboxController controller) {
+  public AlignToReefCoralIntermediateCommand(SwerveSubsystem swerve, ReefScoringSelector selector, ReefScoringPosition.ReefScoringSide side, CommandXboxController controller) {
     this.swerve = swerve;
     this.selector = selector;
     this.side = side;
@@ -47,7 +46,7 @@ public class AlignToReefCoralCommand extends Command {
             VisionConstants.ALIGNMENT_RAD_TOLERANCE,
             VisionConstants.ALIGNMENT_X_METERS_TOLERANCE,
             new TrapezoidProfile.Constraints(SwerveConstants.MAX_ANGULAR_SPEED_RAD_PER_SEC, SwerveConstants.MAX_ANGULAR_ACCELERATION_RAD_PER_SEC_SQUARED),
-            new TrapezoidProfile.Constraints(SwerveConstants.MAX_REAL_SPEED_METERS_PER_SECOND, SwerveConstants.MAX_REAL_ACCELERATION_METERS_PER_SECOND_SQUARED),
+            new TrapezoidProfile.Constraints(2, 1),
             () -> -controller.getLeftX() * SwerveConstants.MAX_REAL_SPEED_METERS_PER_SECOND * SwerveSubsystem.getVelocityMultiplier()
     );
     selector.setSide(side);
@@ -62,7 +61,7 @@ public class AlignToReefCoralCommand extends Command {
   @Override public void execute() {
     ReefScoringPosition.getCoralPositionFor(swerve.getPose(), side, selector.getLevel()).ifPresentOrElse(position -> {
       final var goalPose = new Pose2d(
-              position.position().toTranslation2d(),
+              position.intermediatePosition().toTranslation2d(),
               position.robotHeading()
       );
       var speeds = selector.getLevel() == ReefScoringPosition.ReefLevel.L1 ?
@@ -81,10 +80,10 @@ public class AlignToReefCoralCommand extends Command {
         speeds = new ChassisSpeeds(-speeds.vxMetersPerSecond, -speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
       }
 
-      Logger.recordOutput("AlignToReefCoralCommand/GoalPose", goalPose);
-      Logger.recordOutput("AlignToReefCoralCommand/Vx", speeds.vxMetersPerSecond);
-      Logger.recordOutput("AlignToReefCoralCommand/Vy", speeds.vyMetersPerSecond);
-      Logger.recordOutput("AlignToReefCoralCommand/Omega", speeds.omegaRadiansPerSecond);
+      Logger.recordOutput("AlignToReefCoralIntermediateCommand/GoalPose", goalPose);
+      Logger.recordOutput("AlignToReefCoralIntermediateCommand/Vx", speeds.vxMetersPerSecond);
+      Logger.recordOutput("AlignToReefCoralIntermediateCommand/Vy", speeds.vyMetersPerSecond);
+      Logger.recordOutput("AlignToReefCoralIntermediateCommand/Omega", speeds.omegaRadiansPerSecond);
 
       swerve.runVelocityFieldRelative(speeds);
     }, swerve::stop);

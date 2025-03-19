@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalDouble;
 
-public record ReefScoringPosition(int id, Translation3d position, Rotation2d robotHeading) {
+public record ReefScoringPosition(int id, Translation3d position, Translation3d intermediatePosition, Rotation2d robotHeading) {
   /**
    * Reef scoring positions with blue alliance wall as reference and robot facing the field.
    * Based off <a href="https://github.com/wpilibsuite/allwpilib/blob/main/apriltag/src/main/native/resources/edu/wpi/first/apriltag/2025-reefscape-andymark.json">AndyMark field AprilTag locations</a>.
@@ -58,9 +58,11 @@ public record ReefScoringPosition(int id, Translation3d position, Rotation2d rob
     };
     final var xOffset = (-SwerveConstants.ROBOT_LENGTH_X_METERS / 2.0) - additionalXOffset;
     final var offsetPose2d = REEF_SCORING_POSE_2D.get(id).transformBy(new Transform2d(xOffset, side.yOffset, new Rotation2d()));
+    final var offsetPose2dIntermediate = REEF_SCORING_POSE_2D.get(id).transformBy(new Transform2d(xOffset - Units.inchesToMeters(18), side.yOffset, new Rotation2d()));
     return Optional.of(new ReefScoringPosition(
             id,
             new Translation3d(offsetPose2d.getX(), offsetPose2d.getY(), level.height),
+            new Translation3d(offsetPose2dIntermediate.getX(), offsetPose2dIntermediate.getY(), level.height),
             offsetPose2d.getRotation()
     ));
   }
@@ -82,6 +84,7 @@ public record ReefScoringPosition(int id, Translation3d position, Rotation2d rob
     final var offsetPose2d = REEF_SCORING_POSE_2D.get(id).transformBy(new Transform2d(-SwerveConstants.ROBOT_LENGTH_X_METERS / 2.0, 0.0, new Rotation2d()));
     return Optional.of(new ReefScoringPosition(
             id,
+            new Translation3d(offsetPose2d.getX(), offsetPose2d.getY(), 0.0),
             new Translation3d(offsetPose2d.getX(), offsetPose2d.getY(), 0.0),
             offsetPose2d.getRotation()
     ));

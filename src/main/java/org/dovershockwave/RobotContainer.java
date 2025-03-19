@@ -3,29 +3,19 @@ package org.dovershockwave;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.Pair;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.dovershockwave.commands.*;
 import org.dovershockwave.subsystems.algaepivot.*;
 import org.dovershockwave.subsystems.algaerollers.*;
 import org.dovershockwave.subsystems.coralpivot.*;
-import org.dovershockwave.subsystems.coralrollers.CoralRollersConstants;
-import org.dovershockwave.subsystems.coralrollers.CoralRollersIO;
-import org.dovershockwave.subsystems.coralrollers.CoralRollersIOSpark;
-import org.dovershockwave.subsystems.coralrollers.CoralRollersSubsystem;
+import org.dovershockwave.subsystems.coralrollers.*;
 import org.dovershockwave.subsystems.coralrollers.lidar.LidarIO;
 import org.dovershockwave.subsystems.coralrollers.lidar.LidarIOLaserCan;
-import org.dovershockwave.subsystems.elevator.ElevatorConstants;
-import org.dovershockwave.subsystems.elevator.ElevatorIO;
-import org.dovershockwave.subsystems.elevator.ElevatorIOSpark;
-import org.dovershockwave.subsystems.elevator.ElevatorSubsystem;
+import org.dovershockwave.subsystems.elevator.*;
 import org.dovershockwave.subsystems.swerve.SwerveSubsystem;
 import org.dovershockwave.subsystems.swerve.commands.FeedforwardCharacterizationCommand;
 import org.dovershockwave.subsystems.swerve.commands.ResetFieldOrientatedDriveCommand;
@@ -44,6 +34,7 @@ import org.dovershockwave.subsystems.vision.*;
 import org.dovershockwave.subsystems.vision.commands.AlignToHumanPlayerCommand;
 import org.dovershockwave.subsystems.vision.commands.AlignToReefAlgaeCommand;
 import org.dovershockwave.subsystems.vision.commands.AlignToReefCoralCommand;
+import org.dovershockwave.subsystems.vision.commands.AlignToReefCoralIntermediateCommand;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class RobotContainer {
@@ -143,8 +134,29 @@ public class RobotContainer {
 
   private void configureBindings() {
     driverController.leftTrigger(0.8).onTrue(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(0.5))).onFalse(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(1.0)));
-    driverController.leftBumper().whileTrue(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController).andThen(new FullScoreCoralCopyCommand(coralPivot, coralRollers, elevator, selector)));
-    driverController.rightBumper().whileTrue(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.RIGHT, driverController).andThen(new FullScoreCoralCopyCommand(coralPivot, coralRollers, elevator, selector)));
+    driverController.leftBumper().whileTrue(
+            new AlignToReefCoralIntermediateCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController).andThen(
+                    new SequentialCommandGroup(
+                            new InstantCommand(() -> elevator.setDesiredState(selector.getLevel()), elevator),
+                            new WaitUntilCommand(elevator::atDesiredState),
+                            new InstantCommand(() -> coralPivot.setDesiredState(selector.getLevel()), coralPivot),
+                            new WaitUntilCommand(coralPivot::atDesiredState)
+                    )
+            ).andThen(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController)).andThen(
+                    new SequentialCommandGroup(
+                            new RunCommand(() -> coralRollers.setDesiredState(selector.getLevel()), coralRollers).withTimeout(0.25).andThen(new ParallelCommandGroup(
+                                    new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING), coralPivot).andThen(
+                                            new WaitUntilCommand(coralPivot::atDesiredState),
+                                            new InstantCommand(() -> elevator.setDesiredState(ElevatorState.STARTING), elevator)
+                                    ),
+                                    new InstantCommand(() -> coralRollers.setDesiredState(CoralRollersState.STOPPED), coralRollers)
+                            ))
+                    )
+            )
+    );
+
+//    driverController.leftBumper().whileTrue(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController).andThen(new FullScoreCoralCommand(coralPivot, coralRollers, elevator, selector)));
+    driverController.rightBumper().whileTrue(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.RIGHT, driverController).andThen(new FullScoreCoralCommand(coralPivot, coralRollers, elevator, selector)));
     driverController.rightTrigger(0.8).whileTrue(new FullAlgaeKnockoffCommand(coralPivot, elevator, coralRollers, selector).andThen(new AlignToReefAlgaeCommand(swerve)).finallyDo(() -> {
       coralPivot.setDesiredState(CoralPivotState.MOVING);
     }));
@@ -166,9 +178,6 @@ public class RobotContainer {
 //    operatorController.leftBumper().onTrue(new InstantCommand(() -> climb.setDesiredState(ClimbState.STARTING)));
 //    operatorController.rightBumper().onTrue(new InstantCommand(() -> climb.setDesiredState(ClimbState.DOWN)));
 
-    operatorController.leftBumper().onTrue(new InstantCommand(() -> coralPivot.setDesiredState(new CoralPivotState(coralPivot.getDesiredState().wristPositionRad(), coralPivot.getDesiredState().armPositionRad() - Units.degreesToRadians(2)))));
-    operatorController.rightBumper().onTrue(new InstantCommand(() -> coralPivot.setDesiredState(new CoralPivotState(coralPivot.getDesiredState().wristPositionRad(), coralPivot.getDesiredState().armPositionRad() + Units.degreesToRadians(2)))));
-
     operatorController.leftTrigger(0.8).onTrue(new ResetStatesCommand(coralRollers, elevator, coralPivot, algaePivot, algaeRollers));
     operatorController.rightTrigger(0.8).onTrue(new ResetStatesCommand(coralRollers, elevator, coralPivot, algaePivot, algaeRollers));
 
@@ -185,6 +194,12 @@ public class RobotContainer {
     }));
 
     SmartDashboard.putData("Reset Elevator Pos", new InstantCommand(elevator::resetPosition).ignoringDisable(true));
+
+    SmartDashboard.putData("One", new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.SAFE_POSITION_AFTER_START_ONE)));
+    SmartDashboard.putData("Two", new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.SAFE_POSITION_AFTER_START_TWO)));
+    SmartDashboard.putData("Three", new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.SAFE_POSITION_AFTER_START_THREE)));
+    SmartDashboard.putData("Four", new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.SAFE_POSITION_AFTER_START_FOUR)));
+    SmartDashboard.putData("GetOutOfStarting", new GetOutOfStartingCommand(coralPivot));
   }
 
   private void registerPP() {

@@ -22,6 +22,6 @@ public class VisionConstants {
   public static final PIDFGains ALIGNMENT_Y_VELOCITY_PID = new PIDFGains(7.5, 0.0, 0.08, 0.0);
 
   public static final double ALIGNMENT_RAD_TOLERANCE = Units.degreesToRadians(2);
-  public static final double ALIGNMENT_X_METERS_TOLERANCE = Units.inchesToMeters(0.125);
-  public static final double ALIGNMENT_Y_METERS_TOLERANCE = Units.inchesToMeters(0.125);
+  public static final double ALIGNMENT_X_METERS_TOLERANCE = Units.inchesToMeters(0.25);
+  public static final double ALIGNMENT_Y_METERS_TOLERANCE = Units.inchesToMeters(0.25);
 }

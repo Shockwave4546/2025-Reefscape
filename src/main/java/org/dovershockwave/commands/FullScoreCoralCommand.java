@@ -19,17 +19,12 @@ public class FullScoreCoralCommand extends SequentialCommandGroup {
             new WaitUntilCommand(elevator::atDesiredState),
             new InstantCommand(() -> coralPivot.setDesiredState(selector.getLevel()), coralPivot),
             new WaitUntilCommand(coralPivot::atDesiredState),
-//            new ParallelCommandGroup(
-//                    new ConditionalCommand(new WaitCommand(0.5).andThen(new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.L2_L3_OUTTAKE), coralPivot)), new InstantCommand(), () -> selector.getLevel() == ReefScoringPosition.ReefLevel.L2 || selector.getLevel() == ReefScoringPosition.ReefLevel.L3),
-//                    new RunCommand(() -> coralRollers.setDesiredState(selector.getLevel()), coralRollers)
-//            ).withTimeout(1),
-            new RunCommand(() -> coralRollers.setDesiredState(selector.getLevel()), coralRollers).withTimeout(0.5),
-            new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING), coralPivot),
-            new InstantCommand(() -> coralRollers.setDesiredState(CoralRollersState.STOPPED), coralRollers),
+            new RunCommand(() -> coralRollers.setDesiredState(selector.getLevel()), coralRollers).withTimeout(0.5).finallyDo(() -> {
+              coralPivot.setDesiredState(CoralPivotState.MOVING);
+              coralRollers.setDesiredState(CoralRollersState.STOPPED);
+            }),
             new WaitUntilCommand(coralPivot::atDesiredState),
             new InstantCommand(() -> elevator.setDesiredState(ElevatorState.STARTING), elevator)
     );
-
-    addRequirements(coralPivot, coralRollers, elevator);
   }
 }
