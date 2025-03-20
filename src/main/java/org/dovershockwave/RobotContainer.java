@@ -138,9 +138,7 @@ public class RobotContainer {
     driverController.leftTrigger(0.8).onTrue(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(0.5))).onFalse(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(1.0)));
     driverController.leftBumper()
             .whileTrue(new SequentialCommandGroup(
-                    new ConditionalCommand(new SequentialCommandGroup(
-                            new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING_UP))
-                    ), new InstantCommand(), () -> selector.getLevel() == ReefScoringPosition.ReefLevel.L4),
+                    new ConditionalCommand(new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING_UP)), new InstantCommand(), () -> selector.getLevel() == ReefScoringPosition.ReefLevel.L4),
                     new AlignToReefCoralIntermediateCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController),
                     new ConditionalCommand(
                             new SequentialCommandGroup(
@@ -171,9 +169,7 @@ public class RobotContainer {
 
     driverController.rightBumper()
             .whileTrue(new SequentialCommandGroup(
-                    new ConditionalCommand(new SequentialCommandGroup(
-                            new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING_UP))
-                    ), new InstantCommand(), () -> selector.getLevel() == ReefScoringPosition.ReefLevel.L4),
+                    new ConditionalCommand(new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING_UP)), new InstantCommand(), () -> selector.getLevel() == ReefScoringPosition.ReefLevel.L4),
                     new AlignToReefCoralIntermediateCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.RIGHT, driverController),
                     new ConditionalCommand(
                             new SequentialCommandGroup(
@@ -235,11 +231,6 @@ public class RobotContainer {
                     new InstantCommand(() -> elevator.setDesiredState(ElevatorState.STARTING), elevator),
                     new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING), coralPivot)
             ));
-
-//    driverController.x().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.CLOSE).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
-//    driverController.a().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.CENTER).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
-//    driverController.b().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.FAR).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
-//    driverController.y().whileTrue(new TemporaryHeadingCommand(swerve, vision));
 
     swerve.setDefaultCommand(new SwerveDriveCommand(swerve, driverController));
     SmartDashboard.putData("Reset Field Orientated Drive", new ResetFieldOrientatedDriveCommand(swerve));
