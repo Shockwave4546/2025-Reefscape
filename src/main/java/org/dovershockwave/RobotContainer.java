@@ -17,6 +17,7 @@ import org.dovershockwave.subsystems.coralrollers.*;
 import org.dovershockwave.subsystems.coralrollers.lidar.LidarIO;
 import org.dovershockwave.subsystems.coralrollers.lidar.LidarIOLaserCan;
 import org.dovershockwave.subsystems.elevator.*;
+import org.dovershockwave.subsystems.swerve.SwerveConstants;
 import org.dovershockwave.subsystems.swerve.SwerveSubsystem;
 import org.dovershockwave.subsystems.swerve.commands.FeedforwardCharacterizationCommand;
 import org.dovershockwave.subsystems.swerve.commands.ResetFieldOrientatedDriveCommand;
@@ -137,33 +138,107 @@ public class RobotContainer {
     driverController.leftTrigger(0.8).onTrue(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(0.5))).onFalse(new InstantCommand(() -> SwerveSubsystem.setVelocityMultiplier(1.0)));
     driverController.leftBumper()
             .whileTrue(new SequentialCommandGroup(
+                    new ConditionalCommand(new SequentialCommandGroup(
+                            new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING_UP))
+                    ), new InstantCommand(), () -> selector.getLevel() == ReefScoringPosition.ReefLevel.L4),
                     new AlignToReefCoralIntermediateCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController),
-                    new InstantCommand(() -> elevator.setDesiredState(selector.getLevel()), elevator),
-                    new WaitUntilCommand(elevator::atDesiredState),
-                    new InstantCommand(() -> coralPivot.setDesiredState(selector.getLevel()), coralPivot),
-                    new WaitUntilCommand(coralPivot::atDesiredState),
-                    new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController),
-                    new RunCommand(() -> coralRollers.setDesiredState(selector.getLevel()), coralRollers).withTimeout(0.25))
-            ).onFalse(new SequentialCommandGroup(
+                    new ConditionalCommand(
+                            new SequentialCommandGroup(
+                                    new InstantCommand(() -> elevator.setDesiredState(selector.getLevel()), elevator),
+                                    new WaitUntilCommand(elevator::atDesiredState),
+                                    new InstantCommand(() -> coralPivot.setDesiredState(selector.getLevel()), coralPivot),
+                                    new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController),
+                                    new RunCommand(() -> coralRollers.setDesiredState(selector.getLevel()), coralRollers).withTimeout(0.25)),
+                            new SequentialCommandGroup(
+                                    new InstantCommand(() -> elevator.setDesiredState(selector.getLevel()), elevator),
+                                    new InstantCommand(() -> coralPivot.setDesiredState(selector.getLevel()), coralPivot),
+                                    new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController),
+                                    new RunCommand(() -> coralRollers.setDesiredState(selector.getLevel()), coralRollers).withTimeout(0.25))
+                            , () -> selector.getLevel() == ReefScoringPosition.ReefLevel.L4)
+            )).onFalse(new SequentialCommandGroup(
                     new WaitUntilCommand(this::isSafeToStow),
                     new ParallelCommandGroup(
-                            new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING), coralPivot),
+                            new ConditionalCommand(
+                                    new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING_UP)),
+                                    new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING)),
+                                    () -> selector.getLevel() == ReefScoringPosition.ReefLevel.L4
+                            ),
                             new InstantCommand(() -> coralRollers.setDesiredState(CoralRollersState.STOPPED), coralRollers)
                     ),
                     new WaitUntilCommand(coralPivot::atDesiredState),
                     new InstantCommand(() -> elevator.setDesiredState(ElevatorState.STARTING), elevator)
             ));
 
+    driverController.rightBumper()
+            .whileTrue(new SequentialCommandGroup(
+                    new ConditionalCommand(new SequentialCommandGroup(
+                            new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING_UP))
+                    ), new InstantCommand(), () -> selector.getLevel() == ReefScoringPosition.ReefLevel.L4),
+                    new AlignToReefCoralIntermediateCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.RIGHT, driverController),
+                    new ConditionalCommand(
+                            new SequentialCommandGroup(
+                                    new InstantCommand(() -> elevator.setDesiredState(selector.getLevel()), elevator),
+                                    new WaitUntilCommand(elevator::atDesiredState),
+                                    new InstantCommand(() -> coralPivot.setDesiredState(selector.getLevel()), coralPivot),
+                                    new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.RIGHT, driverController),
+                                    new RunCommand(() -> coralRollers.setDesiredState(selector.getLevel()), coralRollers).withTimeout(0.25)),
+                            new SequentialCommandGroup(
+                                    new InstantCommand(() -> elevator.setDesiredState(selector.getLevel()), elevator),
+                                    new InstantCommand(() -> coralPivot.setDesiredState(selector.getLevel()), coralPivot),
+                                    new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.RIGHT, driverController),
+                                    new RunCommand(() -> coralRollers.setDesiredState(selector.getLevel()), coralRollers).withTimeout(0.25))
+                            , () -> selector.getLevel() == ReefScoringPosition.ReefLevel.L4)
+            )).onFalse(new SequentialCommandGroup(
+                    new WaitUntilCommand(this::isSafeToStow),
+                    new ParallelCommandGroup(
+                            new ConditionalCommand(
+                                    new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING_UP)),
+                                    new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING)),
+                                    () -> selector.getLevel() == ReefScoringPosition.ReefLevel.L4
+                            ),
+                            new InstantCommand(() -> coralRollers.setDesiredState(CoralRollersState.STOPPED), coralRollers)
+                    ),
+                    new WaitUntilCommand(coralPivot::atDesiredState),
+                    new InstantCommand(() -> elevator.setDesiredState(ElevatorState.STARTING), elevator)
+            ));
 
-//    driverController.leftBumper().whileTrue(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController).andThen(new FullScoreCoralCommand(coralPivot, coralRollers, elevator, selector)));
-    driverController.rightBumper().whileTrue(new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.RIGHT, driverController).andThen(new FullScoreCoralCommand(coralPivot, coralRollers, elevator, selector)));
-    driverController.rightTrigger(0.8).whileTrue(new FullAlgaeKnockoffCommand(coralPivot, elevator, coralRollers, selector).andThen(new AlignToReefAlgaeCommand(swerve)).finallyDo(() -> {
-      coralPivot.setDesiredState(CoralPivotState.MOVING);
-    }));
+    driverController.rightTrigger(0.8).whileTrue(new SequentialCommandGroup(
+            new FullAlgaeKnockoffCommand(coralPivot, elevator, coralRollers, selector),
+            new AlignToReefAlgaeCommand(swerve)
+    )).onFalse(new SequentialCommandGroup(
+            new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING), coralPivot)
+    ));
 
-    driverController.x().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.CLOSE).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
-    driverController.a().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.CENTER).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
-    driverController.b().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.FAR).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
+    driverController.x()
+            .whileTrue(new SequentialCommandGroup(
+                    new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.CLOSE),
+                    new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)
+            )).onFalse(new SequentialCommandGroup(
+                    new InstantCommand(() -> elevator.setDesiredState(ElevatorState.STARTING), elevator),
+                    new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING), coralPivot)
+            ));
+
+    driverController.a()
+            .whileTrue(new SequentialCommandGroup(
+                    new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.CENTER),
+                    new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)
+            )).onFalse(new SequentialCommandGroup(
+                    new InstantCommand(() -> elevator.setDesiredState(ElevatorState.STARTING), elevator),
+                    new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING), coralPivot)
+            ));
+
+    driverController.b()
+            .whileTrue(new SequentialCommandGroup(
+                    new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.FAR),
+                    new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)
+            )).onFalse(new SequentialCommandGroup(
+                    new InstantCommand(() -> elevator.setDesiredState(ElevatorState.STARTING), elevator),
+                    new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING), coralPivot)
+            ));
+
+//    driverController.x().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.CLOSE).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
+//    driverController.a().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.CENTER).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
+//    driverController.b().whileTrue(new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.FAR).andThen(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)));
 //    driverController.y().whileTrue(new TemporaryHeadingCommand(swerve, vision));
 
     swerve.setDefaultCommand(new SwerveDriveCommand(swerve, driverController));
@@ -195,10 +270,9 @@ public class RobotContainer {
 
     SmartDashboard.putData("Reset Elevator Pos", new InstantCommand(elevator::resetPosition).ignoringDisable(true));
 
-    SmartDashboard.putData("One", new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.SAFE_POSITION_AFTER_START_ONE)));
-    SmartDashboard.putData("Two", new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.SAFE_POSITION_AFTER_START_TWO)));
-    SmartDashboard.putData("Three", new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.SAFE_POSITION_AFTER_START_THREE)));
-    SmartDashboard.putData("Four", new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.SAFE_POSITION_AFTER_START_FOUR)));
+    SmartDashboard.putData("One", new InstantCommand(() -> coralPivot.setDesiredState(new CoralPivotState(1.95, coralPivot.getDesiredState().armPositionRad()))));
+    SmartDashboard.putData("Two", new InstantCommand(() -> coralPivot.setDesiredState(new CoralPivotState(1.95, CoralPivotState.MOVING_UP.armPositionRad()))));
+    SmartDashboard.putData("Three", new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING_UP)));
     SmartDashboard.putData("GetOutOfStarting", new GetOutOfStartingCommand(coralPivot));
   }
 
@@ -208,7 +282,7 @@ public class RobotContainer {
   private boolean isSafeToStow() {
     return VisionConstants.APRIL_TAG_FIELD.getTags().stream()
             .map(tag -> tag.pose.getTranslation().toTranslation2d().getDistance(swerve.getPose().getTranslation()))
-            .allMatch(distance -> distance > Units.inchesToMeters(7));
+            .allMatch(distance -> distance > Units.inchesToMeters(7) + SwerveConstants.TRACK_WIDTH_METERS / 2.0);
   }
 
   private void registerPP() {

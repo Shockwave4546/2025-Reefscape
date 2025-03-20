@@ -23,11 +23,11 @@ public class AlignToReefCoralCommand extends Command {
           VisionConstants.ALIGNMENT_X_VELOCITY_PID,
           VisionConstants.ALIGNMENT_Y_VELOCITY_PID,
           Units.degreesToRadians(2),
-          Units.inchesToMeters(0.5),
-          Units.inchesToMeters(0.5),
+          Units.inchesToMeters(0.75),
+          Units.inchesToMeters(0.75),
           new TrapezoidProfile.Constraints(SwerveConstants.MAX_ANGULAR_SPEED_RAD_PER_SEC, SwerveConstants.MAX_ANGULAR_ACCELERATION_RAD_PER_SEC_SQUARED),
-          new TrapezoidProfile.Constraints(SwerveConstants.MAX_REAL_SPEED_METERS_PER_SECOND, SwerveConstants.MAX_REAL_ACCELERATION_METERS_PER_SECOND_SQUARED),
-          new TrapezoidProfile.Constraints(SwerveConstants.MAX_REAL_SPEED_METERS_PER_SECOND, SwerveConstants.MAX_REAL_ACCELERATION_METERS_PER_SECOND_SQUARED)
+          new TrapezoidProfile.Constraints(2.5, 2),
+          new TrapezoidProfile.Constraints(2.5, 2)
   );
 
   private final XHeadingAlignController xHeadingAlignController;
@@ -45,9 +45,9 @@ public class AlignToReefCoralCommand extends Command {
             VisionConstants.ALIGNMENT_OMEGA_PID,
             VisionConstants.ALIGNMENT_X_VELOCITY_PID,
             Units.degreesToRadians(2),
-            Units.inchesToMeters(0.25),
+            Units.inchesToMeters(0.75),
             new TrapezoidProfile.Constraints(SwerveConstants.MAX_ANGULAR_SPEED_RAD_PER_SEC, SwerveConstants.MAX_ANGULAR_ACCELERATION_RAD_PER_SEC_SQUARED),
-            new TrapezoidProfile.Constraints(SwerveConstants.MAX_REAL_SPEED_METERS_PER_SECOND, SwerveConstants.MAX_REAL_ACCELERATION_METERS_PER_SECOND_SQUARED),
+            new TrapezoidProfile.Constraints(2, 2),
             () -> -controller.getLeftX() * SwerveConstants.MAX_REAL_SPEED_METERS_PER_SECOND * SwerveSubsystem.getVelocityMultiplier()
     );
     selector.setSide(side);

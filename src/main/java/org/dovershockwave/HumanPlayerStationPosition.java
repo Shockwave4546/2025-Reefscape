@@ -48,7 +48,7 @@ public record HumanPlayerStationPosition(Pose2d pose, int id) {
 
     if (signForYOffset == 0) return Optional.empty();
 
-    final var offsetXDistance = (-SwerveConstants.ROBOT_LENGTH_X_METERS / 2.0) - Units.inchesToMeters(13.5);
+    final var offsetXDistance = (-SwerveConstants.ROBOT_LENGTH_X_METERS / 2.0) - Units.inchesToMeters(6.5);
     final var offsetYDistance = switch (side) {
       case CLOSE -> CLOSE_Y_OFFSET_DISTANCE_METERS;
       case FAR -> FAR_Y_OFFSET_DISTANCE_METERS;

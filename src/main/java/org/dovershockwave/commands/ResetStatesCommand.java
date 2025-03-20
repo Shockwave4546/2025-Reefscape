@@ -2,6 +2,8 @@ package org.dovershockwave.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import org.dovershockwave.subsystems.algaepivot.AlgaePivotState;
 import org.dovershockwave.subsystems.algaepivot.AlgaePivotSubsystem;
 import org.dovershockwave.subsystems.algaerollers.AlgaeRollersState;
@@ -18,11 +20,14 @@ public class ResetStatesCommand extends ParallelCommandGroup {
     addCommands(
             new InstantCommand(() -> coralRollers.setDesiredState(CoralRollersState.STOPPED), coralRollers),
             new InstantCommand(() -> elevator.setDesiredState(ElevatorState.STARTING), elevator),
-            new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING), coralPivot),
             new InstantCommand(() -> algaePivot.setDesiredState(AlgaePivotState.STARTING), algaePivot),
-            new InstantCommand(() -> algaeRollers.setDesiredState(AlgaeRollersState.STOPPED), algaeRollers)
-    );
+            new InstantCommand(() -> algaeRollers.setDesiredState(AlgaeRollersState.STOPPED), algaeRollers),
 
-    addRequirements(coralRollers, elevator, coralPivot, algaePivot, algaeRollers);
+            new SequentialCommandGroup(
+                    new InstantCommand(() -> coralPivot.setDesiredState(new CoralPivotState(CoralPivotState.MOVING_UP.wristPositionRad(), coralPivot.getDesiredState().armPositionRad())), coralPivot),
+                    new WaitUntilCommand(coralPivot::atDesiredState),
+                    new InstantCommand(() -> coralPivot.setDesiredState(new CoralPivotState(coralPivot.getDesiredState().wristPositionRad(), CoralPivotState.MOVING_UP.armPositionRad())), coralPivot)
+            )
+    );
   }
 }
