@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "GetOutOfStarting"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "StartNonProcessor-J"
