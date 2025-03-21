@@ -15,7 +15,5 @@ public class GetOutOfStartingCommand extends SequentialCommandGroup {
             new WaitUntilCommand(coralPivot::atDesiredState),
             new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.SAFE_POSITION_AFTER_START_FOUR))
     );
-
-    addRequirements(coralPivot);
   }
 }

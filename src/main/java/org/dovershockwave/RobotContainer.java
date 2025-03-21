@@ -244,10 +244,24 @@ public class RobotContainer {
 //    operatorController.leftBumper().onTrue(new InstantCommand(() -> climb.setDesiredState(ClimbState.STARTING)));
 //    operatorController.rightBumper().onTrue(new InstantCommand(() -> climb.setDesiredState(ClimbState.DOWN)));
 
-    operatorController.leftTrigger(0.8).onTrue(new ResetStatesCommand(coralRollers, elevator, coralPivot, algaePivot, algaeRollers));
-    operatorController.rightTrigger(0.8).onTrue(new ResetStatesCommand(coralRollers, elevator, coralPivot, algaePivot, algaeRollers));
+    operatorController.leftTrigger(0.8).onTrue(new ResetStatesCommand(coralRollers, elevator, coralPivot, algaePivot, algaeRollers, selector));
+    operatorController.rightTrigger(0.8).onTrue(new ResetStatesCommand(coralRollers, elevator, coralPivot, algaePivot, algaeRollers, selector));
 
-    operatorController.a().onTrue(new FullScoreCoralCommand(coralPivot, coralRollers, elevator, selector));
+    operatorController.a().onTrue(new FullScoreCoralCommand(coralPivot, coralRollers, elevator, selector))
+            .onFalse(new SequentialCommandGroup(
+                    new WaitUntilCommand(this::isSafeToStow),
+                    new ParallelCommandGroup(
+                            new ConditionalCommand(
+                                    new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING_UP)),
+                                    new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING)),
+                                    () -> selector.getLevel() == ReefScoringPosition.ReefLevel.L4
+                            ),
+                            new InstantCommand(() -> coralRollers.setDesiredState(CoralRollersState.STOPPED), coralRollers)
+                    ),
+                    new WaitUntilCommand(coralPivot::atDesiredState),
+                    new InstantCommand(() -> elevator.setDesiredState(ElevatorState.STARTING), elevator)
+            ));
+
     operatorController.y().toggleOnTrue(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));
 
     operatorController.b().whileTrue(new FullScoreAlgaeCommand(algaePivot, algaeRollers));
@@ -265,6 +279,8 @@ public class RobotContainer {
     SmartDashboard.putData("Two", new InstantCommand(() -> coralPivot.setDesiredState(new CoralPivotState(1.95, CoralPivotState.MOVING_UP.armPositionRad()))));
     SmartDashboard.putData("Three", new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING_UP)));
     SmartDashboard.putData("GetOutOfStarting", new GetOutOfStartingCommand(coralPivot));
+
+    SmartDashboard.putData("COPY GetOutOfStarting COPY", new GetOutOfStartingCopyCommand(coralPivot));
   }
 
   /**
@@ -286,6 +302,7 @@ public class RobotContainer {
 //    NamedCommands.registerCommand("L4Positions", allL4PositionsCommand);
 //    NamedCommands.registerCommand("Intake", new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));
     NamedCommands.registerCommand("ScoreL4", new AutoFullScoreCoralL4Command(coralPivot, coralRollers, elevator));
+    NamedCommands.registerCommand("GetOutOfStarting", new GetOutOfStartingCopyCommand(coralPivot));
 //
 //    new EventTrigger("L4Positions").onTrue(allL4PositionsCommand);
 //    new EventTrigger("Intake").onTrue(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));
