@@ -11,20 +11,20 @@ import org.dovershockwave.ReefScoringPosition;
 import org.dovershockwave.ReefScoringSelector;
 import org.dovershockwave.subsystems.swerve.SwerveConstants;
 import org.dovershockwave.subsystems.swerve.SwerveSubsystem;
-import org.dovershockwave.subsystems.vision.VisionConstants;
 import org.dovershockwave.subsystems.vision.controllers.FullAlignController;
 import org.dovershockwave.subsystems.vision.controllers.XHeadingAlignController;
+import org.dovershockwave.utils.PIDFGains;
 import org.littletonrobotics.junction.Logger;
 
 public class AlignToReefCoralIntermediateCommand extends Command {
   private final FullAlignController fullAlignController = new FullAlignController(
           "AlignToReefCoralCommand",
-          VisionConstants.ALIGNMENT_OMEGA_PID,
-          VisionConstants.ALIGNMENT_X_VELOCITY_PID,
-          VisionConstants.ALIGNMENT_Y_VELOCITY_PID,
-          Units.degreesToRadians(2),
-          Units.inchesToMeters(0.75),
-          Units.inchesToMeters(0.75),
+          new PIDFGains(3, 0.0, 0, 0.0),
+          new PIDFGains(7.5, 0.0, 0, 0.0),
+          new PIDFGains(7.5, 0.0, 0, 0.0),
+          Units.degreesToRadians(4),
+          Units.inchesToMeters(1),
+          Units.inchesToMeters(1),
           new TrapezoidProfile.Constraints(SwerveConstants.MAX_ANGULAR_SPEED_RAD_PER_SEC, SwerveConstants.MAX_ANGULAR_ACCELERATION_RAD_PER_SEC_SQUARED),
           new TrapezoidProfile.Constraints(SwerveConstants.MAX_REAL_SPEED_METERS_PER_SECOND, SwerveConstants.MAX_REAL_ACCELERATION_METERS_PER_SECOND_SQUARED),
           new TrapezoidProfile.Constraints(SwerveConstants.MAX_REAL_SPEED_METERS_PER_SECOND, SwerveConstants.MAX_REAL_ACCELERATION_METERS_PER_SECOND_SQUARED)
@@ -42,10 +42,10 @@ public class AlignToReefCoralIntermediateCommand extends Command {
     this.side = side;
     this.xHeadingAlignController = new XHeadingAlignController(
             "AlignToReefCoralL1Command",
-            VisionConstants.ALIGNMENT_OMEGA_PID,
-            VisionConstants.ALIGNMENT_X_VELOCITY_PID,
-            Units.degreesToRadians(2),
-            Units.inchesToMeters(0.75),
+            new PIDFGains(2, 0.0, 0.094, 0.0),
+            new PIDFGains(7.5, 0.0, 0, 0.0),
+            Units.degreesToRadians(4),
+            Units.inchesToMeters(1),
             new TrapezoidProfile.Constraints(SwerveConstants.MAX_ANGULAR_SPEED_RAD_PER_SEC, SwerveConstants.MAX_ANGULAR_ACCELERATION_RAD_PER_SEC_SQUARED),
             new TrapezoidProfile.Constraints(SwerveConstants.MAX_REAL_SPEED_METERS_PER_SECOND, SwerveConstants.MAX_REAL_ACCELERATION_METERS_PER_SECOND_SQUARED),
             () -> -controller.getLeftX() * SwerveConstants.MAX_REAL_SPEED_METERS_PER_SECOND * SwerveSubsystem.getVelocityMultiplier()

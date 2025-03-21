@@ -25,7 +25,7 @@ public class TunableProfiledPIDF extends TunablePIDF {
     super.periodic(pidfConfigurator, manualValueSetter);
 
     if (RobotContainer.isTuningMode())
-      TunableNumber.ifChanged(hashCode() + 2, values -> constraintsConfigurator.accept(new TrapezoidProfile.Constraints(values[0], values[1])), maxVelocity, maxAcceleration);
+      TunableNumber.ifChanged(hashCode() * 2, values -> constraintsConfigurator.accept(new TrapezoidProfile.Constraints(values[0], values[1])), maxVelocity, maxAcceleration);
   }
 
   public void setConstraints(TrapezoidProfile.Constraints constraints) {

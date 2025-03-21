@@ -8,19 +8,19 @@ import edu.wpi.first.wpilibj2.command.Command;
 import org.dovershockwave.HumanPlayerStationPosition;
 import org.dovershockwave.subsystems.swerve.SwerveConstants;
 import org.dovershockwave.subsystems.swerve.SwerveSubsystem;
-import org.dovershockwave.subsystems.vision.VisionConstants;
 import org.dovershockwave.subsystems.vision.controllers.FullAlignController;
+import org.dovershockwave.utils.PIDFGains;
 import org.littletonrobotics.junction.Logger;
 
 public class AlignToHumanPlayerCommand extends Command {
   private final FullAlignController alignController = new FullAlignController(
           "AlignToHumanPlayerCommand",
-          VisionConstants.ALIGNMENT_OMEGA_PID,
-          VisionConstants.ALIGNMENT_X_VELOCITY_PID,
-          VisionConstants.ALIGNMENT_Y_VELOCITY_PID,
+          new PIDFGains(3, 0.0, 0, 0.0),
+          new PIDFGains(7.5, 0.0, 0, 0.0),
+          new PIDFGains(7.5, 0.0, 0, 0.0),
           Units.degreesToRadians(2),
-          Units.inchesToMeters(0.5),
-          Units.inchesToMeters(0.5),
+          Units.inchesToMeters(1),
+          Units.inchesToMeters(1),
           new TrapezoidProfile.Constraints(SwerveConstants.MAX_ANGULAR_SPEED_RAD_PER_SEC, SwerveConstants.MAX_ANGULAR_ACCELERATION_RAD_PER_SEC_SQUARED),
           new TrapezoidProfile.Constraints(SwerveConstants.MAX_REAL_SPEED_METERS_PER_SECOND, SwerveConstants.MAX_REAL_ACCELERATION_METERS_PER_SECOND_SQUARED),
           new TrapezoidProfile.Constraints(SwerveConstants.MAX_REAL_SPEED_METERS_PER_SECOND, SwerveConstants.MAX_REAL_ACCELERATION_METERS_PER_SECOND_SQUARED)

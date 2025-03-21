@@ -28,7 +28,5 @@ public class FullAlgaeKnockoffCommand extends ParallelCommandGroup {
 
             new InstantCommand(() -> coralRollers.setDesiredState(CoralRollersState.KNOCKOFF_ALGAE), coralRollers)
     );
-
-    addRequirements(coralPivot, elevator);
   }
 }

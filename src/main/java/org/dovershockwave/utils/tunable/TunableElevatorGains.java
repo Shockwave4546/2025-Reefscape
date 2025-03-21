@@ -35,7 +35,7 @@ public class TunableElevatorGains extends TunableProfiledPIDF {
     super.periodic(pidGainsConfigurator, elevatorConstraintsConfigurator, manualValueSetter);
 
     if (RobotContainer.isTuningMode())
-      TunableNumber.ifChanged(hashCode() + 3, values -> elevatorFeedforwardConfigurator.accept(
+      TunableNumber.ifChanged(hashCode() * 3, values -> elevatorFeedforwardConfigurator.accept(
             new ElevatorFeedforwardGains(values[0], values[1], values[2], values[3])),
             kS, kG, kV, kA
       );

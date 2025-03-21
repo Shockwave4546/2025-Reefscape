@@ -16,6 +16,6 @@ public record CoralPivotState(double wristPositionRad, double armPositionRad) {
   public static final CoralPivotState SAFE_POSITION_AFTER_START_THREE = new CoralPivotState(2.75, 0.75); // Move wrist more in to moving
   public static final CoralPivotState SAFE_POSITION_AFTER_START_FOUR = new CoralPivotState(2.75, -1.2); // Move arm down to moving
 
-  public static final CoralPivotState ALGAE_KNOCK_OFF_L2 = new CoralPivotState(0.2278, -0.066);
-  public static final CoralPivotState ALGAE_KNOCK_OFF_L3 = new CoralPivotState(0.62, 0.2);
+  public static final CoralPivotState ALGAE_KNOCK_OFF_L2 = new CoralPivotState(0, 0);
+  public static final CoralPivotState ALGAE_KNOCK_OFF_L3 = new CoralPivotState(-0.4, 0.4);
 }
