@@ -154,7 +154,7 @@ public class RobotContainer {
                                     new RunCommand(() -> coralRollers.setDesiredState(selector.getLevel()), coralRollers).withTimeout(0.25))
                             , () -> selector.getLevel() == ReefScoringPosition.ReefLevel.L4)
             )).onFalse(new SequentialCommandGroup(
-                    new WaitUntilCommand(this::isSafeToStow),
+//                    new WaitUntilCommand(this::isSafeToStow),
                     new ParallelCommandGroup(
                             new ConditionalCommand(
                                     new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING_UP)),
@@ -185,7 +185,7 @@ public class RobotContainer {
                                     new RunCommand(() -> coralRollers.setDesiredState(selector.getLevel()), coralRollers).withTimeout(0.25))
                             , () -> selector.getLevel() == ReefScoringPosition.ReefLevel.L4)
             )).onFalse(new SequentialCommandGroup(
-                    new WaitUntilCommand(this::isSafeToStow),
+//                    new WaitUntilCommand(this::isSafeToStow),
                     new ParallelCommandGroup(
                             new ConditionalCommand(
                                     new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING_UP)),
@@ -249,7 +249,7 @@ public class RobotContainer {
 
     operatorController.a().onTrue(new FullScoreCoralCommand(coralPivot, coralRollers, elevator, selector))
             .onFalse(new SequentialCommandGroup(
-                    new WaitUntilCommand(this::isSafeToStow),
+//                    new WaitUntilCommand(this::isSafeToStow),
                     new ParallelCommandGroup(
                             new ConditionalCommand(
                                     new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING_UP)),
