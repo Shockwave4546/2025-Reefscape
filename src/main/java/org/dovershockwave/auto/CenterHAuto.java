@@ -9,11 +9,11 @@ import org.dovershockwave.subsystems.coralrollers.CoralRollersSubsystem;
 import org.dovershockwave.subsystems.elevator.ElevatorSubsystem;
 import org.dovershockwave.subsystems.swerve.SwerveSubsystem;
 
-public class CenterGAuto extends SequentialCommandGroup {
-  public CenterGAuto(SwerveSubsystem swerve, CoralPivotSubsystem coralPivot, CoralRollersSubsystem coralRollers, ElevatorSubsystem elevator, ReefScoringSelector selector) {
+public class CenterHAuto extends SequentialCommandGroup {
+  public CenterHAuto(SwerveSubsystem swerve, CoralPivotSubsystem coralPivot, CoralRollersSubsystem coralRollers, ElevatorSubsystem elevator, ReefScoringSelector selector) {
     addCommands(
-            swerve.resetOdomThenFollowPath("Center-G"),
-            new AutoScoreCoralL4Command(swerve, coralPivot, coralRollers, elevator, selector, ReefScoringPosition.ReefScoringSide.LEFT)
+            swerve.resetOdomThenFollowPath("Center-H"),
+            new AutoScoreCoralL4Command(swerve, coralPivot, coralRollers, elevator, selector, ReefScoringPosition.ReefScoringSide.RIGHT)
     );
   }
 }
