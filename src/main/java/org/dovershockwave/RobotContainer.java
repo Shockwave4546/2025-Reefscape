@@ -1,7 +1,5 @@
 package org.dovershockwave;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -9,6 +7,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import org.dovershockwave.auto.CenterGAuto;
+import org.dovershockwave.auto.StartingNonProcessorJKLAuto;
 import org.dovershockwave.commands.*;
 import org.dovershockwave.subsystems.algaepivot.*;
 import org.dovershockwave.subsystems.algaerollers.*;
@@ -128,10 +128,10 @@ public class RobotContainer {
     testChooser.addOption("Turn SysId (Dynamic Reverse)", new SysIdDriveDynamicCommand(swerve, SysIdRoutine.Direction.kReverse));
 
     configureBindings();
-    registerPP();
 
-    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+    autoChooser = new LoggedDashboardChooser<>("Auto Choices");
     autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
+    registerPP();
     DriverStation.silenceJoystickConnectionWarning(true);
   }
 
@@ -303,21 +303,19 @@ public class RobotContainer {
   }
 
   private void registerPP() {
-    final var allL4PositionsCommand = new ParallelCommandGroup(
-            new InstantCommand(() -> elevator.setDesiredState(ReefScoringPosition.ReefLevel.L4)),
-            new InstantCommand(() -> coralPivot.setDesiredState(ReefScoringPosition.ReefLevel.L4))
-    );
-
 //    NamedCommands.registerCommand("AutoAlignScoreL4", new AlignToReefCoralCommand(swerve, selector, ReefScoringPosition.ReefScoringSide.LEFT, driverController).andThen(new FullScoreCoralCopyCommand(coralPivot, coralRollers, elevator, selector)));
 //    NamedCommands.registerCommand("L4Positions", allL4PositionsCommand);
 //    NamedCommands.registerCommand("Intake", new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));
-    NamedCommands.registerCommand("ScoreL4", new AutoFullScoreCoralL4Command(coralPivot, coralRollers, elevator));
-    NamedCommands.registerCommand("GetOutOfStarting", new GetOutOfStartingCopyCommand(coralPivot));
+//    NamedCommands.registerCommand("ScoreL4", new AutoScoreCoralL4Command(coralPivot, coralRollers, elevator));
+//    NamedCommands.registerCommand("GetOutOfStarting", new GetOutOfStartingCopyCommand(coralPivot));
 //
 //    new EventTrigger("L4Positions").onTrue(allL4PositionsCommand);
 //    new EventTrigger("Intake").onTrue(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));
 
     swerve.initializePP();
+
+    autoChooser.addOption("Center-G", new CenterGAuto(swerve, coralPivot, coralRollers, elevator, selector));
+    autoChooser.addOption("StartingNonProcessor-J-K-L", new StartingNonProcessorJKLAuto(swerve, coralPivot, coralRollers, elevator, selector));
   }
 
   public static boolean isCompetitionMatch() {

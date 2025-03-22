@@ -3,6 +3,8 @@ package org.dovershockwave.subsystems.swerve;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.PathPlannerLogging;
@@ -21,6 +23,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.dovershockwave.Constants;
@@ -30,9 +34,11 @@ import org.dovershockwave.subsystems.swerve.gyro.GyroIOInputsAutoLogged;
 import org.dovershockwave.subsystems.swerve.module.Module;
 import org.dovershockwave.subsystems.swerve.module.ModuleIO;
 import org.dovershockwave.subsystems.swerve.module.ModuleType;
+import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 import static edu.wpi.first.units.Units.Volts;
@@ -250,6 +256,45 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public void resetGyro() {
     gyroIO.resetGyro();
+  }
+
+  @SuppressWarnings("CallToPrintStackTrace")
+  public Command followPath(String pathName) {
+    try {
+      return AutoBuilder.followPath(PathPlannerPath.fromPathFile(pathName));
+    } catch (IOException | ParseException e) {
+      e.printStackTrace();
+      return new InstantCommand();
+    }
+  }
+
+  @SuppressWarnings("CallToPrintStackTrace")
+  public Command resetOdomThenFollowPath(String pathName) {
+    try {
+      final var path = PathPlannerPath.fromPathFile(pathName);
+      final var startingPose = new Pose2d(path.getPoint(0).position, path.getIdealStartingState().rotation());
+      return AutoBuilder.resetOdom(startingPose).andThen(AutoBuilder.followPath(PathPlannerPath.fromPathFile(pathName)));
+    } catch (IOException | ParseException e) {
+      e.printStackTrace();
+      return new InstantCommand();
+    }
+  }
+
+  @SuppressWarnings("CallToPrintStackTrace")
+  public Command pathFindThenFollowPath(String pathName) {
+    try {
+      return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile(pathName), new PathConstraints(
+              SwerveConstants.MAX_REAL_SPEED_METERS_PER_SECOND,
+              SwerveConstants.MAX_REAL_ACCELERATION_METERS_PER_SECOND_SQUARED,
+              SwerveConstants.MAX_ANGULAR_SPEED_RAD_PER_SEC,
+              SwerveConstants.MAX_ANGULAR_ACCELERATION_RAD_PER_SEC_SQUARED,
+              12.0,
+              false
+      ));
+    } catch (IOException | ParseException e) {
+      e.printStackTrace();
+      return new InstantCommand();
+    }
   }
 
   @AutoLogOutput(key = "Odometry/Robot")
