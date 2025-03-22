@@ -14,6 +14,7 @@ import org.dovershockwave.subsystems.algaepivot.*;
 import org.dovershockwave.subsystems.algaerollers.*;
 import org.dovershockwave.subsystems.coralpivot.*;
 import org.dovershockwave.subsystems.coralrollers.*;
+import org.dovershockwave.subsystems.coralrollers.commands.IndexCoralCommand;
 import org.dovershockwave.subsystems.coralrollers.lidar.LidarIO;
 import org.dovershockwave.subsystems.coralrollers.lidar.LidarIOLaserCan;
 import org.dovershockwave.subsystems.elevator.*;
@@ -209,27 +210,30 @@ public class RobotContainer {
             .whileTrue(new SequentialCommandGroup(
                     new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.CLOSE),
                     new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)
-            )).onFalse(new SequentialCommandGroup(
+            )).onFalse(new ParallelCommandGroup(
                     new InstantCommand(() -> elevator.setDesiredState(ElevatorState.STARTING), elevator),
-                    new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING), coralPivot)
+                    new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING), coralPivot),
+                    new IndexCoralCommand(coralRollers)
             ));
 
     driverController.a()
             .whileTrue(new SequentialCommandGroup(
                     new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.CENTER),
                     new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)
-            )).onFalse(new SequentialCommandGroup(
+            )).onFalse(new ParallelCommandGroup(
                     new InstantCommand(() -> elevator.setDesiredState(ElevatorState.STARTING), elevator),
-                    new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING), coralPivot)
+                    new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING), coralPivot),
+                    new IndexCoralCommand(coralRollers)
             ));
 
     driverController.b()
             .whileTrue(new SequentialCommandGroup(
                     new AlignToHumanPlayerCommand(swerve, HumanPlayerStationPosition.HumanPlayerStationSide.FAR),
                     new FullIntakeCoralCommand(coralPivot, coralRollers, elevator)
-            )).onFalse(new SequentialCommandGroup(
+            )).onFalse(new ParallelCommandGroup(
                     new InstantCommand(() -> elevator.setDesiredState(ElevatorState.STARTING), elevator),
-                    new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING), coralPivot)
+                    new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING), coralPivot),
+                    new IndexCoralCommand(coralRollers)
             ));
 
     swerve.setDefaultCommand(new SwerveDriveCommand(swerve, driverController));
@@ -262,7 +266,13 @@ public class RobotContainer {
                     new InstantCommand(() -> elevator.setDesiredState(ElevatorState.STARTING), elevator)
             ));
 
-    operatorController.y().toggleOnTrue(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator));
+    operatorController.y()
+            .whileTrue(new FullIntakeCoralCommand(coralPivot, coralRollers, elevator))
+            .onFalse(new ParallelCommandGroup(
+                    new InstantCommand(() -> elevator.setDesiredState(ElevatorState.STARTING), elevator),
+                    new InstantCommand(() -> coralPivot.setDesiredState(CoralPivotState.MOVING), coralPivot),
+                    new IndexCoralCommand(coralRollers)
+            ));
 
     operatorController.b().whileTrue(new FullScoreAlgaeCommand(algaePivot, algaeRollers));
     operatorController.x().whileTrue(new RunCommand(() -> {

@@ -27,7 +27,7 @@ public class ElevatorIOSpark implements ElevatorIO {
   private final Debouncer leftConnectedDebouncer = new Debouncer(0.5);
   private final Debouncer rightConnectedDebouncer = new Debouncer(0.5);
 
-  private final Debouncer limitSwitchDebouncer = new Debouncer(0.1);
+  private final Debouncer limitSwitchDebouncer = new Debouncer(0.25);
 
   public ElevatorIOSpark(int leftCanId, int rightCanId) {
     this.leftSpark = new SparkMax(leftCanId, SparkLowLevel.MotorType.kBrushless);

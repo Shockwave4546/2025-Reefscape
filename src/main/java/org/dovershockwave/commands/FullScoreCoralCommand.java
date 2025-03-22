@@ -17,10 +17,13 @@ public class FullScoreCoralCommand extends SequentialCommandGroup {
                             new InstantCommand(() -> elevator.setDesiredState(selector.getLevel()), elevator),
                             new WaitUntilCommand(elevator::atDesiredState),
                             new InstantCommand(() -> coralPivot.setDesiredState(selector.getLevel()), coralPivot),
+                            new WaitUntilCommand(coralPivot::atDesiredState),
                             new RunCommand(() -> coralRollers.setDesiredState(selector.getLevel()), coralRollers).withTimeout(0.25)),
                     new SequentialCommandGroup(
                             new InstantCommand(() -> elevator.setDesiredState(selector.getLevel()), elevator),
                             new InstantCommand(() -> coralPivot.setDesiredState(selector.getLevel()), coralPivot),
+                            new WaitUntilCommand(elevator::atDesiredState),
+                            new WaitUntilCommand(coralPivot::atDesiredState),
                             new RunCommand(() -> coralRollers.setDesiredState(selector.getLevel()), coralRollers).withTimeout(0.25))
                     , () -> selector.getLevel() == ReefScoringPosition.ReefLevel.L4)
     );
