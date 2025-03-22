@@ -8,7 +8,9 @@ import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.dovershockwave.auto.CenterGAuto;
+import org.dovershockwave.auto.CenterHAuto;
 import org.dovershockwave.auto.StartingNonProcessorJKLAuto;
+import org.dovershockwave.auto.StartingProcessorEDCAuto;
 import org.dovershockwave.commands.*;
 import org.dovershockwave.subsystems.algaepivot.*;
 import org.dovershockwave.subsystems.algaerollers.*;
@@ -314,8 +316,10 @@ public class RobotContainer {
 
     swerve.initializePP();
 
+    autoChooser.addOption("Center-H", new CenterHAuto(swerve, coralPivot, coralRollers, elevator, selector));
     autoChooser.addOption("Center-G", new CenterGAuto(swerve, coralPivot, coralRollers, elevator, selector));
     autoChooser.addOption("StartingNonProcessor-J-K-L", new StartingNonProcessorJKLAuto(swerve, coralPivot, coralRollers, elevator, selector));
+    autoChooser.addOption("StartingProcessor-E-D-C", new StartingProcessorEDCAuto(swerve, coralPivot, coralRollers, elevator, selector));
   }
 
   public static boolean isCompetitionMatch() {
