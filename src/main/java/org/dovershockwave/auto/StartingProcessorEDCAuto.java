@@ -14,15 +14,15 @@ public class StartingProcessorEDCAuto extends SequentialCommandGroup {
   public StartingProcessorEDCAuto(SwerveSubsystem swerve, CoralPivotSubsystem coralPivot, CoralRollersSubsystem coralRollers, ElevatorSubsystem elevator, ReefScoringSelector selector) {
     addCommands(
             swerve.resetOdomThenFollowPath("StartProcessor-E"),
-            new AutoScoreCoralL4Command(swerve, coralPivot, coralRollers, elevator, selector, ReefScoringPosition.ReefScoringSide.RIGHT),
+            new AutoScoreCoralL4Command(swerve, coralPivot, coralRollers, elevator, selector, ReefScoringPosition.ReefScoringSide.LEFT),
             swerve.pathFindThenFollowPath("E-HumanProcessor"),
             new AutoAlignIntakeCommand(swerve, coralPivot, coralRollers, elevator),
             swerve.pathFindThenFollowPath("HumanProcessor-D"),
-            new AutoScoreCoralL4Command(swerve, coralPivot, coralRollers, elevator, selector, ReefScoringPosition.ReefScoringSide.LEFT),
+            new AutoScoreCoralL4Command(swerve, coralPivot, coralRollers, elevator, selector, ReefScoringPosition.ReefScoringSide.RIGHT),
             swerve.pathFindThenFollowPath("D-HumanProcessor"),
             new AutoAlignIntakeCommand(swerve, coralPivot, coralRollers, elevator),
             swerve.pathFindThenFollowPath("HumanProcessor-C"),
-            new AutoScoreCoralL4Command(swerve, coralPivot, coralRollers, elevator, selector, ReefScoringPosition.ReefScoringSide.RIGHT)
+            new AutoScoreCoralL4Command(swerve, coralPivot, coralRollers, elevator, selector, ReefScoringPosition.ReefScoringSide.LEFT)
     );
   }
 }

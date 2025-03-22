@@ -120,7 +120,7 @@ public class SwerveSubsystem extends SubsystemBase {
         lastModulePositions[moduleIndex] = modulePositions[moduleIndex];
       }
 
-      rawGyroRotation = gyroInputs.odometryYawPositions[i];
+      if (gyroInputs.connected) rawGyroRotation = gyroInputs.odometryYawPositions[i];
 
       // Apply update
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
