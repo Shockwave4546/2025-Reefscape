@@ -52,7 +52,7 @@ public record ReefScoringPosition(int id, Translation3d position, Translation3d 
     if (!REEF_SCORING_POSE_2D.containsKey(id)) return Optional.empty();
 
     final var additionalXOffset = switch (level) {
-      case L1 -> 0.45;
+      case L1 -> Units.inchesToMeters(5);
       case L2, L3 -> 0.1;
       case L4 -> 0.0;
     };

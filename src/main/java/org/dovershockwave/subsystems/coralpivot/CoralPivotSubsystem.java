@@ -103,13 +103,13 @@ public class CoralPivotSubsystem extends SubsystemBase {
     final var wristGoalState = new TrapezoidProfile.State(desiredState.wristPositionRad(), 0.0);
     final var wristNextState = wristProfile.calculate(0.02, wristCurrentState, wristGoalState);
     final var wristAcceleration = (wristNextState.velocity - wristCurrentState.velocity) / 0.02;
-    coralWristIO.setWristPosition(desiredState.wristPositionRad(), wristFeedforward.calculate(wristNextState.position, wristNextState.velocity, wristAcceleration));
+//    coralWristIO.setWristPosition(desiredState.wristPositionRad(), wristFeedforward.calculate(wristNextState.position, wristNextState.velocity, wristAcceleration));
 
     final var armCurrentState = new TrapezoidProfile.State(coralArmInputs.armRightPositionRad, coralArmInputs.armRightVelocityRadPerSec);
     final var armGoalState = new TrapezoidProfile.State(desiredState.armPositionRad(), 0.0);
     final var armNextState = armProfile.calculate(0.02, armCurrentState, armGoalState);
     final var armAcceleration = (armNextState.velocity - armCurrentState.velocity) /  0.02;
-    coralArmIO.setArmPosition(desiredState.armPositionRad(), armFeedforward.calculate(armNextState.position, armNextState.velocity, armAcceleration));
+//    coralArmIO.setArmPosition(desiredState.armPositionRad(), armFeedforward.calculate(armNextState.position, armNextState.velocity, armAcceleration));
   }
 
   public void setDesiredState(ReefScoringPosition.ReefLevel level) {

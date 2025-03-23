@@ -42,7 +42,7 @@ public class AlignToReefCoralIntermediateCommand extends Command {
     this.side = side;
     this.xHeadingAlignController = new XHeadingAlignController(
             "AlignToReefCoralL1IntermediateCommand",
-            new PIDFGains(2, 0.0, 0.094, 0.0),
+            new PIDFGains(3, 0.0, 0, 0.0),
             new PIDFGains(7.5, 0.0, 0, 0.0),
             Units.degreesToRadians(4),
             Units.inchesToMeters(1),
@@ -95,6 +95,6 @@ public class AlignToReefCoralIntermediateCommand extends Command {
   }
 
   @Override public boolean isFinished() {
-    return fullAlignController.atGoal();
+    return selector.getLevel() == ReefScoringPosition.ReefLevel.L1 ? xHeadingAlignController.atGoal() : fullAlignController.atGoal();
   }
 }

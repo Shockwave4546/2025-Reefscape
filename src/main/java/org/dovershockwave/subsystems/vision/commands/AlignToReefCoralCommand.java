@@ -95,6 +95,6 @@ public class AlignToReefCoralCommand extends Command {
   }
 
   @Override public boolean isFinished() {
-    return fullAlignController.atGoal();
+    return selector.getLevel() == ReefScoringPosition.ReefLevel.L1 ? xHeadingAlignController.atGoal() : fullAlignController.atGoal();
   }
 }
